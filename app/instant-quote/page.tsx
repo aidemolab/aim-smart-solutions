@@ -1,0 +1,131 @@
+"use client";
+
+import Link from "next/link";
+import { FormEvent, useMemo, useState } from "react";
+import "./quote.css";
+
+const services = [
+  { id: "discovery", name: "Automation Discovery & Workflow Plan" },
+  { id: "email", name: "Customer Email Automation" },
+  { id: "quote", name: "Automatic Quote Workflow" },
+  { id: "booking", name: "Appointment Booking & Reminders" },
+  { id: "dashboard", name: "Business Dashboard" },
+  { id: "voice", name: "AI Voice Agent Setup" },
+  { id: "other", name: "Other service not listed" },
+];
+
+type SubmissionState = "ready" | "submitting" | "success" | "error";
+
+export default function InstantQuotePage() {
+  const [selected, setSelected] = useState<string[]>([]);
+  const [details, setDetails] = useState<Record<string, string>>({});
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [state, setState] = useState<SubmissionState>("ready");
+  const [message, setMessage] = useState("");
+  const [customer, setCustomer] = useState({ name: "", business: "", email: "", mobile: "" });
+  const chosen = useMemo(() => services.filter((service) => selected.includes(service.id)), [selected]);
+  const activeService = chosen[activeIndex];
+  const allDetailsComplete = chosen.length > 0 && chosen.every((service) => details[service.id]?.trim());
+
+  function toggle(id: string) {
+    setState("ready");
+    setMessage("");
+    setSelected((current) => {
+      const next = current.includes(id) ? current.filter((item) => item !== id) : [...current, id];
+      setActiveIndex((index) => Math.min(index, Math.max(next.length - 1, 0)));
+      return next;
+    });
+  }
+
+  async function submitRequest(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (state === "submitting" || !allDetailsComplete) return;
+    setState("submitting");
+    setMessage("");
+    try {
+      const response = await fetch("/api/service-request", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...customer, services: chosen.map((service) => ({ id: service.id, name: service.name, details: details[service.id].trim() })) }),
+      });
+      const result = (await response.json().catch(() => null)) as { ok?: boolean; message?: string } | null;
+      if (!response.ok || !result?.ok) throw new Error(result?.message || "Your request could not be submitted.");
+      setState("success");
+      setMessage("Thank you. We have received your service request and will contact you within 24 hours.");
+    } catch (error) {
+      setState("error");
+      setMessage(error instanceof Error ? error.message : "Your request could not be submitted. Please try again.");
+    }
+  }
+
+  const customerComplete = customer.name.trim() && customer.business.trim() && customer.email.trim() && customer.mobile.trim();
+
+  return (
+    <main id="top">
+      <header className="site-header quote-site-header">
+        <Link className="brand" href="/" aria-label="AIM Smart Solutions home"><img src="/aim-smart-solutions-logo.png" alt="AIM Smart Solutions — Business Growth & Automation" /></Link>
+        <nav aria-label="Main navigation"><Link href="/#outcomes">Outcomes</Link><Link href="/#solutions">Solutions</Link><Link href="/#proof">Proof</Link><Link href="/instant-quote" aria-current="page">Request a Proposal</Link><Link href="/#about">Why AIM</Link></nav>
+        <Link className="nav-cta" href="/book-appointment">Book your free call</Link>
+      </header>
+
+      <section className="quote-hero">
+        <p className="kicker">Tailored Proposal Request</p>
+        <h1>Tell us the outcome your business <em>needs.</em></h1>
+        <p>If you already have a defined requirement, select the relevant support and describe the result you want. We will review it and contact you within 24 hours.</p>
+      </section>
+
+      <form className="quote-builder" aria-label="Service request form" onSubmit={submitRequest}>
+        <div className="quote-form-panel">
+          <div className="quote-step"><span>01</span><div><h2>Your details</h2><p>Tell us who the service request is for.</p></div></div>
+          <div className="quote-fields">
+            <label>Full name<input required value={customer.name} onChange={(e) => setCustomer({ ...customer, name: e.target.value })} placeholder="Your name" autoComplete="name" /></label>
+            <label>Business name<input required value={customer.business} onChange={(e) => setCustomer({ ...customer, business: e.target.value })} placeholder="Your business" autoComplete="organization" /></label>
+            <label>Email address<input required type="email" value={customer.email} onChange={(e) => setCustomer({ ...customer, email: e.target.value })} placeholder="name@business.co.uk" autoComplete="email" /></label>
+            <label>Mobile number<input required type="tel" value={customer.mobile} onChange={(e) => setCustomer({ ...customer, mobile: e.target.value })} placeholder="07 or +44 7" autoComplete="tel" /></label>
+          </div>
+
+          <div className="quote-step service-step"><span>02</span><div><h2>Select the support you may need</h2><p>Not sure? Choose “Automation Discovery &amp; Workflow Plan” or book a free call first.</p></div></div>
+          <div className="quote-services">
+            {services.map((service) => (
+              <label className={selected.includes(service.id) ? "selected" : ""} key={service.id}>
+                <input type="checkbox" checked={selected.includes(service.id)} onChange={() => toggle(service.id)} />
+                <span><strong>{service.name}</strong></span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <aside className="service-details-panel" aria-live="polite">
+          {state === "success" ? (
+            <div className="request-success"><span>✓</span><h2>Request received</h2><p>{message}</p><small>A confirmation email has been sent to {customer.email}.</small></div>
+          ) : !activeService ? (
+            <div className="quote-placeholder"><span>→</span><h2>Your service details will appear here</h2><p>Enter your details and select at least one service.</p></div>
+          ) : (
+            <div className="service-detail-step">
+              <p className="detail-progress">Service {activeIndex + 1} of {chosen.length}</p>
+              <h2>{activeService.name}</h2>
+              <label htmlFor={`details-${activeService.id}`}>What would you like help with?</label>
+              <textarea id={`details-${activeService.id}`} required rows={9} value={details[activeService.id] || ""} onChange={(e) => setDetails({ ...details, [activeService.id]: e.target.value })} placeholder="Please describe what you need, the current problem and the outcome you would like." />
+              <div className="detail-actions">
+                <button type="button" className="back-button" disabled={activeIndex === 0} onClick={() => setActiveIndex(activeIndex - 1)}>Previous</button>
+                {activeIndex < chosen.length - 1 ? (
+                  <button type="button" className="next-button" disabled={!details[activeService.id]?.trim()} onClick={() => setActiveIndex(activeIndex + 1)}>Next service →</button>
+                ) : (
+                  <button type="submit" className="submit-request" disabled={!customerComplete || !allDetailsComplete || state === "submitting"}>{state === "submitting" ? "Submitting…" : "Submit service request →"}</button>
+                )}
+              </div>
+              {message && state === "error" && <p className="submission-message error" role="status">{message}</p>}
+            </div>
+          )}
+        </aside>
+      </form>
+
+      <footer className="quote-footer">
+        <Link className="footer-brand" href="/"><img src="/aim-smart-solutions-logo.png" alt="AIM Smart Solutions" /></Link>
+        <p>Practical AI and automation that helps service businesses win more opportunities, serve customers faster and release capacity for growth.</p>
+        <nav aria-label="Footer navigation"><Link href="/#outcomes">Outcomes</Link><Link href="/#solutions">Solutions</Link><Link href="/#proof">Proof</Link><Link href="/book-appointment">Book a free call</Link><Link href="/business-enquiry">Live enquiry demo</Link></nav>
+        <small>© {new Date().getFullYear()} AIM Smart Solutions. All rights reserved.</small>
+      </footer>
+    </main>
+  );
+}
