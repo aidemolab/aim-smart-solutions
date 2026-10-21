@@ -1,3 +1,4 @@
+import ServiceHeader from "./components/ServiceHeader";
 const outcomes = [
   { number: "01", title: "Win more enquiries", body: "Acknowledge new leads quickly, capture the right information and make urgent opportunities easier to act on.", result: "Fewer valuable enquiries left waiting." },
   { number: "02", title: "Serve customers faster", body: "Remove avoidable delays from quotations, bookings, confirmations and routine customer communication.", result: "A smoother, more responsive customer journey." },
@@ -27,11 +28,7 @@ const faqs = [
 export default function Home() {
   return (
     <main id="top">
-      <header className="site-header">
-        <a className="brand" href="#top" aria-label="AIM Smart Solutions home"><img src="/aim-smart-solutions-logo.png" alt="AIM Smart Solutions" /></a>
-        <nav aria-label="Main navigation"><a href="#outcomes">Outcomes</a><a href="#solutions">Solutions</a><a href="#proof">Proof</a><a href="#fit">Is this for you?</a><a href="#about">Why AIM</a><a href="#faq">Questions</a></nav>
-        <a className="nav-cta" href="/book-appointment">Book a free AI opportunity call</a>
-      </header>
+      <ServiceHeader />
 
       <section className="funnel-hero">
         <div className="funnel-hero-copy">
@@ -54,7 +51,7 @@ export default function Home() {
 
       <section className="cost-section"><div><p className="kicker light">The cost of waiting</p><h2>Every slow response gives the customer another reason to look elsewhere.</h2></div><div className="cost-list"><p><span>01</span><strong>Missed revenue</strong> from enquiries that receive a faster answer elsewhere.</p><p><span>02</span><strong>Restricted capacity</strong> while skilled people repeat avoidable administration.</p><p><span>03</span><strong>Weaker decisions</strong> when important information remains scattered and unclear.</p></div></section>
 
-      <section className="section solution-section" id="solutions"><div className="section-intro"><div><p className="kicker">Outcome-led solutions</p><h2>Start with what must improve. <em>Then choose the technology.</em></h2></div><p>You do not need to diagnose the software. Choose the business outcome that matters and AIM will shape the right practical response.</p></div><div className="offer-grid">{offers.map((offer, index) => <article className="offer-card" key={offer.title}><p className="card-tag">{offer.label}</p><span className="offer-number">0{index + 1}</span><h3>{offer.title}</h3><p>{offer.body}</p><ul>{offer.includes.map(item => <li key={item}>✓ {item}</li>)}</ul><a href="/book-appointment">Discuss this outcome →</a></article>)}</div><div className="specialist-line"><strong>Also available:</strong> Customer email automation · AI voice agents · business dashboards · reporting · workflow discovery · tailored process automation</div></section>
+      <section className="section solution-section" id="solutions"><div className="section-intro"><div><p className="kicker">Our Services</p><h2>Explore practical AI, data and <em>automation services.</em></h2></div><p>Seven dedicated services, with working demonstrations that show what's possible for your business.</p></div><div className="offer-grid"><article className="offer-card"><p className="card-tag">01 / Smart Apps</p><h3>AI Smart Apps</h3><p>Custom applications that make complex decisions easier.</p><a href="/services/smart-apps">Explore smart applications →</a></article><article className="offer-card"><p className="card-tag">02 / Voice AI</p><h3>AI Voice Agents</h3><p>Give customers a responsive voice-based enquiry experience.</p><a href="/services/ai-voice-agents">Try our calling agent →</a></article><article className="offer-card"><p className="card-tag">03 / Automation and data</p><h3>Smarter Business Operations</h3><p>From customer workflows to dashboards, reporting and training.</p><a href="/services">View all seven services →</a></article></div><div className="specialist-line"><a href="/services">Explore all services →</a> &nbsp;·&nbsp; <a href="/live-demos">Try our live AI applications →</a></div></section>
 
       <section className="proof-section" id="proof"><div className="section proof-inner"><div className="proof-heading"><div><p className="kicker light">Evidence before promises</p><h2>Do not imagine the solution. <em>Test it.</em></h2></div><p>These are working customer journeys—not illustrations. Use them to experience how faster response, better information and simpler booking can feel.</p></div><div className="proof-grid">{demonstrations.map(item => <article key={item.number}><div className="proof-card-top"><span>{item.number}</span><b>LIVE</b></div><h3>{item.title}</h3><dl><dt>Without improvement</dt><dd>{item.problem}</dd><dt>With AIM</dt><dd>{item.solution}</dd></dl><a href={item.href}>{item.cta} →</a></article>)}</div></div></section>
 
