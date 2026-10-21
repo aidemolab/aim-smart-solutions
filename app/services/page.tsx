@@ -1,0 +1,6 @@
+import Link from "next/link";
+import {services} from "./data";
+import ServiceHeader from "../components/ServiceHeader";
+import ServiceFooter from "../components/ServiceFooter";
+export const metadata={title:"Our Services | AIM Smart Solutions"};
+export default function Services(){return <><ServiceHeader/><main className="services-main"><section className="services-hero"><p className="kicker">Our services</p><h1>Practical technology. <em>Real business improvements.</em></h1><p>Explore seven services to help your business work smarter, respond faster and make better decisions.</p><Link className="button primary" href="/live-demos">Try live AI demonstrations →</Link></section><section className="services-list">{services.map((s,i)=><article className="services-list-card" key={s.slug}><span className="service-index">0{i+1}</span><p className="kicker">{s.demoStatus==="live"?"Working example available":"Tailored demonstration"}</p><h2>{s.title}</h2><p>{s.tagline}</p><Link href={"/services/"+s.slug}>Explore this service →</Link></article>)}</section></main><ServiceFooter/></>}
