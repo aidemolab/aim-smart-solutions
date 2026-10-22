@@ -16,6 +16,15 @@ export type Demo = {
 
 export const demos: Demo[] = [
   {
+    id: "ai-opportunity-score",
+    title: "AI Opportunity Score",
+    summary: "Answer seven quick questions about how your business runs and get a score out of 100, a short explanation and your top three recommended services.",
+    href: "/services/ai-consultancy/#demo",
+    badge: "Live",
+    tryLabel: "Get your score",
+    service: "ai-consultancy",
+  },
+  {
     id: "enquiry-journey",
     title: "Enquiry journey",
     summary: "Send an enquiry and receive an instant acknowledgement by email while the business owner gets an alert. An AI call-back for urgent enquiries can be added.",
@@ -41,6 +50,24 @@ export const demos: Demo[] = [
     badge: "Live",
     tryLabel: "See live availability",
     service: "business-automation",
+  },
+  {
+    id: "business-dashboard",
+    title: "Business Performance Dashboard",
+    summary: "Explore 12 months of figures for a fictional UK service business: revenue, enquiries, conversion rate and response time, filtered by month and service line.",
+    href: "/services/data-analytics/#demo",
+    badge: "Illustrative data",
+    tryLabel: "Explore the dashboard",
+    service: "data-analytics",
+  },
+  {
+    id: "ai-skills-taster",
+    title: "5-minute AI Skills Taster",
+    summary: "A short lesson on writing better AI prompts for your business, with a before-and-after example and a three-question quiz with instant feedback.",
+    href: "/services/training/#demo",
+    badge: "Live",
+    tryLabel: "Start the taster",
+    service: "training",
   },
   {
     id: "pharma-market-intelligence",

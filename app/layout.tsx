@@ -4,6 +4,7 @@ import SiteHeader from "./components/SiteHeader";
 import SiteFooter from "./components/SiteFooter";
 import "./globals.css";
 import "./site.css";
+import "./demos.css";
 
 const description = "Practical AI and automation for UK service businesses: win more customers, save time on admin and turn your data into clear decisions. Based in Bolton.";
 
