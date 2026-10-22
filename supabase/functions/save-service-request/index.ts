@@ -1,10 +1,11 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import { withCors } from "../_shared/cors.ts";
 import nodemailer from "npm:nodemailer@6.9.16";
 
 const clean = (value: unknown, max: number) => typeof value === "string" ? value.trim().slice(0, max) : "";
 const escapeHtml = (value: string) => value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
 
-Deno.serve(async (request: Request) => {
+Deno.serve(withCors(async (request: Request) => {
   if (request.method !== "POST") return Response.json({ ok: false, message: "Method not allowed." }, { status: 405 });
   let body: Record<string, unknown>;
   try { body = await request.json(); }
@@ -59,4 +60,4 @@ Deno.serve(async (request: Request) => {
     return Response.json({ ok: false, message: "Your request was saved, but its confirmation email could not be sent." }, { status: 502 });
   }
   return Response.json({ ok: true, reference, emailsSent: 2 });
-});
+}));

@@ -1,4 +1,5 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import { withCors } from "../_shared/cors.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.4";
 import nodemailer from "npm:nodemailer@6.9.16";
 
@@ -6,7 +7,7 @@ const json = (body: unknown, status = 200) => Response.json(body, { status });
 const clean = (value: unknown, max: number) => typeof value === "string" ? value.trim().slice(0, max) : "";
 const escapeHtml = (value: string) => value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
 
-Deno.serve(async (request: Request) => {
+Deno.serve(withCors(async (request: Request) => {
   if (request.method !== "POST") return json({ ok: false, message: "Method not allowed." }, 405);
 
   const calendarUrl = Deno.env.get("GOOGLE_BOOKING_URL");
@@ -100,4 +101,4 @@ Deno.serve(async (request: Request) => {
   }
 
   return json({ ok: true, appointmentAt: savedAppointmentAt, emailSent: true });
-});
+}));

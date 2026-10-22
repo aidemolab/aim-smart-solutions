@@ -1,7 +1,9 @@
 "use client";
 
+import { withBase } from "@/lib/base-path";
 import Link from "next/link";
 import { FormEvent, useMemo, useState } from "react";
+import { callFunction, toUkE164 } from "@/lib/supabase-functions";
 import "./quote.css";
 
 const services = [
@@ -40,16 +42,23 @@ export default function InstantQuotePage() {
   async function submitRequest(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (state === "submitting" || !allDetailsComplete) return;
+    const mobile = toUkE164(customer.mobile);
+    if (!mobile) {
+      setState("error");
+      setMessage("Enter a valid UK mobile number beginning 07 or +44 7.");
+      return;
+    }
     setState("submitting");
     setMessage("");
     try {
-      const response = await fetch("/api/service-request", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...customer, services: chosen.map((service) => ({ id: service.id, name: service.name, details: details[service.id].trim() })) }),
+      const { status, result } = await callFunction("save-service-request", {
+        name: customer.name.trim(),
+        businessName: customer.business.trim(),
+        email: customer.email.trim().toLowerCase(),
+        mobile,
+        services: chosen.map((service) => ({ id: service.id, name: service.name, details: details[service.id].trim() })),
       });
-      const result = (await response.json().catch(() => null)) as { ok?: boolean; message?: string } | null;
-      if (!response.ok || !result?.ok) throw new Error(result?.message || "Your request could not be submitted.");
+      if (status >= 400 || !result?.ok) throw new Error(result?.message || "Your request could not be submitted.");
       setState("success");
       setMessage("Thank you. We have received your service request and will contact you within 24 hours.");
     } catch (error) {
@@ -63,7 +72,7 @@ export default function InstantQuotePage() {
   return (
     <main id="top">
       <header className="site-header quote-site-header">
-        <Link className="brand" href="/" aria-label="AIM Smart Solutions home"><img src="/aim-smart-solutions-logo.png" alt="AIM Smart Solutions — Business Growth & Automation" /></Link>
+        <Link className="brand" href="/" aria-label="AIM Smart Solutions home"><img src={withBase("/aim-smart-solutions-logo.png")} alt="AIM Smart Solutions — Business Growth & Automation" /></Link>
         <nav aria-label="Main navigation"><Link href="/#outcomes">Outcomes</Link><Link href="/#solutions">Solutions</Link><Link href="/#proof">Proof</Link><Link href="/instant-quote" aria-current="page">Request a Proposal</Link><Link href="/#about">Why AIM</Link></nav>
         <Link className="nav-cta" href="/book-appointment">Book your free call</Link>
       </header>
@@ -121,7 +130,7 @@ export default function InstantQuotePage() {
       </form>
 
       <footer className="quote-footer">
-        <Link className="footer-brand" href="/"><img src="/aim-smart-solutions-logo.png" alt="AIM Smart Solutions" /></Link>
+        <Link className="footer-brand" href="/"><img src={withBase("/aim-smart-solutions-logo.png")} alt="AIM Smart Solutions" /></Link>
         <p>Practical AI and automation that helps service businesses win more opportunities, serve customers faster and release capacity for growth.</p>
         <nav aria-label="Footer navigation"><Link href="/#outcomes">Outcomes</Link><Link href="/#solutions">Solutions</Link><Link href="/#proof">Proof</Link><Link href="/book-appointment">Book a free call</Link><Link href="/business-enquiry">Live enquiry demo</Link></nav>
         <small>© {new Date().getFullYear()} AIM Smart Solutions. All rights reserved.</small>

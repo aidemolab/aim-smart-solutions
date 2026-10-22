@@ -1,0 +1,64 @@
+name: Deploy to GitHub Pages
+
+# Builds the static export and publishes it to GitHub Pages.
+# Repository variables (Settings > Secrets and variables > Actions > Variables):
+#   NEXT_PUBLIC_SUPABASE_URL        Supabase project URL
+#   NEXT_PUBLIC_SUPABASE_ANON_KEY   legacy anon key (JWT starting eyJ); public by design
+#   NEXT_PUBLIC_TURNSTILE_SITE_KEY  Cloudflare Turnstile site key; public by design
+#   PAGES_PREVIEW                   "true" (default) builds for aidemolab.github.io/aim-smart-solutions/;
+#                                   set to "false" only when the custom domain is switched over.
+# Never add the service-role key, SMTP password, Vapi key or Turnstile secret here:
+# everything in this build ends up in the public site.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run lint
+
+      - name: Build and test static export
+        run: npm test
+        env:
+          PAGES_PREVIEW: ${{ vars.PAGES_PREVIEW || 'true' }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ vars.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ vars.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.NEXT_PUBLIC_TURNSTILE_SITE_KEY }}
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

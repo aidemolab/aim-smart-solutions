@@ -1,7 +1,9 @@
 "use client";
 
+import { withBase } from "@/lib/base-path";
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
+import { callFunction } from "@/lib/supabase-functions";
 import "./booking.css";
 
 type BookingState = "loading" | "ready" | "submitting" | "success" | "error";
@@ -10,28 +12,33 @@ const formatSlot = (slot: string) => new Intl.DateTimeFormat("en-GB", {
   weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Europe/London",
 }).format(new Date(slot));
 
+async function fetchSlots(): Promise<string[]> {
+  const { status, result } = await callFunction("appointment-booking", { action: "availability" });
+  if (status >= 400 || !result?.ok) throw new Error(result?.message || "Available times could not be loaded.");
+  return Array.isArray(result.slots) ? result.slots : [];
+}
+
 export default function BookAppointmentPage() {
   const [slots, setSlots] = useState<string[]>([]);
   const [selectedSlot, setSelectedSlot] = useState("");
   const [state, setState] = useState<BookingState>("loading");
   const [message, setMessage] = useState("");
 
-  async function loadSlots() {
-    setState("loading");
-    setMessage("");
-    try {
-      const response = await fetch("/api/appointments", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "availability" }) });
-      const result = await response.json();
-      if (!response.ok || !result.ok) throw new Error(result.message || "Available times could not be loaded.");
-      setSlots(result.slots || []);
-      setState("ready");
-    } catch (error) {
-      setState("error");
-      setMessage(error instanceof Error ? error.message : "Available times could not be loaded.");
-    }
+  // State is only set once the request settles, never synchronously inside the effect.
+  function showSlots(request: Promise<string[]>) {
+    request.then(
+      (loaded) => { setSlots(loaded); setState("ready"); },
+      (error: unknown) => { setState("error"); setMessage(error instanceof Error ? error.message : "Available times could not be loaded."); },
+    );
   }
 
-  useEffect(() => { loadSlots(); }, []);
+  function loadSlots() {
+    setState("loading");
+    setMessage("");
+    showSlots(fetchSlots());
+  }
+
+  useEffect(() => { showSlots(fetchSlots()); }, []);
 
   async function submitBooking(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -40,14 +47,10 @@ export default function BookAppointmentPage() {
     setState("submitting");
     setMessage("");
     try {
-      const response = await fetch("/api/appointments", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "book", name: form.get("name"), businessName: form.get("businessName"), email: form.get("email"), mobile: form.get("mobile"), jobDescription: form.get("jobDescription"), appointmentAt: selectedSlot }),
-      });
-      const result = await response.json();
-      if (!response.ok || !result.ok) throw new Error(result.message || "Your appointment could not be booked.");
+      const { status, result } = await callFunction("appointment-booking", { action: "book", name: form.get("name"), businessName: form.get("businessName"), email: form.get("email"), mobile: form.get("mobile"), jobDescription: form.get("jobDescription"), appointmentAt: selectedSlot });
+      if (status >= 400 || !result?.ok) throw new Error(result?.message || "Your appointment could not be booked.");
       setState("success");
-      setMessage(`Your appointment is confirmed for ${formatSlot(result.appointmentAt)}. A confirmation email has been sent.`);
+      setMessage(`Your appointment is confirmed for ${formatSlot(String(result.appointmentAt ?? selectedSlot))}. A confirmation email has been sent.`);
     } catch (error) {
       setState("error");
       setMessage(error instanceof Error ? error.message : "Your appointment could not be booked.");
@@ -57,7 +60,7 @@ export default function BookAppointmentPage() {
   return (
     <main id="top">
       <header className="site-header">
-        <Link className="brand" href="/" aria-label="AIM Smart Solutions home"><img src="/aim-smart-solutions-logo.png" alt="AIM Smart Solutions — Business Growth & Automation" /></Link>
+        <Link className="brand" href="/" aria-label="AIM Smart Solutions home"><img src={withBase("/aim-smart-solutions-logo.png")} alt="AIM Smart Solutions — Business Growth & Automation" /></Link>
         <nav aria-label="Main navigation"><Link href="/#outcomes">Outcomes</Link><Link href="/#solutions">Solutions</Link><Link href="/#proof">Proof</Link><Link href="/#fit">Is this for you?</Link><Link href="/#about">Why AIM</Link><Link href="/#faq">Questions</Link></nav>
         <Link className="nav-cta" href="/book-appointment" aria-current="page">Book your free call</Link>
       </header>
@@ -96,7 +99,7 @@ export default function BookAppointmentPage() {
       </section>
 
       <footer>
-        <Link className="footer-brand" href="/"><img src="/aim-smart-solutions-logo.png" alt="AIM Smart Solutions" /></Link>
+        <Link className="footer-brand" href="/"><img src={withBase("/aim-smart-solutions-logo.png")} alt="AIM Smart Solutions" /></Link>
         <p>Practical AI and automation that helps service businesses win more opportunities, serve customers faster and release capacity for growth.</p>
         <nav aria-label="Footer navigation"><Link href="/#outcomes">Outcomes</Link><Link href="/#solutions">Solutions</Link><Link href="/#proof">Proof</Link><Link href="/instant-quote">Request a proposal</Link><Link href="/business-enquiry">Live enquiry demo</Link></nav>
         <small>© {new Date().getFullYear()} AIM Smart Solutions. All rights reserved.</small>
