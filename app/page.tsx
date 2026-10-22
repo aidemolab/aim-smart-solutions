@@ -1,8 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { withBase } from "@/lib/base-path";
 import { CALLS_ENABLED } from "@/lib/site";
 import { BookingButton, CtaBand, HowIWork, PillarCards, StartHere } from "./components/Blocks";
 import DemoBadge from "./components/DemoBadge";
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 const demonstrations = [
   {

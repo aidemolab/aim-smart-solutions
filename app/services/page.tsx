@@ -7,6 +7,7 @@ import { BookingButton, pillarNumber } from "../components/Blocks";
 import DemoBadge from "../components/DemoBadge";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/services/" },
   title: "Services",
   description: "AI and automation services for UK service businesses, grouped by the problem they solve: win more customers, save time and decide better.",
 };

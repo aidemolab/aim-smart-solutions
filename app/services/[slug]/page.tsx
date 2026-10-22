@@ -21,6 +21,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   if (!service) return {};
   return {
     title: service.title,
+    alternates: { canonical: `/services/${service.slug}/` },
     description: service.metaDescription,
     openGraph: { title: `${service.title} | AIM Smart Solutions`, description: service.metaDescription, images: [{ url: "/og.png", width: 1200, height: 630, alt: "AIM Smart Solutions" }] },
   };

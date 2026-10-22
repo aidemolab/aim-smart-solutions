@@ -5,6 +5,7 @@ import DemoBadge from "../components/DemoBadge";
 import DemoCard from "../components/DemoCard";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/live-demos/" },
   title: "Live AI Demos: the AI Lab",
   description: "Try AIM Smart Solutions' AI and automation demos yourself: enquiry handling, instant quotes, online booking and a smart decision app.",
 };
