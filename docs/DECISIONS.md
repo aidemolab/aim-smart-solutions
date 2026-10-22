@@ -46,3 +46,14 @@ than rewriting history; if a decision changes, add a new entry that replaces the
 - **Performance:** accessibility and SEO score 100. Mobile performance is limited mainly by the
   Next.js/React JavaScript every page loads; inlining CSS was tried and made it worse, so it
   is off.
+
+## External demo apps (2026-10-22)
+- Four demo apps live in their own `aidemolab` repos and deploy to `aidemolab.github.io/<repo>/`
+  with a Pages workflow: pharma, `aim-supplier-risk-demo` (Data & Dashboards),
+  `aim-sales-lead-scoring-demo` (Sales & Marketing) and `aim-property-investment-demo`
+  (Smart Apps). The main site only links to them, badge "Illustrative data".
+- They contain no API keys and no server code; any "AI" behaviour is rule-based and labelled so.
+- The property demo carries "Not investment advice" and uses clearly fictional addresses.
+- The demo repos are also edited in Google AI Studio (two-way sync), so keep changes small
+  and expect AI Studio commits on `main`.
+- The in-site Business Performance Dashboard was removed in favour of the Supplier Risk app.

@@ -79,7 +79,7 @@ test("every page offers the one main call to action", () => {
 
 test("every demo in the AI Lab has a Live or Illustrative data badge", () => {
   const tiles = page("live-demos").split('class="demo-tile"').slice(1);
-  assert.ok(tiles.length >= 7, `expected at least 7 demos, found ${tiles.length}`);
+  assert.ok(tiles.length >= 9, `expected at least 9 demos, found ${tiles.length}`);
   tiles.forEach((tile, i) => assert.match(tile.slice(0, 300), /class="demo-badge [^"]+">(Live|Illustrative data)</, `demo ${i + 1} has no badge`));
 });
 

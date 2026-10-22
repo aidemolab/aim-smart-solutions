@@ -7,7 +7,6 @@ import { services, serviceBySlug, type Service } from "../data";
 import { BookingButton, CtaBand, EnquiryJourney } from "../../components/Blocks";
 import DemoCard from "../../components/DemoCard";
 import OpportunityScore from "../../components/demos/OpportunityScore";
-import BusinessDashboard from "../../components/demos/BusinessDashboard";
 import SkillsTaster from "../../components/demos/SkillsTaster";
 
 type Params = { params: Promise<{ slug: string }> };
@@ -29,11 +28,9 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
 // The demo shown on each service page. Built-in demos are added here.
 function ServiceDemo({ service }: { service: Service }) {
-  if (service.slug === "sales-marketing") return <EnquiryJourney />;
   if (service.slug === "ai-consultancy") return <OpportunityScore />;
-  if (service.slug === "data-analytics") return <BusinessDashboard />;
   if (service.slug === "training") return <SkillsTaster />;
-  const list = service.demos.map(demoById).filter((demo) => demo !== undefined);
+  const list = service.demos.filter((id) => !(service.slug === "sales-marketing" && id === "enquiry-journey")).map(demoById).filter((demo) => demo !== undefined);
   if (list.length === 0) {
     return (
       <div className="demo-placeholder">
@@ -43,7 +40,12 @@ function ServiceDemo({ service }: { service: Service }) {
       </div>
     );
   }
-  return <div className="demo-tiles">{list.map((demo) => <DemoCard key={demo.id} demo={demo} />)}</div>;
+  return (
+    <>
+      {service.slug === "sales-marketing" && <EnquiryJourney />}
+      <div className={`demo-tiles${service.slug === "sales-marketing" ? " demo-tiles-after" : ""}`}>{list.map((demo) => <DemoCard key={demo.id} demo={demo} />)}</div>
+    </>
+  );
 }
 
 export default async function ServicePage({ params }: Params) {
