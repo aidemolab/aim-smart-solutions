@@ -27,7 +27,21 @@ These demonstrations illustrate potential client solutions. They do not represen
 
 This repository is intended to hold the website source code, assets and project documentation.
 
-Development and deployment instructions will be added after the source has been copied and checked.
+The site is a static Next.js export, built for GitHub Pages. There is no server: the
+enquiry, quotation and booking forms call Supabase Edge Functions (in `supabase/functions/`)
+directly from the browser.
+
+```bash
+cp .env.example .env.local   # add the Supabase URL and anon (public) key
+npm install
+npm run dev                  # http://localhost:3000
+npm test                     # builds to out/ and checks every route exported
+npm start                    # serves out/ locally
+```
+
+Never put the Supabase service-role key, SMTP password or voice-agent token in `.env.local`
+or GitHub variables for the site build: anything prefixed `NEXT_PUBLIC_` is visible to visitors.
+Those secrets belong only in the Supabase function settings.
 
 ## Contact
 

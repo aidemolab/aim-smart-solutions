@@ -9,7 +9,6 @@ export const metadata: Metadata = {
   openGraph: { title: "AIM Smart Solutions", description: "Win more customers, serve them faster and give your team hours back with practical AI and automation.", type: "website", images: [{ url: "/og.png", width: 1200, height: 630, alt: "AIM Smart Solutions" }] },
   twitter: { card: "summary_large_image", title: "AIM Smart Solutions", description: "Win more customers, serve them faster and give your team hours back with practical AI and automation.", images: ["/og.png"] },
   icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
-  other: { "codex-preview": "development" },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

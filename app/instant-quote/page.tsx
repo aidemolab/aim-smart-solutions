@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { FormEvent, useMemo, useState } from "react";
+import { callFunction, toUkE164 } from "@/lib/supabase-functions";
 import "./quote.css";
 
 const services = [
@@ -40,16 +41,23 @@ export default function InstantQuotePage() {
   async function submitRequest(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (state === "submitting" || !allDetailsComplete) return;
+    const mobile = toUkE164(customer.mobile);
+    if (!mobile) {
+      setState("error");
+      setMessage("Enter a valid UK mobile number beginning 07 or +44 7.");
+      return;
+    }
     setState("submitting");
     setMessage("");
     try {
-      const response = await fetch("/api/service-request", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...customer, services: chosen.map((service) => ({ id: service.id, name: service.name, details: details[service.id].trim() })) }),
+      const { status, result } = await callFunction("save-service-request", {
+        name: customer.name.trim(),
+        businessName: customer.business.trim(),
+        email: customer.email.trim().toLowerCase(),
+        mobile,
+        services: chosen.map((service) => ({ id: service.id, name: service.name, details: details[service.id].trim() })),
       });
-      const result = (await response.json().catch(() => null)) as { ok?: boolean; message?: string } | null;
-      if (!response.ok || !result?.ok) throw new Error(result?.message || "Your request could not be submitted.");
+      if (status >= 400 || !result?.ok) throw new Error(result?.message || "Your request could not be submitted.");
       setState("success");
       setMessage("Thank you. We have received your service request and will contact you within 24 hours.");
     } catch (error) {

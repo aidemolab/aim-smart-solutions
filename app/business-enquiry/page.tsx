@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import Link from "next/link";
+import { callFunction, toUkE164 } from "@/lib/supabase-functions";
 
 type SubmissionState = "ready" | "submitting" | "success" | "error";
 
@@ -13,33 +14,40 @@ export default function BusinessEnquiryPage() {
     event.preventDefault();
     if (state === "submitting") return;
     const data = new FormData(event.currentTarget);
-    setState("submitting");
-    const urgency = data.get("urgency");
+    const urgency = data.get("urgency") === "urgent" ? "urgent" : "normal";
+    const text = (key: string) => String(data.get(key) ?? "").trim();
+    const mobile = toUkE164(data.get("mobile"));
     setMessage("");
+    if (!mobile) {
+      setState("error");
+      setMessage("Enter a valid UK mobile number beginning 07 or +44 7.");
+      return;
+    }
+    setState("submitting");
 
     try {
-      const response = await fetch("/api/calls", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          firstName: data.get("firstName"),
-          businessName: data.get("businessName"),
-          email: data.get("email"),
-          phone: data.get("mobile"),
-          enquiry: data.get("enquiry"),
-          urgency,
-        }),
+      // The voice call used to be started by the old /api/calls route. On a static
+      // site it must be started inside the save-business-enquiry function instead,
+      // which reports back with callStarted: true.
+      const { status, result } = await callFunction("save-business-enquiry", {
+        name: text("firstName"),
+        businessName: text("businessName"),
+        email: text("email"),
+        mobile,
+        enquiry: text("enquiry"),
+        urgency,
       });
-      const result = (await response.json().catch(() => null)) as { ok?: boolean; callId?: string; message?: string } | null;
-      if (response.ok && result?.ok) {
+      if (status < 400 && result?.ok) {
         setState("success");
-        setMessage(urgency === "urgent"
-          ? "Thank you. Your urgent enquiry has been submitted and our AI assistant is calling you now."
-          : "Thank you. Your enquiry has been submitted and we will get back to you within 24 hours.");
+        setMessage(urgency !== "urgent"
+          ? "Thank you. Your enquiry has been submitted and we will get back to you within 24 hours."
+          : result.callStarted === true
+            ? "Thank you. Your urgent enquiry has been submitted and our AI assistant is calling you now."
+            : "Thank you. Your urgent enquiry has been submitted and we will contact you as a priority.");
         return;
       }
       setState("error");
-      setMessage(result?.message || "We could not start the call. Please check your mobile number and try again.");
+      setMessage(result?.message || "We could not submit your enquiry. Please check your details and try again.");
     } catch {
       setState("error");
       setMessage("We could not contact the call service. Please try again.");
