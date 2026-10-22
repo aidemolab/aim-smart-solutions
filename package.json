@@ -10,7 +10,8 @@
     "build": "next build",
     "start": "npx --yes serve@14.2.4 out",
     "test": "npm run build && node --test tests/static-export.test.mjs",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "check-test-emails": "node scripts/check-test-emails.mjs"
   },
   "dependencies": {
     "next": "16.2.6",

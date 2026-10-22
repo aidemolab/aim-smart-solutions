@@ -1,0 +1,29 @@
+name: Check pull request
+
+# Lint, build and test every pull request before it is merged into main.
+# Uses no secrets: the forms are built without Supabase values, which the tests allow.
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run lint
+
+      - name: Build and test static export
+        run: npm test
