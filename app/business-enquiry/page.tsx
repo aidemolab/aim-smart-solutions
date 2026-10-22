@@ -5,6 +5,7 @@ import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { callFunction, toUkE164 } from "@/lib/supabase-functions";
 import Turnstile from "../components/Turnstile";
+import { CALL_CONSENT_TEXT, CALL_CONSENT_VERSION } from "@/lib/consent";
 
 type SubmissionState = "ready" | "submitting" | "success" | "error";
 
@@ -52,6 +53,7 @@ export default function BusinessEnquiryPage() {
         enquiry: text("enquiry"),
         urgency,
         consent,
+        consentVersion: consent ? CALL_CONSENT_VERSION : undefined,
         turnstileToken,
       });
       // Turnstile tokens are single-use, so get a fresh one for any retry.
@@ -108,7 +110,7 @@ export default function BusinessEnquiryPage() {
             <label style={{ display: "inline-flex", alignItems: "center", gap: 9, margin: 0, fontSize: 14, letterSpacing: 0, textTransform: "none", cursor: "pointer" }}><input style={{ width: 18, height: 18, margin: 0 }} name="urgency" type="radio" value="urgent" onChange={() => setUrgent(true)} /> Urgent</label>
           </fieldset>
           <p className="field-help urgency-help" style={{ margin: "0 0 16px" }}>Select Urgent if you need a prompt response. Our AI assistant will call the mobile number you provided.</p>
-          {urgent && <label htmlFor="call-consent" style={{ display: "flex", alignItems: "flex-start", gap: 10, margin: "0 0 20px", fontSize: 14, letterSpacing: 0, textTransform: "none", cursor: "pointer" }}><input id="call-consent" style={{ width: 18, height: 18, margin: "2px 0 0", flex: "none" }} name="consent" type="checkbox" value="yes" required /> I agree to receive one automated phone call from the AIM Smart Solutions AI assistant to the mobile number above about this enquiry.</label>}
+          {urgent && <label htmlFor="call-consent" style={{ display: "flex", alignItems: "flex-start", gap: 10, margin: "0 0 20px", fontSize: 14, letterSpacing: 0, textTransform: "none", cursor: "pointer" }}><input id="call-consent" style={{ width: 18, height: 18, margin: "2px 0 0", flex: "none" }} name="consent" type="checkbox" value="yes" required /> {CALL_CONSENT_TEXT}</label>}
           <Turnstile onToken={setTurnstileToken} resetKey={turnstileKey} />
           <button type="submit" disabled={state === "submitting"}>{state === "submitting" ? "Submitting…" : "Try the enquiry journey"}<span>→</span></button>
           {message && <p id="enquiry-status" className={`submission-message ${state}`} role="status" aria-live="polite">{message}</p>}

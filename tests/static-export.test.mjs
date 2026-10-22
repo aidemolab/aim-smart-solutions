@@ -37,3 +37,13 @@ test("no server-only leftovers in the export", () => {
   assert.doesNotMatch(text, /utm_source=chatgpt\.com/, "ChatGPT tracking link found");
   assert.doesNotMatch(text, /service_role|IONOS_SMTP|VOICE_AGENT|BOOKING_SECRET/, "a secret name leaked into browser code");
 });
+
+test("consent wording in the form matches the wording the function stores", () => {
+  const read = (p) => readFileSync(fileURLToPath(new URL(p, import.meta.url)), "utf8");
+  const client = read("../lib/consent.ts");
+  const server = read("../supabase/functions/submit-enquiry/index.ts");
+  const version = client.match(/CALL_CONSENT_VERSION = "([^"]+)"/)?.[1];
+  const text = client.match(/CALL_CONSENT_TEXT =\s*"([^"]+)"/)?.[1];
+  assert.ok(version && text, "could not read lib/consent.ts");
+  assert.ok(server.includes(`"${version}":\n    "${text}"`), `submit-enquiry has no identical wording for version ${version}`);
+});

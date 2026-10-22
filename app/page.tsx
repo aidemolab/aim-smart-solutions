@@ -7,12 +7,6 @@ const outcomes = [
   { number: "03", title: "Release capacity for growth", body: "Automate repetitive administration and bring important information into a clear, usable view.", result: "More time for customers, delivery and growth." },
 ];
 
-const offers = [
-  { label: "Enquiries & follow-up", title: "Never Miss an Enquiry", body: "Capture, acknowledge and prioritise customer enquiries so opportunities do not sit unnoticed when your team is busy.", includes: ["Structured enquiry capture", "Immediate customer acknowledgement", "Optional urgent AI voice response", "Clear follow-up workflow"] },
-  { label: "Quotes & appointments", title: "Faster Quote-to-Booking", body: "Collect complete requirements at the start, reduce back-and-forth and move suitable customers towards a confirmed appointment.", includes: ["Guided service requests", "Quotation-ready information", "Online appointment selection", "Confirmations and reminders"] },
-  { label: "Operations & decisions", title: "Smarter Business Operations", body: "Remove repeated tasks and turn scattered business information into practical dashboards and workflows your team can use.", includes: ["Workflow review", "Focused automation", "Dashboards and reporting", "Adoption support"] },
-];
-
 const demonstrations = [
   { number: "01", title: "An urgent lead receives a faster response", problem: "A new enquiry arrives while the owner is busy.", solution: "The customer receives confirmation and can request an immediate AI voice response.", href: "/business-enquiry", cta: "Try the live enquiry" },
   { number: "02", title: "A service request arrives quotation-ready", problem: "Missing details cause repeated emails and slow down the quotation.", solution: "A guided request captures the relevant information for every selected service.", href: "/instant-quote", cta: "Try the service request" },

@@ -40,5 +40,8 @@ $function$;
 revoke execute on function public.form_consume(text, integer) from public, anon, authenticated;
 grant execute on function public.form_consume(text, integer) to service_role;
 
--- Records when the visitor ticked the consent box for an automated call.
+-- Records when the visitor ticked the consent box for an automated call, and
+-- exactly which wording (and version of it) they agreed to.
 alter table public.enquiries add column if not exists call_consent_at timestamptz;
+alter table public.enquiries add column if not exists call_consent_version text;
+alter table public.enquiries add column if not exists call_consent_text text;

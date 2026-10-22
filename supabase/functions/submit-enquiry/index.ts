@@ -4,19 +4,32 @@
 // live ChatGPT Sites version.
 //
 // Steps: Turnstile check -> validation -> per-IP / per-number daily limits ->
-// save customer + enquiry -> (urgent + consent) start the Vapi call -> email.
+// save customer + enquiry -> (urgent + consent) start the Vapi call ->
+// customer acknowledgement email -> owner notification email.
 //
 // Secrets it needs (Supabase > Edge Functions > Secrets):
 //   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY        (provided by Supabase)
 //   TURNSTILE_SECRET_KEY                           (new)
 //   VAPI_API_KEY, VAPI_ASSISTANT_ID, VAPI_PHONE_NUMBER_ID   (already set for vapi-outbound-call)
 //   IONOS_SMTP_HOST, IONOS_SMTP_PORT, IONOS_SMTP_USER, IONOS_SMTP_PASSWORD (already set)
-// Optional: RATE_LIMIT_SALT, ALLOWED_ORIGINS, TURNSTILE_HOSTNAMES
+// Optional: RATE_LIMIT_SALT, ALLOWED_ORIGINS, TURNSTILE_HOSTNAMES,
+//           OWNER_EMAIL (default enquiry@aimsmartsolutions.tech)
 // Needs migration 20261022120000_submit_enquiry_protection.sql applied first.
 
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import nodemailer from "npm:nodemailer@6.9.16";
 import { withCors } from "../_shared/cors.ts";
+
+// Canonical wording of the call-consent checkbox, by version. The form sends only
+// the version; the wording stored with the enquiry comes from here, so a visitor
+// cannot alter what is recorded. Must match lib/consent.ts exactly (checked by
+// tests/static-export.test.mjs). To change the wording, add a new version.
+const CONSENT_WORDING: Record<string, string> = {
+  "2026-10-22":
+    "I agree to receive one automated phone call from the AIM Smart Solutions AI assistant to the mobile number above about this enquiry.",
+};
+
+const DEFAULT_OWNER_EMAIL = "enquiry@aimsmartsolutions.tech";
 
 // Daily limits (UTC day). Calls cost money and ring real phones, so they are tighter.
 const LIMITS = {
@@ -94,6 +107,7 @@ Deno.serve(withCors(async (request: Request) => {
   const enquiryText = clean(body.enquiry, 5000);
   const urgency = body.urgency === "urgent" ? "urgent" : "normal";
   const consent = body.consent === true;
+  const consentVersion = clean(body.consentVersion, 20);
 
   if (!name || !businessName || !enquiryText || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return json({ ok: false, message: "Complete all enquiry fields." }, 400);
@@ -101,7 +115,7 @@ Deno.serve(withCors(async (request: Request) => {
   if (!/^\+447\d{9}$/.test(mobile)) {
     return json({ ok: false, message: "Enter a valid UK mobile number beginning 07 or +44 7." }, 400);
   }
-  if (urgency === "urgent" && !consent) {
+  if (urgency === "urgent" && (!consent || !CONSENT_WORDING[consentVersion])) {
     return json({ ok: false, message: "Please confirm you agree to receive an automated call, or choose Normal." }, 400);
   }
 
@@ -171,6 +185,8 @@ Deno.serve(withCors(async (request: Request) => {
       urgency,
       status: "new",
       call_consent_at: urgency === "urgent" ? new Date().toISOString() : null,
+      call_consent_version: urgency === "urgent" ? consentVersion : null,
+      call_consent_text: urgency === "urgent" ? CONSENT_WORDING[consentVersion] : null,
     }),
   });
   if (!enquiryResponse.ok) {
@@ -202,8 +218,11 @@ Deno.serve(withCors(async (request: Request) => {
     }
   }
 
-  // 6. Acknowledgement email.
+  // 6. Emails: customer acknowledgement, then owner notification (which reports
+  //    whether the acknowledgement went). Failures are logged, not fatal: the
+  //    enquiry is already saved.
   let emailSent = false;
+  let ownerNotified = false;
   const smtpHost = Deno.env.get("IONOS_SMTP_HOST");
   const smtpPort = Number(Deno.env.get("IONOS_SMTP_PORT") ?? "465");
   const smtpUser = Deno.env.get("IONOS_SMTP_USER");
@@ -211,17 +230,17 @@ Deno.serve(withCors(async (request: Request) => {
   if (!smtpHost || !smtpUser || !smtpPassword || !Number.isInteger(smtpPort)) {
     console.error("SMTP configuration is incomplete");
   } else {
+    const transporter = nodemailer.createTransport({
+      host: smtpHost, port: smtpPort, secure: smtpPort === 465,
+      auth: { user: smtpUser, pass: smtpPassword },
+      connectionTimeout: 10000, greetingTimeout: 10000, socketTimeout: 15000,
+    });
     const urgentLine = urgency !== "urgent"
       ? ""
       : callStarted
         ? "You selected Urgent. Our AI assistant is calling the mobile number you provided."
         : "You selected Urgent. We will contact you as a priority.";
     try {
-      const transporter = nodemailer.createTransport({
-        host: smtpHost, port: smtpPort, secure: smtpPort === 465,
-        auth: { user: smtpUser, pass: smtpPassword },
-        connectionTimeout: 10000, greetingTimeout: 10000, socketTimeout: 15000,
-      });
       await transporter.sendMail({
         from: `AIM Smart Solutions <${smtpUser}>`,
         to: email,
@@ -234,7 +253,36 @@ Deno.serve(withCors(async (request: Request) => {
     } catch (error) {
       console.error("Acknowledgement email failed:", error instanceof Error ? error.message : "Unknown error");
     }
+
+    const ownerEmail = Deno.env.get("OWNER_EMAIL") || DEFAULT_OWNER_EMAIL;
+    const yesNo = (value: boolean) => value ? "Yes" : "No";
+    // Keep visitor text out of the header on one line (no header injection).
+    const oneLine = (value: string) => value.replace(/[\r\n]+/g, " ");
+    const callLine = urgency === "urgent" ? yesNo(callStarted) : "Not requested";
+    const details: [string, string][] = [
+      ["Name", name],
+      ["Business", businessName],
+      ["Email", email],
+      ["Mobile", mobile],
+      ["Urgency", urgency === "urgent" ? "Urgent" : "Normal"],
+      ["Acknowledgement email sent", yesNo(emailSent)],
+      ["AI call started", callLine],
+    ];
+    if (urgency === "urgent") details.push(["Call consent", `Yes (version ${consentVersion})`]);
+    try {
+      await transporter.sendMail({
+        from: `AIM Smart Solutions website <${smtpUser}>`,
+        to: ownerEmail,
+        replyTo: email,
+        subject: oneLine(`${urgency === "urgent" ? "[URGENT] " : ""}New enquiry - ${businessName} (${name})`),
+        text: `${details.map(([label, value]) => `${label}: ${value}`).join("\n")}\n\nEnquiry:\n${enquiryText}`,
+        html: `<p><strong>New website enquiry</strong></p><table cellpadding="4">${details.map(([label, value]) => `<tr><td><strong>${escapeHtml(label)}</strong></td><td>${escapeHtml(value)}</td></tr>`).join("")}</table><p><strong>Enquiry:</strong><br>${escapeHtml(enquiryText).replaceAll("\n", "<br>")}</p>`,
+      });
+      ownerNotified = true;
+    } catch (error) {
+      console.error("Owner notification email failed:", error instanceof Error ? error.message : "Unknown error");
+    }
   }
 
-  return json({ ok: true, emailSent, callStarted });
+  return json({ ok: true, emailSent, callStarted, ownerNotified });
 }));
