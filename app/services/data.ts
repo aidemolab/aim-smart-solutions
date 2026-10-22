@@ -61,9 +61,10 @@ export const services: Service[] = [
       "Instant acknowledgement and owner alert for every website enquiry",
       "Follow-up emails when a quote has not had a reply",
       "Capturing leads into a simple CRM or spreadsheet automatically",
+      "Scoring leads so the best opportunities get the first call",
     ],
     features: ["Lead capture and qualification", "Customer email workflows", "CRM and contact management integration", "Sales reporting and follow-up processes"],
-    demos: ["enquiry-journey"],
+    demos: ["enquiry-journey", "sales-lead-scoring"],
     metaDescription: "AI sales and marketing automation for small businesses: instant enquiry replies, owner alerts, reliable follow-up and a clear view of every lead.",
   },
   {
@@ -113,7 +114,7 @@ export const services: Service[] = [
       "Internal tools that guide staff through a complex process",
     ],
     features: ["Industry-specific decision tools", "Interactive calculators and scenario planning", "AI-powered explanations with human-checkable results", "Practical implementation and ongoing improvements"],
-    demos: ["pharma-market-intelligence"],
+    demos: ["pharma-market-intelligence", "property-investment"],
     metaDescription: "AI smart apps: purpose-built decision tools with transparent calculations, scenario planning and plain-English AI explanations. Try the pharma demo.",
   },
   {
@@ -138,7 +139,7 @@ export const services: Service[] = [
       "Cleaning and combining spreadsheets into a reliable data source",
     ],
     features: ["Data preparation and quality checks", "Business dashboards and KPIs", "Sales and operating performance reports", "Decision-support analysis"],
-    demos: ["business-dashboard"],
+    demos: ["supplier-risk"],
     metaDescription: "Data analytics, dashboards and KPI reporting for small businesses: bring scattered figures into one clear view and plan with confidence.",
   },
   {
