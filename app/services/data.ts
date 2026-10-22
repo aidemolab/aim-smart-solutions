@@ -138,7 +138,7 @@ export const services: Service[] = [
       "Cleaning and combining spreadsheets into a reliable data source",
     ],
     features: ["Data preparation and quality checks", "Business dashboards and KPIs", "Sales and operating performance reports", "Decision-support analysis"],
-    demos: [],
+    demos: ["business-dashboard"],
     metaDescription: "Data analytics, dashboards and KPI reporting for small businesses: bring scattered figures into one clear view and plan with confidence.",
   },
   {
@@ -163,7 +163,7 @@ export const services: Service[] = [
       "Introducing AI tools across a team with agreed good practice",
     ],
     features: ["Hands-on AI workshops", "Excel and data analysis training", "SQL and reporting skills", "Team-specific training programmes"],
-    demos: [],
+    demos: ["ai-skills-taster"],
     metaDescription: "Practical AI and data training for UK teams: hands-on workshops in AI tools, prompting, Excel, SQL, Power BI and business automation.",
   },
   {
@@ -188,7 +188,7 @@ export const services: Service[] = [
       "Planning and supporting the adoption of a new system",
     ],
     features: ["AI opportunity assessments", "Process and data reviews", "Tool selection and solution design", "Implementation guidance and adoption support"],
-    demos: [],
+    demos: ["ai-opportunity-score"],
     metaDescription: "AI and digital transformation consultancy for SMEs: assess your workflows, find the AI opportunities worth pursuing and plan practical next steps.",
   },
 ];
