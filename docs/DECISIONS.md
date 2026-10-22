@@ -70,3 +70,10 @@ than rewriting history; if a decision changes, add a new entry that replaces the
   limits, and a daily limit per IP (120) and overall (3000). No secret keys are in browser code.
 - Main-site badge for these three apps is **Live**; the pharma app stays **Illustrative data**.
   Every app says the sample data is fictional and not to enter personal or confidential data.
+
+## Appointment reminders (2026-10-22)
+- `send-appointment-reminders` requires the `x-cron-secret` header (Supabase secret
+  `REMINDERS_CRON_SECRET`, same value in Vault as `reminders_cron_secret`); no JWT.
+- pg_cron job `appointment-reminders-hourly` (minute 5) calls it via pg_net. One customer and one
+  business reminder per appointment, sent when the appointment is 2 to 24 hours away; each flag is
+  claimed before sending (no duplicates) and released if sending fails.
