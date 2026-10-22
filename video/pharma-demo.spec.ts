@@ -22,7 +22,7 @@ const APP_URL = 'https://aidemolab.github.io/aim-pharmaceutical-ai-demo/';
 const OUT_DIR = process.env.OUT_DIR ?? path.resolve('video-out');
 const QUESTION = 'Which product should we pilot first and why?';
 const SLOW_MO = 30; // ms added to every browser interaction
-const TYPE_DELAY = 30; // + SLOW_MO ~= 60ms per character
+const TYPE_DELAY = 5; // + SLOW_MO ~= 35ms per character
 
 const FORMATS = [
   { name: '16x9', width: 1920, height: 1080 },
@@ -162,7 +162,7 @@ async function waitForAnswer(page: Page, timeoutMs = 60_000): Promise<string> {
     const now = await read();
     if (now.length > 80 && now === last) {
       if (!stableSince) stableSince = Date.now();
-      if (Date.now() - stableSince > 1500) break;
+      if (Date.now() - stableSince > 600) break;
     } else {
       stableSince = 0;
     }
@@ -260,22 +260,22 @@ async function recordOnce(browser: Browser, fmt: (typeof FORMATS)[number], video
     await page.mouse.up();
     await holdUntil(32);
 
-    // 32-40s: AI assistant, type the question, wait for the answer, hold 3s.
+    // 32-40s: AI assistant, type the question, wait for the answer, hold 2s.
     mark('assistant');
     await smoothScroll(page, 0, 400);
     await cursor.click(nav(page, 'Assistant'));
     const input = page.getByPlaceholder('Ask a strategic advisory question...');
     await input.waitFor();
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(300);
     await cursor.click(input);
     await input.pressSequentially(QUESTION, { delay: TYPE_DELAY });
-    await page.waitForTimeout(300);
+    await page.waitForTimeout(200);
     mark('sent');
     await page.keyboard.press('Enter');
     await cursor.moveTo(fmt.width * 0.85, fmt.height * 0.6, 18); // move cursor off the answer
     await waitForAnswer(page);
     mark('answer');
-    await page.waitForTimeout(3000);
+    await page.waitForTimeout(2000);
     mark('end');
 
     ok = true;
