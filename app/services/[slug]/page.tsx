@@ -60,11 +60,32 @@ export default async function ServicePage({ params }: Params) {
   if (!service) notFound();
   const pillar = pillars.find((item) => item.id === service.pillar)!;
   const siblings = pillar.services.filter((slug) => slug !== service.slug).map(serviceBySlug).filter((item) => item !== undefined);
+  // Previous / next service across all pillars, wrapping round so there is never a dead end.
+  const ordered = pillars.flatMap((p) => p.services).map(serviceBySlug).filter((item) => item !== undefined);
+  const index = ordered.findIndex((item) => item.slug === service.slug);
+  const prev = ordered[(index - 1 + ordered.length) % ordered.length];
+  const next = ordered[(index + 1) % ordered.length];
 
   return (
     <main id="main" className="services-main">
       <section className="services-hero">
-        <p className="part-of">Part of: <Link href={`/services/#${pillar.id}`}>{pillar.name}</Link></p>
+        <nav aria-label="Breadcrumb" className="breadcrumbs">
+          <ol>
+            <li><Link href="/">Home</Link></li>
+            <li><Link href="/services/">Services</Link></li>
+            <li><Link href={`/services/#${pillar.id}`}>{pillar.name}</Link></li>
+            <li aria-current="page">{service.name}</li>
+          </ol>
+        </nav>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org", "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home", item: "https://aimsmartsolutions.tech/" },
+            { "@type": "ListItem", position: 2, name: "Services", item: "https://aimsmartsolutions.tech/services/" },
+            { "@type": "ListItem", position: 3, name: pillar.name, item: `https://aimsmartsolutions.tech/services/#${pillar.id}` },
+            { "@type": "ListItem", position: 4, name: service.name, item: `https://aimsmartsolutions.tech/services/${service.slug}/` },
+          ],
+        }) }} />
         <h1>{service.title}</h1>
         <p className="service-tagline">{service.tagline}</p>
         <p>{service.description}</p>
@@ -115,6 +136,12 @@ export default async function ServicePage({ params }: Params) {
           <ul>{siblings.map((item) => <li key={item.slug}><Link href={`/services/${item.slug}/`}><strong>{item.name}</strong><span>{item.tagline}</span></Link></li>)}</ul>
         </section>
       )}
+
+      <nav className="service-pager" aria-label="More services">
+        <Link className="pager-link" href={`/services/${prev.slug}/`} rel="prev"><span>← Previous service</span><strong>{prev.name}</strong></Link>
+        <a className="button secondary pager-demo" href="#demo">Try the demo <span aria-hidden="true">↑</span></a>
+        <Link className="pager-link is-next" href={`/services/${next.slug}/`} rel="next"><span>Next service →</span><strong>{next.name}</strong></Link>
+      </nav>
 
       <CtaBand title={`Could ${service.name} help your business?`} body="Book a free AI Opportunity Call. We will look at where it fits and whether it is the right first step." />
     </main>
