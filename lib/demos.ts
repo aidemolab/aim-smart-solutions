@@ -63,7 +63,7 @@ export const demos: Demo[] = [
   {
     id: "supplier-risk",
     title: "Supplier Risk Scoring Dashboard",
-    summary: "Score a fictional supplier portfolio, then add, edit and delete your own suppliers and watch risk scores and actions update. Your changes are kept for 24 hours. Sample data is fictional.",
+    summary: "Stress-test a fictional supplier portfolio with what-if sliders (risk weights, currency, delay, tariffs), then add and edit your own suppliers. Your changes are kept for 24 hours. Sample data is fictional.",
     href: "https://aidemolab.github.io/aim-supplier-risk-demo/",
     external: true,
     badge: "Live",
@@ -73,7 +73,7 @@ export const demos: Demo[] = [
   {
     id: "sales-lead-scoring",
     title: "Sales Lead Scoring Dashboard",
-    summary: "Rank fictional sales leads, then add, edit and delete your own and watch scores and next actions update. Your changes are kept for 24 hours. Sample data is fictional.",
+    summary: "Tune a fictional sales pipeline with what-if sliders (scoring weights, hot threshold, win rate, calls), then add and edit your own leads. Your changes are kept for 24 hours. Sample data is fictional.",
     href: "https://aidemolab.github.io/aim-sales-lead-scoring-demo/",
     external: true,
     badge: "Live",
@@ -83,7 +83,7 @@ export const demos: Demo[] = [
   {
     id: "property-investment",
     title: "Property Investment Analysis Dashboard",
-    summary: "Rank fictional properties, compare yields and model scenarios, or add your own. Your changes are kept for 24 hours. Fictional data and addresses. Not investment advice.",
+    summary: "Run the numbers on fictional properties with what-if sliders (mortgage rate, deposit, rent, empty months), or add your own. Your changes are kept for 24 hours. Fictional data and addresses. Not investment advice.",
     href: "https://aidemolab.github.io/aim-property-investment-demo/",
     external: true,
     badge: "Live",
