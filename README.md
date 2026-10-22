@@ -50,7 +50,7 @@ Those secrets belong only in the Supabase function settings.
 
 ## Licence
 
-No open-source licence has been granted for this project.
+All rights reserved. No open-source licence has been granted for this project; see [LICENSE](LICENSE).
 Third-party components remain subject to their respective licences.
 
 ## Supabase functions

@@ -39,7 +39,8 @@ test("no server-only leftovers in the export", () => {
 });
 
 test("consent wording in the form matches the wording the function stores", () => {
-  const read = (p) => readFileSync(fileURLToPath(new URL(p, import.meta.url)), "utf8");
+  // Normalise line endings: Windows checkouts use CRLF.
+  const read = (p) => readFileSync(fileURLToPath(new URL(p, import.meta.url)), "utf8").replace(/\r\n/g, "\n");
   const client = read("../lib/consent.ts");
   const server = read("../supabase/functions/submit-enquiry/index.ts");
   const version = client.match(/CALL_CONSENT_VERSION = "([^"]+)"/)?.[1];
