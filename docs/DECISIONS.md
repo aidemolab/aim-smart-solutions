@@ -35,3 +35,14 @@ than rewriting history; if a decision changes, add a new entry that replaces the
 - **Honesty rules:** no testimonials, client logos, savings figures or performance claims,
   and no invented facts.
 - **Founder name on the site:** Alaa Mostafa (PhD in Semiconductor Physics).
+
+## Quality (2026-10-22)
+- **Automated checks** in `tests/quality.test.mjs` run on every PR: unique titles and meta
+  descriptions, Open Graph image and canonical URL on every page, no broken internal links or
+  images, sitemap, robots.txt, custom 404, the main call to action on every page, demo badges
+  and the honesty rules.
+- **Images** are small WebP files (`aim-logo.webp`, `alaa-mostafa.webp`); the sharing image is
+  an AIM-branded `og.png` (1200×630).
+- **Performance:** accessibility and SEO score 100. Mobile performance is limited mainly by the
+  Next.js/React JavaScript every page loads; inlining CSS was tried and made it worse, so it
+  is off.

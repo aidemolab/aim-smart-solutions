@@ -74,7 +74,7 @@ footer.site-footer{max-width:1440px;margin:0 auto;padding:56px 6vw 28px;display:
 .pillar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:56px}
 .pillar-card{display:flex;flex-direction:column;padding:34px;background:#fff;border:1px solid var(--line);border-top:5px solid var(--cobalt);border-radius:10px;box-shadow:0 14px 34px rgba(11,31,51,.06);scroll-margin-top:110px}
 .pillar-card:nth-child(2){border-top-color:var(--amber)}.pillar-card:nth-child(3){border-top-color:var(--navy)}
-.pillar-number{margin:0;color:#94A3B8;font:500 28px Georgia,serif}
+.pillar-number{margin:0;color:#64748B;font:500 28px Georgia,serif}
 .pillar-card h3{margin:14px 0 8px;font:600 30px/1.15 Georgia,serif}
 .pillar-promise{margin:0 0 14px;color:var(--cobalt-dark)!important;font-size:17px!important;font-weight:800}
 .pillar-card>p:not(.pillar-number):not(.pillar-promise){color:var(--ink-soft);font-size:15px;line-height:1.7}
@@ -196,3 +196,8 @@ footer.site-footer{max-width:1440px;margin:0 auto;padding:56px 6vw 28px;display:
   .about-copy{padding:56px 20px}
   h1{font-size:38px}
 }
+
+/* 404 page */
+.not-found-links{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 28px;padding:0;list-style:none}
+.not-found-links a{display:inline-block;padding:10px 16px;border:1px solid var(--line);border-radius:999px;background:#fff;font-weight:800}
+.not-found-links a:hover{border-color:var(--cobalt);color:var(--cobalt-dark)}

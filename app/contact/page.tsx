@@ -4,6 +4,7 @@ import { BOOKING_CTA, CONTACT_EMAIL, LOCATION } from "@/lib/site";
 import { BookingButton } from "../components/Blocks";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/contact/" },
   title: "Contact",
   description: "Contact AIM Smart Solutions in Bolton: book a free AI Opportunity Call, send an enquiry, request a quote or email enquiry@aimsmartsolutions.tech.",
 };

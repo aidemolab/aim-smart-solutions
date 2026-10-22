@@ -5,6 +5,7 @@ import { pillars } from "@/lib/site";
 import { BookingButton, CtaBand, HowIWork } from "../components/Blocks";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/about/" },
   title: "About AIM",
   description: "AIM Smart Solutions is a Bolton-based practical AI and automation consultancy founded by Alaa Mostafa (PhD, Semiconductor Physics), supporting UK service businesses.",
 };
@@ -26,7 +27,7 @@ export default function About() {
       </section>
 
       <section className="about funnel-about">
-        <div className="about-photo"><img src={withBase("/alaa-mostafa.webp")} alt="Alaa Mostafa, founder of AIM Smart Solutions" width={760} height={1059} /></div>
+        <div className="about-photo"><img src={withBase("/alaa-mostafa.webp")} alt="Alaa Mostafa, founder of AIM Smart Solutions" width={760} height={1059} loading="lazy" /></div>
         <div className="about-copy">
           <p className="kicker">The founder</p>
           <h2>Alaa Mostafa</h2>
