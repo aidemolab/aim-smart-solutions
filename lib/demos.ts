@@ -16,6 +16,15 @@ export type Demo = {
 
 export const demos: Demo[] = [
   {
+    id: "content-generator",
+    title: "AI Content & Keyword Generator",
+    summary: "Describe your business and get three social posts, a 7-day content plan and local keyword ideas in under a minute. AI-generated, so review before posting.",
+    href: "/services/sales-marketing/#demo",
+    badge: "Live",
+    tryLabel: "Generate content",
+    service: "sales-marketing",
+  },
+  {
     id: "ai-opportunity-score",
     title: "AI Opportunity Score",
     summary: "Answer seven quick questions about how your business runs and get a score out of 100, a short explanation and your top three recommended services.",
