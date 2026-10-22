@@ -1,15 +1,21 @@
 // submit-enquiry: the enquiry endpoint for the static (GitHub Pages) site.
-// NOT YET DEPLOYED. It replaces the old /api/calls route + save-business-enquiry
+// Deployed 2026-10-22. It replaces the old /api/calls route + save-business-enquiry
 // pair for the new site only; save-business-enquiry stays untouched for the
 // live ChatGPT Sites version.
 //
-// Steps: Turnstile check -> validation -> per-IP / per-number daily limits ->
-// save customer + enquiry -> (urgent + consent) start the Vapi call ->
+// Steps: honeypot -> Turnstile check (only when configured) -> validation ->
+// per-IP / per-number daily limits -> save customer + enquiry ->
+// (calls enabled + urgent + consent) start the Vapi call ->
 // customer acknowledgement email -> owner notification email.
+//
+// Turnstile is OPTIONAL. Without TURNSTILE_SECRET_KEY the function still saves
+// enquiries and sends both emails, but never starts an AI call (calls ring real
+// phones and cost money, so they need the CAPTCHA). Responses carry
+// callsEnabled so the form can hide the Urgent option.
 //
 // Secrets it needs (Supabase > Edge Functions > Secrets):
 //   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY        (provided by Supabase)
-//   TURNSTILE_SECRET_KEY                           (new)
+//   TURNSTILE_SECRET_KEY                           (optional: set it to enable AI calls)
 //   VAPI_API_KEY, VAPI_ASSISTANT_ID, VAPI_PHONE_NUMBER_ID   (already set for vapi-outbound-call)
 //   IONOS_SMTP_HOST, IONOS_SMTP_PORT, IONOS_SMTP_USER, IONOS_SMTP_PASSWORD (already set)
 // Optional: RATE_LIMIT_SALT, ALLOWED_ORIGINS, TURNSTILE_HOSTNAMES,
@@ -62,9 +68,8 @@ function clientIp(request: Request): string {
     "unknown";
 }
 
-async function verifyTurnstile(token: string, ip: string): Promise<boolean> {
-  const secret = Deno.env.get("TURNSTILE_SECRET_KEY");
-  if (!secret || !token) return false;
+async function verifyTurnstile(secret: string, token: string, ip: string): Promise<boolean> {
+  if (!token) return false;
   const form = new FormData();
   form.append("secret", secret);
   form.append("response", token);
@@ -93,19 +98,29 @@ Deno.serve(withCors(async (request: Request) => {
   try { body = await request.json(); }
   catch { return json({ ok: false, message: "Invalid request." }, 400); }
 
-  // 1. CAPTCHA first, so bots cannot use up anyone's daily allowance.
-  const ip = clientIp(request);
-  if (!(await verifyTurnstile(clean(body.turnstileToken, 4096), ip))) {
-    return json({ ok: false, message: "Please complete the security check and try again." }, 403);
+  const turnstileSecret = Deno.env.get("TURNSTILE_SECRET_KEY") ?? "";
+  const callsEnabled = turnstileSecret !== "";
+
+  // 1. Honeypot: a hidden field people never see. If it is filled in, a bot sent
+  //    this, so pretend it worked and save nothing.
+  if (clean(body.website, 500)) {
+    return json({ ok: true, emailSent: true, callStarted: false, ownerNotified: true, callsEnabled });
   }
 
-  // 2. Validate.
+  // 2. CAPTCHA (when configured) before the limits, so bots cannot use up anyone's
+  //    daily allowance.
+  const ip = clientIp(request);
+  if (callsEnabled && !(await verifyTurnstile(turnstileSecret, clean(body.turnstileToken, 4096), ip))) {
+    return json({ ok: false, message: "Please complete the security check and try again.", callsEnabled }, 403);
+  }
+
+  // 3. Validate. Without Turnstile there are no calls, so Urgent is treated as Normal.
   const name = clean(body.name, 100);
   const businessName = clean(body.businessName, 150);
   const email = clean(body.email, 254).toLowerCase();
   const mobile = clean(body.mobile, 30).replace(/[\s()-]/g, "");
   const enquiryText = clean(body.enquiry, 5000);
-  const urgency = body.urgency === "urgent" ? "urgent" : "normal";
+  const urgency = callsEnabled && body.urgency === "urgent" ? "urgent" : "normal";
   const consent = body.consent === true;
   const consentVersion = clean(body.consentVersion, 20);
 
@@ -119,7 +134,7 @@ Deno.serve(withCors(async (request: Request) => {
     return json({ ok: false, message: "Please confirm you agree to receive an automated call, or choose Normal." }, 400);
   }
 
-  // 3. Daily limits: hashed IP and number, never stored in plain text.
+  // 4. Daily limits: hashed IP and number, never stored in plain text.
   const salt = Deno.env.get("RATE_LIMIT_SALT") ?? "";
   const ipBucket = "ip:" + await sha256Hex(salt + ip);
   const numberBucket = "tel:" + await sha256Hex(salt + mobile);
@@ -153,11 +168,12 @@ Deno.serve(withCors(async (request: Request) => {
         message: bucket.startsWith("call:")
           ? "We cannot place another automated call today. Please choose Normal, or email enquiry@aimsmartsolutions.tech."
           : "Daily enquiry limit reached. Please email enquiry@aimsmartsolutions.tech.",
+        callsEnabled,
       }, 429);
     }
   }
 
-  // 4. Save customer and enquiry.
+  // 5. Save customer and enquiry.
   const headers = {
     "Authorization": `Bearer ${serviceKey}`,
     "apikey": serviceKey,
@@ -194,7 +210,7 @@ Deno.serve(withCors(async (request: Request) => {
     return json({ ok: false, message: "We could not save your enquiry." }, 502);
   }
 
-  // 5. Urgent: start the Vapi call server-side. The enquiry is already saved,
+  // 6. Urgent: start the Vapi call server-side. The enquiry is already saved,
   //    so a failed call is reported, not treated as a failed submission.
   let callStarted = false;
   if (urgency === "urgent") {
@@ -218,7 +234,7 @@ Deno.serve(withCors(async (request: Request) => {
     }
   }
 
-  // 6. Emails: customer acknowledgement, then owner notification (which reports
+  // 7. Emails: customer acknowledgement, then owner notification (which reports
   //    whether the acknowledgement went). Failures are logged, not fatal: the
   //    enquiry is already saved.
   let emailSent = false;
@@ -284,5 +300,5 @@ Deno.serve(withCors(async (request: Request) => {
     }
   }
 
-  return json({ ok: true, emailSent, callStarted, ownerNotified });
+  return json({ ok: true, emailSent, callStarted, ownerNotified, callsEnabled });
 }));

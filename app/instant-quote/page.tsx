@@ -3,7 +3,7 @@
 import { withBase } from "@/lib/base-path";
 import Link from "next/link";
 import { FormEvent, useMemo, useState } from "react";
-import { callFunction, toUkE164 } from "@/lib/supabase-functions";
+import { callFunction, HONEYPOT_FIELD, toUkE164 } from "@/lib/supabase-functions";
 import "./quote.css";
 
 const services = [
@@ -57,6 +57,7 @@ export default function InstantQuotePage() {
         email: customer.email.trim().toLowerCase(),
         mobile,
         services: chosen.map((service) => ({ id: service.id, name: service.name, details: details[service.id].trim() })),
+        website: String(new FormData(event.currentTarget).get(HONEYPOT_FIELD) ?? ""),
       });
       if (status >= 400 || !result?.ok) throw new Error(result?.message || "Your request could not be submitted.");
       setState("success");
@@ -91,6 +92,7 @@ export default function InstantQuotePage() {
             <label>Business name<input required value={customer.business} onChange={(e) => setCustomer({ ...customer, business: e.target.value })} placeholder="Your business" autoComplete="organization" /></label>
             <label>Email address<input required type="email" value={customer.email} onChange={(e) => setCustomer({ ...customer, email: e.target.value })} placeholder="name@business.co.uk" autoComplete="email" /></label>
             <label>Mobile number<input required type="tel" value={customer.mobile} onChange={(e) => setCustomer({ ...customer, mobile: e.target.value })} placeholder="07 or +44 7" autoComplete="tel" /></label>
+            <div aria-hidden="true" style={{ position: "absolute", left: "-10000px", width: 1, height: 1, overflow: "hidden" }}><label htmlFor="quote-website">Website<input id="quote-website" name={HONEYPOT_FIELD} type="text" tabIndex={-1} autoComplete="off" /></label></div>
           </div>
 
           <div className="quote-step service-step"><span>02</span><div><h2>Select the support you may need</h2><p>Not sure? Choose “Automation Discovery &amp; Workflow Plan” or book a free call first.</p></div></div>

@@ -1,4 +1,4 @@
--- Supports the submit-enquiry function. NOT YET APPLIED.
+-- Supports the submit-enquiry function. Applied to production on 2026-10-22.
 -- Same pattern as the pharma demo (pharma_demo_usage / pharma_demo_consume):
 -- daily counters keyed by a hashed bucket, consumed through a SECURITY DEFINER
 -- function that only the service role may call.

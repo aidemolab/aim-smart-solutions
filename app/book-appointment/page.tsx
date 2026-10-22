@@ -3,7 +3,7 @@
 import { withBase } from "@/lib/base-path";
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
-import { callFunction } from "@/lib/supabase-functions";
+import { callFunction, HONEYPOT_FIELD } from "@/lib/supabase-functions";
 import "./booking.css";
 
 type BookingState = "loading" | "ready" | "submitting" | "success" | "error";
@@ -47,7 +47,7 @@ export default function BookAppointmentPage() {
     setState("submitting");
     setMessage("");
     try {
-      const { status, result } = await callFunction("appointment-booking", { action: "book", name: form.get("name"), businessName: form.get("businessName"), email: form.get("email"), mobile: form.get("mobile"), jobDescription: form.get("jobDescription"), appointmentAt: selectedSlot });
+      const { status, result } = await callFunction("appointment-booking", { action: "book", name: form.get("name"), businessName: form.get("businessName"), email: form.get("email"), mobile: form.get("mobile"), jobDescription: form.get("jobDescription"), appointmentAt: selectedSlot, website: String(form.get(HONEYPOT_FIELD) ?? "") });
       if (status >= 400 || !result?.ok) throw new Error(result?.message || "Your appointment could not be booked.");
       setState("success");
       setMessage(`Your appointment is confirmed for ${formatSlot(String(result.appointmentAt ?? selectedSlot))}. A confirmation email has been sent.`);
@@ -84,6 +84,7 @@ export default function BookAppointmentPage() {
               <label htmlFor="booking-mobile">Mobile Number<input id="booking-mobile" name="mobile" type="tel" autoComplete="tel" required /></label>
             </div>
             <label htmlFor="booking-job">What is the biggest bottleneck in your business?<textarea id="booking-job" name="jobDescription" rows={4} placeholder="For example: slow enquiry follow-up, repeated quotation work, appointment administration or unclear reporting." required /></label>
+            <div aria-hidden="true" style={{ position: "absolute", left: "-10000px", width: 1, height: 1, overflow: "hidden" }}><label htmlFor="booking-website">Website<input id="booking-website" name={HONEYPOT_FIELD} type="text" tabIndex={-1} autoComplete="off" /></label></div>
             <fieldset className="slot-field">
               <legend>Available appointment times</legend>
               {state === "loading" && <p className="slot-loading">Loading available times…</p>}

@@ -48,3 +48,18 @@ test("consent wording in the form matches the wording the function stores", () =
   assert.ok(version && text, "could not read lib/consent.ts");
   assert.ok(server.includes(`"${version}":\n    "${text}"`), `submit-enquiry has no identical wording for version ${version}`);
 });
+
+test("each form has the hidden honeypot field", () => {
+  for (const route of ["business-enquiry", "instant-quote", "book-appointment"]) {
+    const html = readFileSync(join(out, route, "index.html"), "utf8");
+    assert.match(html, /<input[^>]*tabindex="-1"[^>]*name="website"/i, `${route} has no honeypot field`);
+  }
+});
+
+test("without a Turnstile site key the enquiry form offers no AI call", () => {
+  if (process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY) return;
+  const html = readFileSync(join(out, "business-enquiry", "index.html"), "utf8");
+  assert.doesNotMatch(html, /name="urgency"/, "Urgent option is shown although calls are disabled");
+  assert.match(html, /Need us quickly\? Mention it in your message/, "priority note is missing");
+  assert.doesNotMatch(html, /turnstile-widget/, "Turnstile widget rendered without a site key");
+});
