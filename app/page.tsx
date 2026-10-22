@@ -1,16 +1,22 @@
 import Link from "next/link";
 import { withBase } from "@/lib/base-path";
-import ServiceHeader from "./components/ServiceHeader";
-const outcomes = [
-  { number: "01", title: "Win more enquiries", body: "Acknowledge new leads quickly, capture the right information and make urgent opportunities easier to act on.", result: "Fewer valuable enquiries left waiting." },
-  { number: "02", title: "Serve customers faster", body: "Remove avoidable delays from quotations, bookings, confirmations and routine customer communication.", result: "A smoother, more responsive customer journey." },
-  { number: "03", title: "Release capacity for growth", body: "Automate repetitive administration and bring important information into a clear, usable view.", result: "More time for customers, delivery and growth." },
-];
+import { CALLS_ENABLED } from "@/lib/site";
+import { BookingButton, CtaBand, HowIWork, PillarCards, StartHere } from "./components/Blocks";
+import DemoBadge from "./components/DemoBadge";
 
 const demonstrations = [
-  { number: "01", title: "An urgent lead receives a faster response", problem: "A new enquiry arrives while the owner is busy.", solution: "The customer receives confirmation and can request an immediate AI voice response.", href: "/business-enquiry", cta: "Try the live enquiry" },
-  { number: "02", title: "A service request arrives quotation-ready", problem: "Missing details cause repeated emails and slow down the quotation.", solution: "A guided request captures the relevant information for every selected service.", href: "/instant-quote", cta: "Try the service request" },
-  { number: "03", title: "A meeting books without diary chasing", problem: "Finding a time and sending reminders consumes valuable administration.", solution: "The customer selects an available appointment and receives confirmation and reminders.", href: "/book-appointment", cta: "View live availability" },
+  {
+    number: "01",
+    title: "A new lead receives an instant response",
+    problem: "A new enquiry arrives while the owner is busy.",
+    solution: CALLS_ENABLED
+      ? "The customer receives confirmation straight away and can request an immediate AI voice response."
+      : "The customer receives confirmation straight away and the owner gets an alert with every detail.",
+    href: "/business-enquiry/",
+    cta: "Try the live enquiry",
+  },
+  { number: "02", title: "A service request arrives quotation-ready", problem: "Missing details cause repeated emails and slow down the quotation.", solution: "A guided request captures the relevant information for every selected service.", href: "/instant-quote/", cta: "Try the service request" },
+  { number: "03", title: "A meeting books without diary chasing", problem: "Finding a time and sending reminders consumes valuable administration.", solution: "The customer selects an available appointment and receives confirmation and reminders.", href: "/book-appointment/", cta: "View live availability" },
 ];
 
 const faqs = [
@@ -23,43 +29,45 @@ const faqs = [
 
 export default function Home() {
   return (
-    <main id="top">
-      <ServiceHeader />
-
+    <main id="main">
       <section className="funnel-hero">
         <div className="funnel-hero-copy">
           <p className="eyebrow"><span /> Practical AI &amp; automation for service businesses</p>
           <h1>Win more customers. Serve them faster. <em>Give your team hours back.</em></h1>
           <p className="hero-lede">When enquiries wait, follow-up slips and administration takes over, growth becomes harder. AIM Smart Solutions turns those costly bottlenecks into practical, automated customer journeys.</p>
-          <div className="hero-actions"><Link className="button primary" href="/book-appointment">Book your free AI opportunity call <span>→</span></Link><a className="button secondary" href="#proof">See the solutions working <span>↓</span></a></div>
+          <div className="hero-actions"><BookingButton /><a className="button secondary" href="#proof">See the solutions working <span aria-hidden="true">↓</span></a></div>
           <div className="risk-reversal"><span>✓ Free initial call</span><span>✓ No technical knowledge needed</span><span>✓ No obligation</span></div>
         </div>
         <aside className="opportunity-panel" aria-label="What you receive from the free call">
           <p className="panel-label">Your free AI Opportunity Call</p><h2>Find the first improvement worth making.</h2>
-          <ol><li><span>01</span><div><strong>Expose the costly bottleneck</strong><p>Identify where leads, time or useful information are being lost.</p></div></li><li><span>02</span><div><strong>Estimate the business value</strong><p>Connect the problem to customer experience, capacity or revenue.</p></div></li><li><span>03</span><div><strong>Choose a practical next step</strong><p>Leave with one focused opportunity—not a list of unnecessary tools.</p></div></li></ol>
-          <Link href="/book-appointment">Choose a convenient time →</Link>
+          <ol><li><span>01</span><div><strong>Expose the costly bottleneck</strong><p>Identify where leads, time or useful information are being lost.</p></div></li><li><span>02</span><div><strong>Estimate the business value</strong><p>Connect the problem to customer experience, capacity or revenue.</p></div></li><li><span>03</span><div><strong>Choose a practical next step</strong><p>Leave with one focused opportunity, not a list of unnecessary tools.</p></div></li></ol>
+          <Link href="/book-appointment/">Choose a convenient time →</Link>
         </aside>
       </section>
 
       <section className="authority-strip" aria-label="Reasons to trust AIM Smart Solutions"><span><b>Working solutions</b> you can test now</span><span><b>PhD-level analysis</b> without the jargon</span><span><b>Data, AI &amp; automation</b> in one practical service</span><span><b>Bolton-based</b> with UK-wide support</span></section>
 
-      <section className="section outcomes" id="outcomes"><div className="section-intro"><div><p className="kicker">The commercial outcome</p><h2>AI should improve the business—not merely <em>impress it.</em></h2></div><p>Your customers do not care which tools you use. They notice how quickly you respond, how easy you are to deal with and whether your service feels organised.</p></div><div className="outcome-grid">{outcomes.map(item => <article key={item.number}><span>{item.number}</span><h3>{item.title}</h3><p>{item.body}</p><strong>{item.result}</strong></article>)}</div></section>
+      <section className="section pillars-section" id="services" aria-labelledby="pillars-title">
+        <div className="section-intro"><div><p className="kicker">What AIM helps with</p><h2 id="pillars-title">Three problems. <em>Practical solutions.</em></h2></div><p>Every service starts with a business problem, not a technology. Choose the one that sounds most like your week.</p></div>
+        <PillarCards />
+        <p className="specialist-line"><Link href="/services/">Explore all services →</Link> &nbsp;·&nbsp; <Link href="/live-demos/">Try the live AI demos →</Link></p>
+      </section>
+
+      <div className="section start-here-wrap"><StartHere /></div>
 
       <section className="cost-section"><div><p className="kicker light">The cost of waiting</p><h2>Every slow response gives the customer another reason to look elsewhere.</h2></div><div className="cost-list"><p><span>01</span><strong>Missed revenue</strong> from enquiries that receive a faster answer elsewhere.</p><p><span>02</span><strong>Restricted capacity</strong> while skilled people repeat avoidable administration.</p><p><span>03</span><strong>Weaker decisions</strong> when important information remains scattered and unclear.</p></div></section>
 
-      <section className="section solution-section" id="solutions"><div className="section-intro"><div><p className="kicker">Our Services</p><h2>Explore practical AI, data and <em>automation services.</em></h2></div><p>Seven dedicated services, with working demonstrations that show what&apos;s possible for your business.</p></div><div className="offer-grid"><article className="offer-card"><p className="card-tag">01 / Smart Apps</p><h3>AI Smart Apps</h3><p>Custom applications that make complex decisions easier.</p><Link href="/services/smart-apps">Explore smart applications →</Link></article><article className="offer-card"><p className="card-tag">02 / Voice AI</p><h3>AI Voice Agents</h3><p>Give customers a responsive voice-based enquiry experience.</p><Link href="/services/ai-voice-agents">Try our calling agent →</Link></article><article className="offer-card"><p className="card-tag">03 / Automation and data</p><h3>Smarter Business Operations</h3><p>From customer workflows to dashboards, reporting and training.</p><Link href="/services">View all seven services →</Link></article></div><div className="specialist-line"><Link href="/services">Explore all services →</Link> &nbsp;·&nbsp; <Link href="/live-demos">Try our live AI applications →</Link></div></section>
+      <section className="proof-section" id="proof"><div className="section proof-inner"><div className="proof-heading"><div><p className="kicker light">Evidence before promises</p><h2>Do not imagine the solution. <em>Test it.</em></h2></div><p>These are working customer journeys, not illustrations. Use them to experience how faster response, better information and simpler booking can feel.</p></div><div className="proof-grid">{demonstrations.map(item => <article key={item.number}><div className="proof-card-top"><span>{item.number}</span><DemoBadge kind="Live" /></div><h3>{item.title}</h3><dl><dt>Without improvement</dt><dd>{item.problem}</dd><dt>With AIM</dt><dd>{item.solution}</dd></dl><Link href={item.href}>{item.cta} →</Link></article>)}</div></div></section>
 
-      <section className="proof-section" id="proof"><div className="section proof-inner"><div className="proof-heading"><div><p className="kicker light">Evidence before promises</p><h2>Do not imagine the solution. <em>Test it.</em></h2></div><p>These are working customer journeys—not illustrations. Use them to experience how faster response, better information and simpler booking can feel.</p></div><div className="proof-grid">{demonstrations.map(item => <article key={item.number}><div className="proof-card-top"><span>{item.number}</span><b>LIVE</b></div><h3>{item.title}</h3><dl><dt>Without improvement</dt><dd>{item.problem}</dd><dt>With AIM</dt><dd>{item.solution}</dd></dl><a href={withBase(item.href)}>{item.cta} →</a></article>)}</div></div></section>
+      <div className="section"><HowIWork /></div>
 
-      <section className="section fit-section" id="fit"><div className="fit-copy"><p className="kicker">A strong fit?</p><h2>Built for service businesses where <em>follow-up matters.</em></h2><p>AIM initially works with small and growing service businesses—particularly training, education, professional and local services—that depend on enquiries, quotations, appointments and good communication.</p><Link className="button primary" href="/book-appointment">Check whether AIM can help <span>→</span></Link></div><div className="fit-checklist"><h3>This conversation is worth having if…</h3><p>✓ Leads sometimes wait or disappear into an inbox</p><p>✓ Your team repeats the same emails, booking steps or reports</p><p>✓ Quotations are delayed by missing customer information</p><p>✓ Important business information lives in separate files or systems</p><p>✓ You want to explore AI without hiring a technical team</p><p>✓ You value a practical result more than technology hype</p></div></section>
+      <section className="section fit-section" id="fit"><div className="fit-copy"><p className="kicker">A strong fit?</p><h2>Built for service businesses where <em>follow-up matters.</em></h2><p>AIM initially works with small and growing service businesses, particularly training, education, professional and local services, that depend on enquiries, quotations, appointments and good communication.</p><BookingButton /></div><div className="fit-checklist"><h3>This conversation is worth having if…</h3><p>✓ Leads sometimes wait or disappear into an inbox</p><p>✓ Your team repeats the same emails, booking steps or reports</p><p>✓ Quotations are delayed by missing customer information</p><p>✓ Important business information lives in separate files or systems</p><p>✓ You want to explore AI without hiring a technical team</p><p>✓ You value a practical result more than technology hype</p></div></section>
 
-      <section className="about funnel-about" id="about"><div className="about-photo"><img src={withBase("/alaa-mostafa-about.png")} alt="Alaa Mostafa, Founder of AIM Smart Solutions" /></div><div className="about-copy"><p className="kicker">Why work with AIM?</p><h2>Technical depth.<br /><em>Commercial clarity.</em></h2><p className="role">Alaa Mostafa · Founder &amp; Practical AI and Automation Consultant</p><p className="about-lead">You need someone who can understand the technology—and explain what it will actually change for your business.</p><p>Alaa combines experience in data analysis, business intelligence, dashboards, automation, AI and professional education. With a PhD in Semiconductor Physics and a career built around analytical problem-solving and teaching, he makes complex possibilities understandable and usable.</p><div className="founder-principles"><span>Understand the real problem</span><span>Build the smallest useful solution</span><span>Support people to use it confidently</span></div><Link className="text-link" href="/book-appointment">Talk directly with Alaa →</Link></div></section>
+      <section className="about funnel-about" id="about"><div className="about-photo"><img src={withBase("/alaa-mostafa.webp")} alt="Alaa Mostafa, founder of AIM Smart Solutions" width={760} height={1059} loading="lazy" /></div><div className="about-copy"><p className="kicker">Why work with AIM?</p><h2>Technical depth.<br /><em>Commercial clarity.</em></h2><p className="role">Alaa Mostafa · Founder &amp; Practical AI and Automation Consultant</p><p className="about-lead">You need someone who can understand the technology and explain what it will actually change for your business.</p><p>Alaa combines experience in data analysis, business intelligence, dashboards, automation, AI and professional education. With a PhD in Semiconductor Physics and a career built around analytical problem-solving and teaching, he makes complex possibilities understandable and usable.</p><div className="founder-principles"><span>Understand the real problem</span><span>Build the smallest useful solution</span><span>Support people to use it confidently</span></div><Link className="text-link" href="/about/">More about AIM →</Link></div></section>
 
-      <section className="section faq-section" id="faq"><div className="faq-intro"><p className="kicker">Before you book</p><h2>Clear answers. <em>No hard sell.</em></h2><p>The first conversation is designed to establish whether there is a useful opportunity—not to push technology your business does not need.</p></div><div className="faq-list">{faqs.map(([question, answer]) => <details key={question}><summary>{question}<span>+</span></summary><p>{answer}</p></details>)}</div></section>
+      <section className="section faq-section" id="faq"><div className="faq-intro"><p className="kicker">Before you book</p><h2>Clear answers. <em>No hard sell.</em></h2><p>The first conversation is designed to establish whether there is a useful opportunity, not to push technology your business does not need.</p></div><div className="faq-list">{faqs.map(([question, answer]) => <details key={question}><summary>{question}<span aria-hidden="true">+</span></summary><p>{answer}</p></details>)}</div></section>
 
-      <section className="final-cta"><p className="kicker light">One useful conversation</p><h2>Where is your business losing customers, time or clarity?</h2><p>Book a free AI Opportunity Call and identify the first practical improvement worth exploring.</p><Link className="button primary" href="/book-appointment">Book your free call <span>→</span></Link><small>Free initial conversation · No technical knowledge required · No obligation</small></section>
-
-      <footer><a className="footer-brand" href="#top"><img src={withBase("/aim-smart-solutions-logo.png")} alt="AIM Smart Solutions" /></a><p>Practical AI and automation that helps service businesses win more opportunities, serve customers faster and release capacity for growth.</p><nav aria-label="Footer navigation"><a href="#outcomes">Outcomes</a><a href="#solutions">Solutions</a><a href="#proof">Proof</a><Link href="/instant-quote">Request a proposal</Link><Link href="/business-enquiry">Live enquiry demo</Link></nav><small>© {new Date().getFullYear()} AIM Smart Solutions. All rights reserved.</small></footer>
+      <CtaBand />
     </main>
   );
 }

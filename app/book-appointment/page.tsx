@@ -1,7 +1,5 @@
 "use client";
 
-import { withBase } from "@/lib/base-path";
-import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
 import { callFunction, HONEYPOT_FIELD } from "@/lib/supabase-functions";
 import "./booking.css";
@@ -58,13 +56,7 @@ export default function BookAppointmentPage() {
   }
 
   return (
-    <main id="top">
-      <header className="site-header">
-        <Link className="brand" href="/" aria-label="AIM Smart Solutions home"><img src={withBase("/aim-smart-solutions-logo.png")} alt="AIM Smart Solutions — Business Growth & Automation" /></Link>
-        <nav aria-label="Main navigation"><Link href="/#outcomes">Outcomes</Link><Link href="/#solutions">Solutions</Link><Link href="/#proof">Proof</Link><Link href="/#fit">Is this for you?</Link><Link href="/#about">Why AIM</Link><Link href="/#faq">Questions</Link></nav>
-        <Link className="nav-cta" href="/book-appointment" aria-current="page">Book your free call</Link>
-      </header>
-
+    <main id="main">
       <section className="section booking-page">
         <div className="booking-copy">
           <p className="kicker">Free AI Opportunity Call</p>
@@ -98,13 +90,6 @@ export default function BookAppointmentPage() {
           {state === "error" && <button className="retry-button" type="button" onClick={loadSlots}>Reload available times</button>}
         </form>
       </section>
-
-      <footer>
-        <Link className="footer-brand" href="/"><img src={withBase("/aim-smart-solutions-logo.png")} alt="AIM Smart Solutions" /></Link>
-        <p>Practical AI and automation that helps service businesses win more opportunities, serve customers faster and release capacity for growth.</p>
-        <nav aria-label="Footer navigation"><Link href="/#outcomes">Outcomes</Link><Link href="/#solutions">Solutions</Link><Link href="/#proof">Proof</Link><Link href="/instant-quote">Request a proposal</Link><Link href="/business-enquiry">Live enquiry demo</Link></nav>
-        <small>© {new Date().getFullYear()} AIM Smart Solutions. All rights reserved.</small>
-      </footer>
     </main>
   );
 }
