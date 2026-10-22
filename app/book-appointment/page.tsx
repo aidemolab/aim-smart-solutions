@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
+import PrivacyNote from "../components/PrivacyNote";
 import { callFunction, HONEYPOT_FIELD } from "@/lib/supabase-functions";
 import "./booking.css";
 
@@ -88,6 +89,7 @@ export default function BookAppointmentPage() {
           </>}
           {message && <p className={`submission-message ${state}`} role="status" aria-live="polite">{message}</p>}
           {state === "error" && <button className="retry-button" type="button" onClick={loadSlots}>Reload available times</button>}
+          <PrivacyNote text="We use your details only to arrange and prepare for this call." />
         </form>
       </section>
     </main>

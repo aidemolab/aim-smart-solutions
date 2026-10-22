@@ -6,6 +6,7 @@
 import { FormEvent, useId, useState } from "react";
 import DemoBadge from "../DemoBadge";
 import { BookingButton } from "../Blocks";
+import PrivacyNote from "../PrivacyNote";
 
 const ENDPOINT = "https://xlxyphqzdzhipmllhxaq.supabase.co/functions/v1/content-generator";
 const TONES = [
@@ -155,7 +156,7 @@ export default function ContentGenerator() {
           <button type="submit" className="button primary" disabled={status === "loading"} id="gen-submit">
             {status === "loading" ? "Generating…" : result ? "Generate again" : "Generate my content"}
           </button>
-          <p className="demo-small">Your answers are sent to an AI service to create the content and are not stored. Up to 10 generations a day.</p>
+          <PrivacyNote text="Your answers are sent to an AI service to create the content and are not stored. Up to 10 generations a day." />
         </div>
       </form>
 

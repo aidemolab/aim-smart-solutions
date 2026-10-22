@@ -24,6 +24,7 @@ export default function SiteFooter() {
         <Link href="/live-demos/">Live AI Demos</Link>
         <Link href="/about/">About AIM</Link>
         <Link href="/contact/">Contact</Link>
+        <Link href="/privacy/">Privacy policy</Link>
         <Link href={BOOKING_CTA.href}>{BOOKING_CTA.label}</Link>
       </nav>
       <small>© {new Date().getFullYear()} AIM Smart Solutions. All rights reserved.</small>
