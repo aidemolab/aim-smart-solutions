@@ -18,7 +18,7 @@ export default function LiveDemos() {
         <h1>Don&apos;t just read about AI. <em>Try it.</em></h1>
         <p>Every demo here is something you can use right now. Each one is labelled so you know exactly what you are looking at.</p>
         <dl className="badge-key">
-          <div><dt><DemoBadge kind="Live" /></dt><dd>Works for real. Forms send real emails and reach AIM.</dd></div>
+          <div><dt><DemoBadge kind="Live" /></dt><dd>Works for real. Forms send real emails; the data apps keep your own records for 24 hours.</dd></div>
           <div><dt><DemoBadge kind="Illustrative data" /></dt><dd>Runs on fictional sample data to show what is possible.</dd></div>
         </dl>
       </section>

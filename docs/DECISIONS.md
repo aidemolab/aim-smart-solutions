@@ -57,3 +57,16 @@ than rewriting history; if a decision changes, add a new entry that replaces the
 - The demo repos are also edited in Google AI Studio (two-way sync), so keep changes small
   and expect AI Studio commits on `main`.
 - The in-site Business Performance Dashboard was removed in favour of the Supplier Risk app.
+
+## Live database for the data demos (2026-10-22)
+- The three data apps (Supplier Risk, Sales Lead Scoring, Property Investment) run on a live
+  database in the **AIM Pharmaceutical AI Demo** Supabase project (`xlxyphqzdzhipmllhxaq`),
+  never the customer project. Source: `demo-apps-backend/` (schema, seed data, Edge Function).
+- Each browser gets a random session id (localStorage). Visitors see the sample rows plus their
+  own, can add, edit and delete their own rows (max 50 per table) and reset to the sample data.
+  Sample rows are read-only. Rows older than 24 hours are deleted hourly (pg_cron).
+- Reads use Row Level Security (the `x-demo-session` header). All writes go through one Edge
+  Function (`demo-data`): origin lock to `https://aidemolab.github.io`, field validation and size
+  limits, and a daily limit per IP (120) and overall (3000). No secret keys are in browser code.
+- Main-site badge for these three apps is **Live**; the pharma app stays **Illustrative data**.
+  Every app says the sample data is fictional and not to enter personal or confidential data.
