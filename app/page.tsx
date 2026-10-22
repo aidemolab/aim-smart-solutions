@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { withBase } from "@/lib/base-path";
 import { CALLS_ENABLED } from "@/lib/site";
 import { BookingButton, CtaBand, HowIWork, PillarCards, StartHere } from "./components/Blocks";
 import DemoBadge from "./components/DemoBadge";
@@ -65,8 +64,6 @@ export default function Home() {
       <div className="section"><HowIWork /></div>
 
       <section className="section fit-section" id="fit"><div className="fit-copy"><p className="kicker">A strong fit?</p><h2>Built for service businesses where <em>follow-up matters.</em></h2><p>AIM initially works with small and growing service businesses, particularly training, education, professional and local services, that depend on enquiries, quotations, appointments and good communication.</p><BookingButton /></div><div className="fit-checklist"><h3>This conversation is worth having if…</h3><p>✓ Leads sometimes wait or disappear into an inbox</p><p>✓ Your team repeats the same emails, booking steps or reports</p><p>✓ Quotations are delayed by missing customer information</p><p>✓ Important business information lives in separate files or systems</p><p>✓ You want to explore AI without hiring a technical team</p><p>✓ You value a practical result more than technology hype</p></div></section>
-
-      <section className="about funnel-about" id="about"><div className="about-photo"><img src={withBase("/alaa-mostafa.webp")} alt="Alaa Mostafa, founder of AIM Smart Solutions" width={760} height={1059} loading="lazy" /></div><div className="about-copy"><p className="kicker">Why work with AIM?</p><h2>Technical depth.<br /><em>Commercial clarity.</em></h2><p className="role">Alaa Mostafa · Founder &amp; Practical AI and Automation Consultant</p><p className="about-lead">You need someone who can understand the technology and explain what it will actually change for your business.</p><p>Alaa combines experience in data analysis, business intelligence, dashboards, automation, AI and professional education. With a PhD in Semiconductor Physics and a career built around analytical problem-solving and teaching, he makes complex possibilities understandable and usable.</p><div className="founder-principles"><span>Understand the real problem</span><span>Build the smallest useful solution</span><span>Support people to use it confidently</span></div><Link className="text-link" href="/about/">More about AIM →</Link></div></section>
 
       <section className="section faq-section" id="faq"><div className="faq-intro"><p className="kicker">Before you book</p><h2>Clear answers. <em>No hard sell.</em></h2><p>The first conversation is designed to establish whether there is a useful opportunity, not to push technology your business does not need.</p></div><div className="faq-list">{faqs.map(([question, answer]) => <details key={question}><summary>{question}<span aria-hidden="true">+</span></summary><p>{answer}</p></details>)}</div></section>
 
