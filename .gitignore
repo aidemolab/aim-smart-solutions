@@ -39,3 +39,6 @@ next-env.d.ts
 /dist/
 /outputs/
 /work/
+
+# Supabase CLI cache
+/supabase/.temp/

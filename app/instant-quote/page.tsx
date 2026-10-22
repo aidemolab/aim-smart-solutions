@@ -1,5 +1,6 @@
 "use client";
 
+import { withBase } from "@/lib/base-path";
 import Link from "next/link";
 import { FormEvent, useMemo, useState } from "react";
 import { callFunction, toUkE164 } from "@/lib/supabase-functions";
@@ -71,7 +72,7 @@ export default function InstantQuotePage() {
   return (
     <main id="top">
       <header className="site-header quote-site-header">
-        <Link className="brand" href="/" aria-label="AIM Smart Solutions home"><img src="/aim-smart-solutions-logo.png" alt="AIM Smart Solutions — Business Growth & Automation" /></Link>
+        <Link className="brand" href="/" aria-label="AIM Smart Solutions home"><img src={withBase("/aim-smart-solutions-logo.png")} alt="AIM Smart Solutions — Business Growth & Automation" /></Link>
         <nav aria-label="Main navigation"><Link href="/#outcomes">Outcomes</Link><Link href="/#solutions">Solutions</Link><Link href="/#proof">Proof</Link><Link href="/instant-quote" aria-current="page">Request a Proposal</Link><Link href="/#about">Why AIM</Link></nav>
         <Link className="nav-cta" href="/book-appointment">Book your free call</Link>
       </header>
@@ -129,7 +130,7 @@ export default function InstantQuotePage() {
       </form>
 
       <footer className="quote-footer">
-        <Link className="footer-brand" href="/"><img src="/aim-smart-solutions-logo.png" alt="AIM Smart Solutions" /></Link>
+        <Link className="footer-brand" href="/"><img src={withBase("/aim-smart-solutions-logo.png")} alt="AIM Smart Solutions" /></Link>
         <p>Practical AI and automation that helps service businesses win more opportunities, serve customers faster and release capacity for growth.</p>
         <nav aria-label="Footer navigation"><Link href="/#outcomes">Outcomes</Link><Link href="/#solutions">Solutions</Link><Link href="/#proof">Proof</Link><Link href="/book-appointment">Book a free call</Link><Link href="/business-enquiry">Live enquiry demo</Link></nav>
         <small>© {new Date().getFullYear()} AIM Smart Solutions. All rights reserved.</small>

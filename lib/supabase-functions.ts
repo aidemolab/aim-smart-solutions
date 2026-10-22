@@ -11,7 +11,7 @@ const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 export type FunctionResult = { ok?: boolean; message?: string; [key: string]: unknown };
 
 export async function callFunction(
-  name: "appointment-booking" | "save-service-request" | "save-business-enquiry",
+  name: "appointment-booking" | "save-service-request" | "submit-enquiry",
   body: unknown,
 ): Promise<{ status: number; result: FunctionResult | null }> {
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {

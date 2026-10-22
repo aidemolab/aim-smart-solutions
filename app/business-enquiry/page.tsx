@@ -1,20 +1,26 @@
 "use client";
 
+import { withBase } from "@/lib/base-path";
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { callFunction, toUkE164 } from "@/lib/supabase-functions";
+import Turnstile from "../components/Turnstile";
 
 type SubmissionState = "ready" | "submitting" | "success" | "error";
 
 export default function BusinessEnquiryPage() {
   const [state, setState] = useState<SubmissionState>("ready");
   const [message, setMessage] = useState("");
+  const [urgent, setUrgent] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [turnstileKey, setTurnstileKey] = useState(0);
 
   async function submitEnquiry(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (state === "submitting") return;
     const data = new FormData(event.currentTarget);
     const urgency = data.get("urgency") === "urgent" ? "urgent" : "normal";
+    const consent = urgency === "urgent" && data.get("consent") === "yes";
     const text = (key: string) => String(data.get(key) ?? "").trim();
     const mobile = toUkE164(data.get("mobile"));
     setMessage("");
@@ -23,20 +29,34 @@ export default function BusinessEnquiryPage() {
       setMessage("Enter a valid UK mobile number beginning 07 or +44 7.");
       return;
     }
+    if (urgency === "urgent" && !consent) {
+      setState("error");
+      setMessage("Please confirm you agree to receive an automated call, or choose Normal.");
+      return;
+    }
+    if (process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && !turnstileToken) {
+      setState("error");
+      setMessage("Please complete the security check.");
+      return;
+    }
     setState("submitting");
 
     try {
-      // The voice call used to be started by the old /api/calls route. On a static
-      // site it must be started inside the save-business-enquiry function instead,
-      // which reports back with callStarted: true.
-      const { status, result } = await callFunction("save-business-enquiry", {
+      // submit-enquiry saves the enquiry, sends the acknowledgement email and, for
+      // urgent enquiries with consent, starts the AI call server-side.
+      const { status, result } = await callFunction("submit-enquiry", {
         name: text("firstName"),
         businessName: text("businessName"),
         email: text("email"),
         mobile,
         enquiry: text("enquiry"),
         urgency,
+        consent,
+        turnstileToken,
       });
+      // Turnstile tokens are single-use, so get a fresh one for any retry.
+      setTurnstileToken("");
+      setTurnstileKey((key) => key + 1);
       if (status < 400 && result?.ok) {
         setState("success");
         setMessage(urgency !== "urgent"
@@ -57,7 +77,7 @@ export default function BusinessEnquiryPage() {
   return (
     <main id="top">
       <header className="site-header">
-        <Link className="brand" href="/" aria-label="AIM Smart Solutions home"><img src="/aim-smart-solutions-logo.png" alt="AIM Smart Solutions — Business Growth & Automation" /></Link>
+        <Link className="brand" href="/" aria-label="AIM Smart Solutions home"><img src={withBase("/aim-smart-solutions-logo.png")} alt="AIM Smart Solutions — Business Growth & Automation" /></Link>
         <nav aria-label="Main navigation"><Link href="/#outcomes">Outcomes</Link><Link href="/#solutions">Solutions</Link><Link href="/#proof">Proof</Link><Link href="/instant-quote">Request a Proposal</Link><Link href="/#about">Why AIM</Link></nav>
         <Link className="nav-cta" href="/book-appointment">Book your free call</Link>
       </header>
@@ -84,10 +104,12 @@ export default function BusinessEnquiryPage() {
           <label htmlFor="enquiry">Your Enquiry<textarea id="enquiry" name="enquiry" rows={7} required /></label>
           <fieldset className="urgency-field" style={{ margin: "0 0 12px", padding: 0, border: 0 }}>
             <legend style={{ marginBottom: 12, color: "var(--navy-2)", fontSize: 10, fontWeight: 800, letterSpacing: ".11em", textTransform: "uppercase" }}>How urgent is your enquiry?</legend>
-            <label style={{ display: "inline-flex", alignItems: "center", gap: 9, margin: "0 28px 0 0", fontSize: 14, letterSpacing: 0, textTransform: "none", cursor: "pointer" }}><input style={{ width: 18, height: 18, margin: 0 }} name="urgency" type="radio" value="normal" defaultChecked /> Normal</label>
-            <label style={{ display: "inline-flex", alignItems: "center", gap: 9, margin: 0, fontSize: 14, letterSpacing: 0, textTransform: "none", cursor: "pointer" }}><input style={{ width: 18, height: 18, margin: 0 }} name="urgency" type="radio" value="urgent" /> Urgent</label>
+            <label style={{ display: "inline-flex", alignItems: "center", gap: 9, margin: "0 28px 0 0", fontSize: 14, letterSpacing: 0, textTransform: "none", cursor: "pointer" }}><input style={{ width: 18, height: 18, margin: 0 }} name="urgency" type="radio" value="normal" defaultChecked onChange={() => setUrgent(false)} /> Normal</label>
+            <label style={{ display: "inline-flex", alignItems: "center", gap: 9, margin: 0, fontSize: 14, letterSpacing: 0, textTransform: "none", cursor: "pointer" }}><input style={{ width: 18, height: 18, margin: 0 }} name="urgency" type="radio" value="urgent" onChange={() => setUrgent(true)} /> Urgent</label>
           </fieldset>
-          <p className="field-help urgency-help" style={{ margin: "0 0 24px" }}>Select Urgent if you need a prompt response. Our AI assistant will call the mobile number you provided.</p>
+          <p className="field-help urgency-help" style={{ margin: "0 0 16px" }}>Select Urgent if you need a prompt response. Our AI assistant will call the mobile number you provided.</p>
+          {urgent && <label htmlFor="call-consent" style={{ display: "flex", alignItems: "flex-start", gap: 10, margin: "0 0 20px", fontSize: 14, letterSpacing: 0, textTransform: "none", cursor: "pointer" }}><input id="call-consent" style={{ width: 18, height: 18, margin: "2px 0 0", flex: "none" }} name="consent" type="checkbox" value="yes" required /> I agree to receive one automated phone call from the AIM Smart Solutions AI assistant to the mobile number above about this enquiry.</label>}
+          <Turnstile onToken={setTurnstileToken} resetKey={turnstileKey} />
           <button type="submit" disabled={state === "submitting"}>{state === "submitting" ? "Submitting…" : "Try the enquiry journey"}<span>→</span></button>
           {message && <p id="enquiry-status" className={`submission-message ${state}`} role="status" aria-live="polite">{message}</p>}
         </form>
@@ -106,7 +128,7 @@ export default function BusinessEnquiryPage() {
       </section>
 
       <footer>
-        <Link className="footer-brand" href="/"><img src="/aim-smart-solutions-logo.png" alt="AIM Smart Solutions" /></Link>
+        <Link className="footer-brand" href="/"><img src={withBase("/aim-smart-solutions-logo.png")} alt="AIM Smart Solutions" /></Link>
         <p>Practical AI and automation that helps service businesses win more opportunities, serve customers faster and release capacity for growth.</p>
         <nav aria-label="Footer navigation"><Link href="/#outcomes">Outcomes</Link><Link href="/#solutions">Solutions</Link><Link href="/#proof">Proof</Link><Link href="/instant-quote">Request a proposal</Link><Link href="/book-appointment">Book a free call</Link></nav>
         <small>© {new Date().getFullYear()} AIM Smart Solutions. All rights reserved.</small>
