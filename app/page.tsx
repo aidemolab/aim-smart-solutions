@@ -47,7 +47,7 @@ export default function Home() {
         </aside>
       </section>
 
-      <section className="authority-strip" aria-label="Reasons to trust AIM Smart Solutions"><span><b>Working solutions</b> you can test now</span><span><b>PhD-level analysis</b> without the jargon</span><span><b>Data, AI &amp; automation</b> in one practical service</span><span><b>Bolton-based</b> with UK-wide support</span></section>
+      <section className="authority-strip" aria-label="Reasons to trust AIM Smart Solutions"><span><b>Working solutions</b> you can test now</span><span><b>Clear, practical analysis</b> without the jargon</span><span><b>Data, AI &amp; automation</b> in one practical service</span><span><b>Bolton-based</b> with UK-wide support</span></section>
 
       <section className="section pillars-section" id="services" aria-labelledby="pillars-title">
         <div className="section-intro"><div><p className="kicker">What AIM helps with</p><h2 id="pillars-title">Three business pains. <em>Practical solutions.</em></h2></div><p>Every service starts with a business pain, not a technology. Choose the one that sounds most like your week.</p></div>
