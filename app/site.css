@@ -236,3 +236,12 @@ footer.site-footer{max-width:1440px;margin:0 auto;padding:56px 6vw 28px;display:
 .privacy-note a{color:var(--cobalt-dark);text-decoration:underline;text-underline-offset:3px}
 .quote-privacy{max-width:1440px;margin:0 auto;padding:0 8vw 40px}
 @media(max-width:600px){.privacy{padding:36px 20px 56px}.quote-privacy{padding:0 20px 32px}}
+
+/* Live demos menu (desktop dropdown + mobile list) and demo card pain line */
+.nav-dropdown-panel .demos-menu{width:300px;display:flex;flex-direction:column;gap:2px;padding:12px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 20px 50px rgba(11,31,51,.16)}
+.demos-menu a{padding:9px 10px;border-radius:6px;border:0;font-size:13px;font-weight:600;color:var(--slate)}
+.demos-menu a:hover,.demos-menu a:focus-visible{background:#EFF6FF;color:var(--cobalt-dark)}
+.demos-menu a.demos-menu-all{color:var(--cobalt-dark);font-weight:800;border-top:1px solid var(--line);border-radius:0 0 6px 6px;margin-top:4px}
+.mobile-menu .demos-menu{display:flex;flex-direction:column;gap:2px;padding:6px 0 10px 12px;border-left:3px solid #EFF6FF}
+.mobile-menu .demos-menu a{display:flex;align-items:center;min-height:44px;font-size:15px}
+.demo-tile p.demo-pain{margin:0 0 10px;color:var(--navy);font-weight:700;font-size:15px;line-height:1.5}
