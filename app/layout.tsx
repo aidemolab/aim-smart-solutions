@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { withBase } from "@/lib/base-path";
 import SiteHeader from "./components/SiteHeader";
 import SiteFooter from "./components/SiteFooter";
+import BackToTop from "./components/BackToTop";
 import "./globals.css";
 import "./site.css";
 import "./demos.css";
@@ -34,6 +35,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <SiteHeader />
         {children}
         <SiteFooter />
+        <BackToTop />
       </body>
     </html>
   );

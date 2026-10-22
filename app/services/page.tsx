@@ -9,7 +9,7 @@ import DemoBadge from "../components/DemoBadge";
 export const metadata: Metadata = {
   alternates: { canonical: "/services/" },
   title: "Services",
-  description: "AI and automation services for UK service businesses, grouped by the problem they solve: win more customers, save time and decide better.",
+  description: "AI and automation services for UK service businesses, grouped by the pain they solve: win more customers, save time and decide better.",
 };
 
 export default function Services() {
@@ -17,8 +17,8 @@ export default function Services() {
     <main id="main" className="services-main">
       <section className="services-hero">
         <p className="kicker">Our services</p>
-        <h1>Practical technology for <em>three business problems.</em></h1>
-        <p>Seven services, grouped by what they change for your business. Each one starts with the problem and uses the smallest practical solution.</p>
+        <h1>Practical technology for <em>three business pains.</em></h1>
+        <p>Seven services, grouped by what they change for your business. Each one starts with the pain and uses the smallest practical solution.</p>
         <nav className="pillar-jump" aria-label="Jump to a pillar">
           {pillars.map((pillar) => <a key={pillar.id} href={`#${pillar.id}`}>{pillar.name}</a>)}
         </nav>

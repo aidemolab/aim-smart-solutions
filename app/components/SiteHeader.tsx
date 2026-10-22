@@ -14,13 +14,14 @@ const links = [
 ];
 
 function ServicesMenu({ onNavigate }: { onNavigate?: () => void }) {
+  const pathname = usePathname() ?? "/";
   return (
     <div className="services-menu">
       {pillars.map((pillar) => (
         <div key={pillar.id} className="services-menu-group">
           <Link className="services-menu-pillar" href={`/services/#${pillar.id}`} onClick={onNavigate}>{pillar.name}</Link>
           {pillar.services.map((slug) => (
-            <Link key={slug} href={`/services/${slug}/`} onClick={onNavigate}>{serviceBySlug(slug)?.name}</Link>
+            <Link key={slug} href={`/services/${slug}/`} onClick={onNavigate} aria-current={pathname.startsWith(`/services/${slug}`) ? "page" : undefined}>{serviceBySlug(slug)?.name}</Link>
           ))}
         </div>
       ))}
@@ -66,10 +67,10 @@ export default function SiteHeader() {
 
       <div id="mobile-menu" className="mobile-menu" hidden={!open}>
         <nav aria-label="Mobile navigation">
-          <Link href="/" onClick={close}>Home</Link>
-          <Link href="/services/" onClick={close}>All services</Link>
+          <Link href="/" onClick={close} aria-current={isCurrent("/") ? "page" : undefined}>Home</Link>
+          <Link href="/services/" onClick={close} aria-current={isCurrent("/services/") ? "page" : undefined}>All services</Link>
           <ServicesMenu onNavigate={close} />
-          {links.map((link) => <Link key={link.href} href={link.href} onClick={close}>{link.label}</Link>)}
+          {links.map((link) => <Link key={link.href} href={link.href} onClick={close} aria-current={isCurrent(link.href) ? "page" : undefined}>{link.label}</Link>)}
           <Link className="button primary" href={BOOKING_CTA.href} onClick={close}>{BOOKING_CTA.label}</Link>
         </nav>
       </div>
