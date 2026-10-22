@@ -1,10 +1,9 @@
 "use client";
 
-import { withBase } from "@/lib/base-path";
 import { FormEvent, useState } from "react";
-import Link from "next/link";
 import { callFunction, HONEYPOT_FIELD, NETWORK_ERROR_MESSAGE, toUkE164 } from "@/lib/supabase-functions";
 import Turnstile from "../components/Turnstile";
+import DemoBadge from "../components/DemoBadge";
 import { CALL_CONSENT_TEXT, CALL_CONSENT_VERSION } from "@/lib/consent";
 
 type SubmissionState = "ready" | "submitting" | "success" | "error";
@@ -85,16 +84,10 @@ export default function BusinessEnquiryPage() {
   }
 
   return (
-    <main id="top">
-      <header className="site-header">
-        <Link className="brand" href="/" aria-label="AIM Smart Solutions home"><img src={withBase("/aim-smart-solutions-logo.png")} alt="AIM Smart Solutions — Business Growth & Automation" /></Link>
-        <nav aria-label="Main navigation"><Link href="/#outcomes">Outcomes</Link><Link href="/#solutions">Solutions</Link><Link href="/#proof">Proof</Link><Link href="/instant-quote">Request a Proposal</Link><Link href="/#about">Why AIM</Link></nav>
-        <Link className="nav-cta" href="/book-appointment">Book your free call</Link>
-      </header>
-
+    <main id="main">
       <section className="section enquiry-page" aria-labelledby="enquiry-title">
         <div className="enquiry-copy">
-          <p className="kicker">Live Working Demonstration</p>
+          <p className="kicker"><DemoBadge kind="Live" /> Live working demonstration</p>
           <h1 id="enquiry-title">Experience a faster <em>enquiry response.</em></h1>
           <p>{callsEnabled
             ? "This working demonstration shows how a business can capture an enquiry, confirm it immediately and offer an optional AI voice response for urgent requests."
@@ -143,13 +136,6 @@ export default function BusinessEnquiryPage() {
             : <article><span>03</span><h3>Priority support</h3><p>{PRIORITY_NOTE}</p></article>}
         </div>
       </section>
-
-      <footer>
-        <Link className="footer-brand" href="/"><img src={withBase("/aim-smart-solutions-logo.png")} alt="AIM Smart Solutions" /></Link>
-        <p>Practical AI and automation that helps service businesses win more opportunities, serve customers faster and release capacity for growth.</p>
-        <nav aria-label="Footer navigation"><Link href="/#outcomes">Outcomes</Link><Link href="/#solutions">Solutions</Link><Link href="/#proof">Proof</Link><Link href="/instant-quote">Request a proposal</Link><Link href="/book-appointment">Book a free call</Link></nav>
-        <small>© {new Date().getFullYear()} AIM Smart Solutions. All rights reserved.</small>
-      </footer>
     </main>
   );
 }

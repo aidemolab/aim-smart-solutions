@@ -1,7 +1,36 @@
-import { withBase } from "@/lib/base-path";
-import Link from "next/link";
-import ServiceHeader from "../components/ServiceHeader";
-import ServiceFooter from "../components/ServiceFooter";
-export const metadata={title:"Live AI Demos | AIM Smart Solutions"};
-const demos=[{title:"Pharmaceutical Market Intelligence",url:"https://aidemolab.github.io/aim-pharmaceutical-ai-demo/",description:"Explore market analysis, product ranking, pricing simulations and AI assistance."},{title:"AI Calling Agent",url:"/business-enquiry",description:"Submit an urgent enquiry to experience AI voice follow-up."},{title:"Automated Quotations",url:"/instant-quote",description:"Experience guided service requests and automated quotation information collection."},{title:"Appointment Booking",url:"/book-appointment",description:"Experience online appointment booking and confirmation."}];
-export default function LiveDemos(){return <><ServiceHeader/><main className="services-main"><section className="services-hero"><p className="kicker">Live demonstrations</p><h1>Don&apos;t just read about AI. <em>Try it.</em></h1><p>Explore interactive applications built with AIM Smart Solutions. Sample data is illustrative, not verified client results.</p></section><section className="services-list">{demos.map(d=><article className="services-list-card" key={d.title}><p className="kicker">Working example</p><h2>{d.title}</h2><p>{d.description}</p><a href={withBase(d.url)}>Launch demonstration →</a></article>)}</section><section className="services-cta"><h2>Need a different application?</h2><Link className="button primary" href="/book-appointment">Discuss a custom demo →</Link></section></main><ServiceFooter/></>}
+import type { Metadata } from "next";
+import { demos } from "@/lib/demos";
+import { BookingButton } from "../components/Blocks";
+import DemoBadge from "../components/DemoBadge";
+import DemoCard from "../components/DemoCard";
+
+export const metadata: Metadata = {
+  title: "Live AI Demos: the AI Lab",
+  description: "Try AIM Smart Solutions' AI and automation demos yourself: enquiry handling, instant quotes, online booking and a smart decision app.",
+};
+
+export default function LiveDemos() {
+  return (
+    <main id="main" className="services-main">
+      <section className="services-hero">
+        <p className="kicker">The AI Lab</p>
+        <h1>Don&apos;t just read about AI. <em>Try it.</em></h1>
+        <p>Every demo here is something you can use right now. Each one is labelled so you know exactly what you are looking at.</p>
+        <dl className="badge-key">
+          <div><dt><DemoBadge kind="Live" /></dt><dd>Works for real. Forms send real emails and reach AIM.</dd></div>
+          <div><dt><DemoBadge kind="Illustrative data" /></dt><dd>Runs on fictional sample data to show what is possible.</dd></div>
+        </dl>
+      </section>
+
+      <section className="lab-grid" aria-label="Demos">
+        {demos.map((demo) => <DemoCard key={demo.id} demo={demo} headingLevel={2} />)}
+      </section>
+
+      <section className="services-cta">
+        <h2>Want this for your business?</h2>
+        <p>Every demo here can be adapted to your services, your customers and the tools you already use. Start with a free conversation.</p>
+        <BookingButton />
+      </section>
+    </main>
+  );
+}

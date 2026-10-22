@@ -1,9 +1,8 @@
 "use client";
 
-import { withBase } from "@/lib/base-path";
-import Link from "next/link";
 import { FormEvent, useMemo, useState } from "react";
 import { callFunction, HONEYPOT_FIELD, toUkE164 } from "@/lib/supabase-functions";
+import DemoBadge from "../components/DemoBadge";
 import "./quote.css";
 
 const services = [
@@ -71,15 +70,9 @@ export default function InstantQuotePage() {
   const customerComplete = customer.name.trim() && customer.business.trim() && customer.email.trim() && customer.mobile.trim();
 
   return (
-    <main id="top">
-      <header className="site-header quote-site-header">
-        <Link className="brand" href="/" aria-label="AIM Smart Solutions home"><img src={withBase("/aim-smart-solutions-logo.png")} alt="AIM Smart Solutions — Business Growth & Automation" /></Link>
-        <nav aria-label="Main navigation"><Link href="/#outcomes">Outcomes</Link><Link href="/#solutions">Solutions</Link><Link href="/#proof">Proof</Link><Link href="/instant-quote" aria-current="page">Request a Proposal</Link><Link href="/#about">Why AIM</Link></nav>
-        <Link className="nav-cta" href="/book-appointment">Book your free call</Link>
-      </header>
-
+    <main id="main">
       <section className="quote-hero">
-        <p className="kicker">Tailored Proposal Request</p>
+        <p className="kicker"><DemoBadge kind="Live" /> Tailored proposal request</p>
         <h1>Tell us the outcome your business <em>needs.</em></h1>
         <p>If you already have a defined requirement, select the relevant support and describe the result you want. We will review it and contact you within 24 hours.</p>
       </section>
@@ -130,13 +123,6 @@ export default function InstantQuotePage() {
           )}
         </aside>
       </form>
-
-      <footer className="quote-footer">
-        <Link className="footer-brand" href="/"><img src={withBase("/aim-smart-solutions-logo.png")} alt="AIM Smart Solutions" /></Link>
-        <p>Practical AI and automation that helps service businesses win more opportunities, serve customers faster and release capacity for growth.</p>
-        <nav aria-label="Footer navigation"><Link href="/#outcomes">Outcomes</Link><Link href="/#solutions">Solutions</Link><Link href="/#proof">Proof</Link><Link href="/book-appointment">Book a free call</Link><Link href="/business-enquiry">Live enquiry demo</Link></nav>
-        <small>© {new Date().getFullYear()} AIM Smart Solutions. All rights reserved.</small>
-      </footer>
     </main>
   );
 }
