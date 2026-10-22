@@ -11,6 +11,12 @@ Deno.serve(withCors(async (request: Request) => {
   try { body = await request.json(); }
   catch { return Response.json({ ok: false, message: "Invalid request." }, { status: 400 }); }
 
+  // Honeypot: a hidden form field people never see. If it is filled in, a bot sent
+  // this, so pretend it worked and save nothing. A missing field passes.
+  if (clean(body.website, 500)) {
+    return Response.json({ ok: true, reference: `AIM-REQ-${crypto.randomUUID().slice(0, 8).toUpperCase()}`, emailsSent: 2 });
+  }
+
   const name = clean(body.name, 100);
   const businessName = clean(body.businessName, 150);
   const email = clean(body.email, 254).toLowerCase();

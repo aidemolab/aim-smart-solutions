@@ -3,11 +3,16 @@
 import { withBase } from "@/lib/base-path";
 import { FormEvent, useState } from "react";
 import Link from "next/link";
-import { callFunction, toUkE164 } from "@/lib/supabase-functions";
+import { callFunction, HONEYPOT_FIELD, NETWORK_ERROR_MESSAGE, toUkE164 } from "@/lib/supabase-functions";
 import Turnstile from "../components/Turnstile";
 import { CALL_CONSENT_TEXT, CALL_CONSENT_VERSION } from "@/lib/consent";
 
 type SubmissionState = "ready" | "submitting" | "success" | "error";
+
+// AI calls need the CAPTCHA, so they are only offered when Turnstile is set up.
+// The function also reports callsEnabled, which overrides this after a submission.
+const CALLS_CONFIGURED = Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY);
+const PRIORITY_NOTE = "Need us quickly? Mention it in your message and we'll contact you as a priority.";
 
 export default function BusinessEnquiryPage() {
   const [state, setState] = useState<SubmissionState>("ready");
@@ -15,12 +20,13 @@ export default function BusinessEnquiryPage() {
   const [urgent, setUrgent] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState("");
   const [turnstileKey, setTurnstileKey] = useState(0);
+  const [callsEnabled, setCallsEnabled] = useState(CALLS_CONFIGURED);
 
   async function submitEnquiry(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (state === "submitting") return;
     const data = new FormData(event.currentTarget);
-    const urgency = data.get("urgency") === "urgent" ? "urgent" : "normal";
+    const urgency = callsEnabled && data.get("urgency") === "urgent" ? "urgent" : "normal";
     const consent = urgency === "urgent" && data.get("consent") === "yes";
     const text = (key: string) => String(data.get(key) ?? "").trim();
     const mobile = toUkE164(data.get("mobile"));
@@ -55,7 +61,9 @@ export default function BusinessEnquiryPage() {
         consent,
         consentVersion: consent ? CALL_CONSENT_VERSION : undefined,
         turnstileToken,
+        website: text(HONEYPOT_FIELD),
       });
+      if (result?.callsEnabled === false) { setCallsEnabled(false); setUrgent(false); }
       // Turnstile tokens are single-use, so get a fresh one for any retry.
       setTurnstileToken("");
       setTurnstileKey((key) => key + 1);
@@ -72,7 +80,7 @@ export default function BusinessEnquiryPage() {
       setMessage(result?.message || "We could not submit your enquiry. Please check your details and try again.");
     } catch {
       setState("error");
-      setMessage("We could not contact the call service. Please try again.");
+      setMessage(NETWORK_ERROR_MESSAGE);
     }
   }
 
@@ -88,11 +96,13 @@ export default function BusinessEnquiryPage() {
         <div className="enquiry-copy">
           <p className="kicker">Live Working Demonstration</p>
           <h1 id="enquiry-title">Experience a faster <em>enquiry response.</em></h1>
-          <p>This working demonstration shows how a business can capture an enquiry, confirm it immediately and offer an optional AI voice response for urgent requests.</p>
+          <p>{callsEnabled
+            ? "This working demonstration shows how a business can capture an enquiry, confirm it immediately and offer an optional AI voice response for urgent requests."
+            : "This working demonstration shows how a business can capture an enquiry and confirm it immediately by email."}</p>
           <ol className="demo-flow" aria-label="What happens next">
             <li><span>1</span>Tell us what you need</li>
             <li><span>2</span>Submit your enquiry</li>
-            <li><span>3</span>Receive a call if your enquiry is urgent</li>
+            <li><span>3</span>{callsEnabled ? "Receive a call if your enquiry is urgent" : "Receive an instant email confirmation"}</li>
           </ol>
         </div>
         <form className="contact-form enquiry-form" onSubmit={submitEnquiry}>
@@ -104,6 +114,8 @@ export default function BusinessEnquiryPage() {
           <label htmlFor="mobile-number">Mobile Number<input id="mobile-number" name="mobile" type="tel" inputMode="tel" autoComplete="tel" placeholder="Enter your UK mobile number" aria-describedby="mobile-help enquiry-status" required /></label>
           <p className="field-help" id="mobile-help">Enter a UK mobile number beginning 07 or +44 7.</p>
           <label htmlFor="enquiry">Your Enquiry<textarea id="enquiry" name="enquiry" rows={7} required /></label>
+          <div aria-hidden="true" style={{ position: "absolute", left: "-10000px", width: 1, height: 1, overflow: "hidden" }}><label htmlFor="enquiry-website">Website<input id="enquiry-website" name={HONEYPOT_FIELD} type="text" tabIndex={-1} autoComplete="off" /></label></div>
+          {callsEnabled ? <>
           <fieldset className="urgency-field" style={{ margin: "0 0 12px", padding: 0, border: 0 }}>
             <legend style={{ marginBottom: 12, color: "var(--navy-2)", fontSize: 10, fontWeight: 800, letterSpacing: ".11em", textTransform: "uppercase" }}>How urgent is your enquiry?</legend>
             <label style={{ display: "inline-flex", alignItems: "center", gap: 9, margin: "0 28px 0 0", fontSize: 14, letterSpacing: 0, textTransform: "none", cursor: "pointer" }}><input style={{ width: 18, height: 18, margin: 0 }} name="urgency" type="radio" value="normal" defaultChecked onChange={() => setUrgent(false)} /> Normal</label>
@@ -111,6 +123,7 @@ export default function BusinessEnquiryPage() {
           </fieldset>
           <p className="field-help urgency-help" style={{ margin: "0 0 16px" }}>Select Urgent if you need a prompt response. Our AI assistant will call the mobile number you provided.</p>
           {urgent && <label htmlFor="call-consent" style={{ display: "flex", alignItems: "flex-start", gap: 10, margin: "0 0 20px", fontSize: 14, letterSpacing: 0, textTransform: "none", cursor: "pointer" }}><input id="call-consent" style={{ width: 18, height: 18, margin: "2px 0 0", flex: "none" }} name="consent" type="checkbox" value="yes" required /> {CALL_CONSENT_TEXT}</label>}
+          </> : <p className="field-help urgency-help" style={{ margin: "0 0 20px" }}>{PRIORITY_NOTE}</p>}
           <Turnstile onToken={setTurnstileToken} resetKey={turnstileKey} />
           <button type="submit" disabled={state === "submitting"}>{state === "submitting" ? "Submitting…" : "Try the enquiry journey"}<span>→</span></button>
           {message && <p id="enquiry-status" className={`submission-message ${state}`} role="status" aria-live="polite">{message}</p>}
@@ -125,7 +138,9 @@ export default function BusinessEnquiryPage() {
         <div className="benefit-grid">
           <article><span>01</span><h3>Tell us about your business</h3><p>Share your contact details and a short description of the support you need.</p></article>
           <article><span>02</span><h3>We review your enquiry</h3><p>For normal enquiries, we will get back to you within 24 hours.</p></article>
-          <article><span>03</span><h3>Urgent support</h3><p>If you select Urgent, our AI assistant will also call the UK mobile number you provide.</p></article>
+          {callsEnabled
+            ? <article><span>03</span><h3>Urgent support</h3><p>If you select Urgent, our AI assistant will also call the UK mobile number you provide.</p></article>
+            : <article><span>03</span><h3>Priority support</h3><p>{PRIORITY_NOTE}</p></article>}
         </div>
       </section>
 

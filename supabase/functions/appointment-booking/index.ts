@@ -31,6 +31,12 @@ Deno.serve(withCors(async (request: Request) => {
     return json(result, result?.ok ? 200 : 502);
   }
 
+  // Honeypot: a hidden form field people never see. If it is filled in, a bot sent
+  // this, so pretend it worked and book nothing. A missing field passes.
+  if (clean(body.website, 500)) {
+    return json({ ok: true, appointmentAt: clean(body.appointmentAt, 50), emailSent: true });
+  }
+
   const name = clean(body.name, 100);
   const businessName = clean(body.businessName, 150);
   const email = clean(body.email, 254).toLowerCase();
