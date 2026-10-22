@@ -40,7 +40,7 @@ export const demos: Demo[] = [
     href: "/business-enquiry/",
     badge: "Live",
     tryLabel: "Try the enquiry journey",
-    service: "sales-marketing",
+    service: "business-automation",
   },
   {
     id: "instant-quote",

@@ -65,7 +65,7 @@ export const services: Service[] = [
       "Scoring leads so the best opportunities get the first call",
     ],
     features: ["Lead capture and qualification", "Customer email workflows", "CRM and contact management integration", "Sales reporting and follow-up processes"],
-    demos: ["content-generator", "enquiry-journey", "sales-lead-scoring"],
+    demos: ["content-generator", "sales-lead-scoring"],
     metaDescription: "AI sales and marketing automation for small businesses: instant enquiry replies, owner alerts, reliable follow-up and a clear view of every lead.",
   },
   {
@@ -85,12 +85,13 @@ export const services: Service[] = [
       { title: "A smoother customer journey", body: "Confirmations and reminders go out on time, every time." },
     ],
     useCases: [
+      "Instant acknowledgement and owner alert for every website enquiry",
       "Guided quote requests that arrive with every detail you need",
       "Online booking with automatic confirmation and reminder emails",
       "Passing enquiry details into your calendar, CRM or spreadsheet",
     ],
     features: ["Customer enquiry workflows", "Automated information collection for quotations", "Appointment confirmations and reminders", "Email notifications and follow-up"],
-    demos: ["instant-quote", "booking"],
+    demos: ["enquiry-journey", "instant-quote", "booking"],
     metaDescription: "Business process automation for UK SMEs: automate quotes, bookings, confirmations, reminders and routine admin using the tools you already have.",
   },
   {

@@ -27,12 +27,18 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   };
 }
 
-// The demo shown on each service page. Built-in demos are added here.
+// The demo shown on each service page: an optional featured built-in demo, then cards for the others.
+const FEATURED: Record<string, { id: string; render: () => React.ReactNode }> = {
+  "sales-marketing": { id: "content-generator", render: () => <ContentGenerator /> },
+  "business-automation": { id: "enquiry-journey", render: () => <EnquiryJourney /> },
+  "ai-consultancy": { id: "ai-opportunity-score", render: () => <OpportunityScore /> },
+  training: { id: "ai-skills-taster", render: () => <SkillsTaster /> },
+};
+
 function ServiceDemo({ service }: { service: Service }) {
-  if (service.slug === "ai-consultancy") return <OpportunityScore />;
-  if (service.slug === "training") return <SkillsTaster />;
-  const list = service.demos.filter((id) => !(service.slug === "sales-marketing" && (id === "enquiry-journey" || id === "content-generator"))).map(demoById).filter((demo) => demo !== undefined);
-  if (list.length === 0) {
+  const featured = FEATURED[service.slug];
+  const list = service.demos.filter((id) => id !== featured?.id).map(demoById).filter((demo) => demo !== undefined);
+  if (!featured && list.length === 0) {
     return (
       <div className="demo-placeholder">
         <h3>See it for your business</h3>
@@ -43,8 +49,8 @@ function ServiceDemo({ service }: { service: Service }) {
   }
   return (
     <>
-      {service.slug === "sales-marketing" && <><ContentGenerator /><div className="demo-tiles-after" /><EnquiryJourney /></>}
-      <div className={`demo-tiles${service.slug === "sales-marketing" ? " demo-tiles-after" : ""}`}>{list.map((demo) => <DemoCard key={demo.id} demo={demo} />)}</div>
+      {featured?.render()}
+      {list.length > 0 && <div className={`demo-tiles${featured ? " demo-tiles-after" : ""}`}>{list.map((demo) => <DemoCard key={demo.id} demo={demo} />)}</div>}
     </>
   );
 }
