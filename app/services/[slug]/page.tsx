@@ -55,6 +55,16 @@ function ServiceDemo({ service }: { service: Service }) {
   );
 }
 
+// "Try the live demo": straight to the app when the page features exactly one demo
+// and it is a standalone app; otherwise to the demo section on this page.
+function TryDemoButton({ service }: { service: Service }) {
+  const featured = FEATURED[service.slug];
+  const all = service.demos.map(demoById).filter((demo) => demo !== undefined);
+  if (!featured && all.length === 0) return <a className="button secondary" href="#demo">See the demo <span aria-hidden="true">↓</span></a>;
+  const only = !featured && all.length === 1 && all[0].external ? all[0] : undefined;
+  return <a className="button secondary try-live-demo" href={only ? only.href : "#demo"}>Try the live demo <span aria-hidden="true">{only ? "→" : "↓"}</span></a>;
+}
+
 export default async function ServicePage({ params }: Params) {
   const service = serviceBySlug((await params).slug);
   if (!service) notFound();
@@ -91,7 +101,7 @@ export default async function ServicePage({ params }: Params) {
         <p>{service.description}</p>
         <div className="service-hero-actions">
           <BookingButton />
-          <a className="button secondary" href="#demo">See the demo <span aria-hidden="true">↓</span></a>
+          <TryDemoButton service={service} />
         </div>
       </section>
 

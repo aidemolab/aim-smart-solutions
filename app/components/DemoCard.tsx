@@ -8,6 +8,7 @@ export default function DemoCard({ demo, headingLevel = 3 }: { demo: Demo; headi
     <article className="demo-tile">
       <DemoBadge kind={demo.badge} />
       <Heading>{demo.title}</Heading>
+      {demo.pain && <p className="demo-pain">{demo.pain}</p>}
       <p>{demo.summary}</p>
       {demo.external
         ? <a className="demo-try" href={demo.href}>{demo.tryLabel} <span aria-hidden="true">→</span></a>

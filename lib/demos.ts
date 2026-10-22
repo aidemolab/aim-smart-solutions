@@ -12,6 +12,7 @@ export type Demo = {
   badge: DemoBadgeKind;
   tryLabel: string;
   service: string; // slug of the service page that features it
+  pain?: string; // one-line problem the app solves (shown on /live-demos)
 };
 
 export const demos: Demo[] = [
@@ -71,6 +72,7 @@ export const demos: Demo[] = [
   },
   {
     id: "supplier-risk",
+    pain: "Spot risky suppliers before a delay or price rise hits your business.",
     title: "Supplier Risk Scoring Dashboard",
     summary: "Stress-test a fictional supplier portfolio with what-if sliders (risk weights, currency, delay, tariffs), then add and edit your own suppliers. Your changes are kept for 24 hours. Sample data is fictional.",
     href: "https://aidemolab.github.io/aim-supplier-risk-demo/",
@@ -81,6 +83,7 @@ export const demos: Demo[] = [
   },
   {
     id: "sales-lead-scoring",
+    pain: "Know which leads to call first instead of guessing.",
     title: "Sales Lead Scoring Dashboard",
     summary: "Tune a fictional sales pipeline with what-if sliders (scoring weights, hot threshold, win rate, calls), then add and edit your own leads. Your changes are kept for 24 hours. Sample data is fictional.",
     href: "https://aidemolab.github.io/aim-sales-lead-scoring-demo/",
@@ -91,6 +94,7 @@ export const demos: Demo[] = [
   },
   {
     id: "property-investment",
+    pain: "Check whether a property's numbers stack up before you commit.",
     title: "Property Investment Analysis Dashboard",
     summary: "Run the numbers on fictional properties with what-if sliders (mortgage rate, deposit, rent, empty months), or add your own. Your changes are kept for 24 hours. Fictional data and addresses. Not investment advice.",
     href: "https://aidemolab.github.io/aim-property-investment-demo/",
@@ -101,14 +105,18 @@ export const demos: Demo[] = [
   },
   {
     id: "pharma-market-intelligence",
+    pain: "Decide which product to pilot, and at what price, from field survey data.",
     title: "Pharmaceutical market intelligence app",
     summary: "Explore market analysis, product ranking, pricing simulations and AI explanations in a purpose-built decision tool.",
     href: "https://aidemolab.github.io/aim-pharmaceutical-ai-demo/",
     external: true,
     badge: "Illustrative data",
-    tryLabel: "Open the app",
+    tryLabel: "Try it",
     service: "smart-apps",
   },
 ];
+
+// The standalone demo apps (each opens in the same tab and carries the shared demo bar).
+export const appDemos = demos.filter((demo) => demo.external);
 
 export const demoById = (id: string) => demos.find((demo) => demo.id === id);
