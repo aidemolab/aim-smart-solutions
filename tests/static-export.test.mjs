@@ -11,7 +11,7 @@ const routes = [
   "", "services", "services/smart-apps", "services/ai-voice-agents",
   "services/business-automation", "services/data-analytics", "services/sales-marketing",
   "services/training", "services/ai-consultancy", "live-demos", "about", "contact",
-  "book-appointment", "business-enquiry", "instant-quote",
+  "book-appointment", "business-enquiry", "instant-quote", "privacy",
 ];
 
 function allFiles(dir) {

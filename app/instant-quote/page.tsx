@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useMemo, useState } from "react";
+import PrivacyNote from "../components/PrivacyNote";
 import { callFunction, HONEYPOT_FIELD, toUkE164 } from "@/lib/supabase-functions";
 import DemoBadge from "../components/DemoBadge";
 import "./quote.css";
@@ -123,6 +124,7 @@ export default function InstantQuotePage() {
           )}
         </aside>
       </form>
+      <div className="quote-privacy"><PrivacyNote text="We use your details only to prepare your quote." /></div>
     </main>
   );
 }

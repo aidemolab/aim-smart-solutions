@@ -14,7 +14,7 @@ const routes = [
   "", "services", "services/smart-apps", "services/ai-voice-agents",
   "services/business-automation", "services/data-analytics", "services/sales-marketing",
   "services/training", "services/ai-consultancy", "live-demos", "about", "contact",
-  "book-appointment", "business-enquiry", "instant-quote",
+  "book-appointment", "business-enquiry", "instant-quote", "privacy",
 ];
 
 const label = (route) => route || "/";
@@ -90,4 +90,11 @@ test("honesty rules: no testimonials, client logos, savings figures or performan
     assert.doesNotMatch(text, /(sav(e|ed|ing)|cut|reduc(e|ed)|increas(e|ed)|boost(ed)?) [^.]{0,30}\d+ ?(%|per ?cent|hours|x\b)/i, `${label(route)} contains a savings or performance figure`);
     assert.doesNotMatch(text, /guaranteed (results|growth|savings)/i, `${label(route)} promises guaranteed results`);
   }
+});
+
+test("every form links to the privacy policy", () => {
+  for (const route of ["business-enquiry", "instant-quote", "book-appointment", "services/sales-marketing"]) {
+    assert.match(page(route), /class="privacy-note"[^]*?href="(\/aim-smart-solutions)?\/privacy\/"/, `${route} has no privacy link under its form`);
+  }
+  assert.match(page("privacy"), /Draft for owner review/, "privacy policy draft note missing");
 });

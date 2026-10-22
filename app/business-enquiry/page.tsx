@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import PrivacyNote from "../components/PrivacyNote";
 import { callFunction, HONEYPOT_FIELD, NETWORK_ERROR_MESSAGE, toUkE164 } from "@/lib/supabase-functions";
 import Turnstile from "../components/Turnstile";
 import DemoBadge from "../components/DemoBadge";
@@ -120,6 +121,7 @@ export default function BusinessEnquiryPage() {
           <Turnstile onToken={setTurnstileToken} resetKey={turnstileKey} />
           <button type="submit" disabled={state === "submitting"}>{state === "submitting" ? "Submitting…" : "Try the enquiry journey"}<span>→</span></button>
           {message && <p id="enquiry-status" className={`submission-message ${state}`} role="status" aria-live="polite">{message}</p>}
+          <PrivacyNote text="We use your details only to reply to your enquiry." />
         </form>
       </section>
 
