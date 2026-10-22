@@ -5,8 +5,8 @@ name: Deploy to GitHub Pages
 #   NEXT_PUBLIC_SUPABASE_URL        Supabase project URL
 #   NEXT_PUBLIC_SUPABASE_ANON_KEY   legacy anon key (JWT starting eyJ); public by design
 #   NEXT_PUBLIC_TURNSTILE_SITE_KEY  Cloudflare Turnstile site key; public by design
-#   PAGES_PREVIEW                   "true" (default) builds for aidemolab.github.io/aim-smart-solutions/;
-#                                   set to "false" only when the custom domain is switched over.
+#   PAGES_PREVIEW                   "false" (default) builds for the custom domain aimsmartsolutions.tech;
+#                                   "true" builds for aidemolab.github.io/aim-smart-solutions/.
 # Never add the service-role key, SMTP password, Vapi key or Turnstile secret here:
 # everything in this build ends up in the public site.
 
@@ -42,7 +42,7 @@ jobs:
       - name: Build and test static export
         run: npm test
         env:
-          PAGES_PREVIEW: ${{ vars.PAGES_PREVIEW || 'true' }}
+          PAGES_PREVIEW: ${{ vars.PAGES_PREVIEW || 'false' }}
           NEXT_PUBLIC_SUPABASE_URL: ${{ vars.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ vars.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
           NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.NEXT_PUBLIC_TURNSTILE_SITE_KEY }}
