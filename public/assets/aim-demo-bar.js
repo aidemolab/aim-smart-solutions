@@ -39,7 +39,7 @@
     ".spacer{flex:1}",
     ".menu{position:relative;flex:none}",
     ".menu-btn{display:flex;align-items:center;gap:6px;padding:8px 10px;border:1px solid rgba(255,255,255,.3);border-radius:6px;background:transparent;cursor:pointer;white-space:nowrap}",
-    ".panel{position:absolute;right:0;top:calc(100% + 8px);width:280px;max-width:calc(100vw - 32px);background:#fff;color:#1E293B;border-radius:10px;box-shadow:0 18px 40px rgba(11,31,51,.25);padding:8px;box-sizing:border-box}",
+    ".panel{position:absolute;right:0;top:100%;margin-top:0;border-top:8px solid transparent;background-clip:padding-box;width:280px;max-width:calc(100vw - 32px);background:#fff;color:#1E293B;border-radius:10px;box-shadow:0 18px 40px rgba(11,31,51,.25);padding:8px;box-sizing:border-box}",
     ".panel[hidden]{display:none}",
     ".panel a{display:block;padding:10px 12px;border-radius:6px;font-size:14px;line-height:1.3}",
     ".panel a:hover,.panel a:focus-visible{background:#EFF6FF;color:#1D4ED8}",
@@ -109,6 +109,12 @@
       e.stopPropagation();
       setOpen(panel.hidden);
     });
+    // Mouse users: open on hover so any demo is one click away.
+    var menu = root.querySelector(".menu");
+    if (window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      menu.addEventListener("mouseenter", function () { setOpen(true); });
+      menu.addEventListener("mouseleave", function () { setOpen(false); });
+    }
     document.addEventListener("click", function (e) {
       if (e.target !== host) setOpen(false);
     });
