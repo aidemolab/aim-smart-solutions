@@ -12,6 +12,7 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "supabase/**",
+    "demo-apps-backend/**",
     "next-env.d.ts",
   ]),
 ]);
