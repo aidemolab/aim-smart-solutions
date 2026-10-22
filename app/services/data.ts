@@ -60,11 +60,12 @@ export const services: Service[] = [
     useCases: [
       "Instant acknowledgement and owner alert for every website enquiry",
       "Follow-up emails when a quote has not had a reply",
+      "Drafting social posts and local keyword ideas with AI, ready to review",
       "Capturing leads into a simple CRM or spreadsheet automatically",
       "Scoring leads so the best opportunities get the first call",
     ],
     features: ["Lead capture and qualification", "Customer email workflows", "CRM and contact management integration", "Sales reporting and follow-up processes"],
-    demos: ["enquiry-journey", "sales-lead-scoring"],
+    demos: ["content-generator", "enquiry-journey", "sales-lead-scoring"],
     metaDescription: "AI sales and marketing automation for small businesses: instant enquiry replies, owner alerts, reliable follow-up and a clear view of every lead.",
   },
   {

@@ -8,6 +8,7 @@ import { BookingButton, CtaBand, EnquiryJourney } from "../../components/Blocks"
 import DemoCard from "../../components/DemoCard";
 import OpportunityScore from "../../components/demos/OpportunityScore";
 import SkillsTaster from "../../components/demos/SkillsTaster";
+import ContentGenerator from "../../components/demos/ContentGenerator";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -30,7 +31,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 function ServiceDemo({ service }: { service: Service }) {
   if (service.slug === "ai-consultancy") return <OpportunityScore />;
   if (service.slug === "training") return <SkillsTaster />;
-  const list = service.demos.filter((id) => !(service.slug === "sales-marketing" && id === "enquiry-journey")).map(demoById).filter((demo) => demo !== undefined);
+  const list = service.demos.filter((id) => !(service.slug === "sales-marketing" && (id === "enquiry-journey" || id === "content-generator"))).map(demoById).filter((demo) => demo !== undefined);
   if (list.length === 0) {
     return (
       <div className="demo-placeholder">
@@ -42,7 +43,7 @@ function ServiceDemo({ service }: { service: Service }) {
   }
   return (
     <>
-      {service.slug === "sales-marketing" && <EnquiryJourney />}
+      {service.slug === "sales-marketing" && <><ContentGenerator /><div className="demo-tiles-after" /><EnquiryJourney /></>}
       <div className={`demo-tiles${service.slug === "sales-marketing" ? " demo-tiles-after" : ""}`}>{list.map((demo) => <DemoCard key={demo.id} demo={demo} />)}</div>
     </>
   );
