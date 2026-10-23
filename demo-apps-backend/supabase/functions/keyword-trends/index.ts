@@ -66,16 +66,17 @@ Return ONLY JSON: {"keep":[numbers]}`;
       method: "POST",
       signal: ctrl.signal,
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json", "HTTP-Referer": "https://aimsmartsolutions.tech", "X-Title": "AIM Smart Solutions Keyword Trends Demo" },
-      body: JSON.stringify({ model: MODEL, provider: { sort: "throughput" }, temperature: 0, max_tokens: 400, response_format: { type: "json_object" }, messages: [{ role: "user", content: prompt }] }),
+      body: JSON.stringify({ model: MODEL, provider: { sort: "throughput" }, temperature: 0, max_tokens: 3000, response_format: { type: "json_object" }, messages: [{ role: "user", content: prompt }] }),
     });
     clearTimeout(timer);
-    if (!r.ok) return null;
+    if (!r.ok) { console.error("keyword-trends ai status", r.status, (await r.text()).slice(0, 300)); return null; }
     const data = await r.json();
     const text = String(data?.choices?.[0]?.message?.content ?? "").replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/, "");
     const keep = JSON.parse(text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1))?.keep;
-    if (!Array.isArray(keep)) return null;
+    if (!Array.isArray(keep)) { console.error("keyword-trends ai shape", text.slice(0, 300), data?.choices?.[0]?.finish_reason); return null; }
     return new Set(keep.map((n: unknown) => Number(n) - 1).filter((n: number) => Number.isInteger(n) && n >= 0 && n < queries.length));
-  } catch {
+  } catch (e) {
+    console.error("keyword-trends ai error", e instanceof Error ? e.message : String(e));
     return null;
   }
 }
