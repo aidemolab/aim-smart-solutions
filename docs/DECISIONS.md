@@ -20,6 +20,10 @@ than rewriting history; if a decision changes, add a new entry that replaces the
   `submit-enquiry`, and Cloudflare Turnstile once its keys are added.
 - **The AI call-back is off** until Turnstile keys are added. Without a site key the enquiry
   form shows no Urgent option, and the site must not describe the call as working.
+- **AI call cost caps** (in `submit-enquiry`, table `call_log`, function `call_claim`): each
+  call lasts at most 180 seconds; at most 10 calls a UTC day site-wide, one per number in any
+  24 hours, two per IP a day, UK (+44) numbers only. Over a cap there is no call, but the
+  enquiry is still saved and both emails still go.
 - **Emails** are sent through IONOS SMTP from enquiry@aimsmartsolutions.tech. Delivery can be
   checked read-only with `npm run check-test-emails`.
 

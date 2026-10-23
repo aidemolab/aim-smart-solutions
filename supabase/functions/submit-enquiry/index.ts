@@ -4,9 +4,10 @@
 // live ChatGPT Sites version.
 //
 // Steps: honeypot -> Turnstile check (only when configured) -> validation ->
-// per-IP / per-number daily limits -> save customer + enquiry ->
-// (calls enabled + urgent + consent) start the Vapi call ->
+// per-IP daily enquiry limits -> save customer + enquiry ->
+// (calls enabled + urgent + consent + under the call caps) start the Vapi call ->
 // customer acknowledgement email -> owner notification email.
+// Over a call cap there is no call, but the enquiry is still saved and emailed.
 //
 // Turnstile is OPTIONAL. Without TURNSTILE_SECRET_KEY the function still saves
 // enquiries and sends both emails, but never starts an AI call (calls ring real
@@ -20,7 +21,8 @@
 //   IONOS_SMTP_HOST, IONOS_SMTP_PORT, IONOS_SMTP_USER, IONOS_SMTP_PASSWORD (already set)
 // Optional: RATE_LIMIT_SALT, ALLOWED_ORIGINS, TURNSTILE_HOSTNAMES,
 //           OWNER_EMAIL (default enquiry@aimsmartsolutions.tech)
-// Needs migration 20261022120000_submit_enquiry_protection.sql applied first.
+// Needs migrations 20261022120000_submit_enquiry_protection.sql and
+// 20261023120000_call_caps.sql applied first.
 
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import nodemailer from "npm:nodemailer@6.9.16";
@@ -38,13 +40,14 @@ const CONSENT_WORDING: Record<string, string> = {
 const DEFAULT_OWNER_EMAIL = "enquiry@aimsmartsolutions.tech";
 
 // Daily limits (UTC day). Calls cost money and ring real phones, so they are tighter.
+// Calls are also limited to one per number in any 24 hours (call_claim in SQL).
 const LIMITS = {
   enquiriesPerIp: 5,
   enquiriesTotal: 100,
   callsPerIp: 2,
-  callsPerNumber: 2,
-  callsTotal: 20,
+  callsTotal: 10,
 };
+const MAX_CALL_SECONDS = 180;
 
 const DEFAULT_TURNSTILE_HOSTNAMES = ["aimsmartsolutions.tech", "www.aimsmartsolutions.tech", "aidemolab.github.io", "localhost"];
 
@@ -156,22 +159,32 @@ Deno.serve(withCors(async (request: Request) => {
     ["enquiry:global", LIMITS.enquiriesTotal],
     [`enquiry:${ipBucket}`, LIMITS.enquiriesPerIp],
   ];
-  if (urgency === "urgent") {
-    checks.push(["call:global", LIMITS.callsTotal], [`call:${ipBucket}`, LIMITS.callsPerIp], [`call:${numberBucket}`, LIMITS.callsPerNumber]);
-  }
   for (const [bucket, limit] of checks) {
     const allowed = await consume(bucket, limit);
     if (allowed === null) return json({ ok: false, message: "The enquiry service is temporarily unavailable." }, 503);
     if (!allowed) {
-      return json({
-        ok: false,
-        message: bucket.startsWith("call:")
-          ? "We cannot place another automated call today. Please choose Normal, or email enquiry@aimsmartsolutions.tech."
-          : "Daily enquiry limit reached. Please email enquiry@aimsmartsolutions.tech.",
-        callsEnabled,
-      }, 429);
+      return json({ ok: false, message: "Daily enquiry limit reached. Please email enquiry@aimsmartsolutions.tech.", callsEnabled }, 429);
     }
   }
+
+  // Call caps: per IP per day, then (atomically, in SQL) 10 a day site-wide and
+  // one per number in 24 hours. UK numbers only. Any failure means no call.
+  const claimCall = async (): Promise<boolean> => {
+    if (!mobile.startsWith("+44")) return false;
+    if ((await consume(`call:${ipBucket}`, LIMITS.callsPerIp)) !== true) return false;
+    try {
+      const response = await fetch(`${supabaseUrl}/rest/v1/rpc/call_claim`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "apikey": serviceKey, "Authorization": `Bearer ${serviceKey}` },
+        body: JSON.stringify({ p_number_hash: numberBucket, p_daily_limit: LIMITS.callsTotal }),
+      });
+      const result = response.ok ? await response.json() : "error";
+      if (result !== "ok") console.log("AI call skipped:", result);
+      return result === "ok";
+    } catch {
+      return false;
+    }
+  };
 
   // 5. Save customer and enquiry.
   const headers = {
@@ -219,12 +232,17 @@ Deno.serve(withCors(async (request: Request) => {
     const phoneNumberId = Deno.env.get("VAPI_PHONE_NUMBER_ID");
     if (!vapiApiKey || !assistantId || !phoneNumberId) {
       console.error("One or more Vapi settings are missing.");
-    } else {
+    } else if (await claimCall()) {
       try {
         const response = await fetch("https://api.vapi.ai/call/phone", {
           method: "POST",
           headers: { "Authorization": `Bearer ${vapiApiKey}`, "Content-Type": "application/json" },
-          body: JSON.stringify({ assistantId, phoneNumberId, customer: { number: mobile } }),
+          body: JSON.stringify({
+            assistantId,
+            phoneNumberId,
+            customer: { number: mobile },
+            assistantOverrides: { maxDurationSeconds: MAX_CALL_SECONDS },
+          }),
         });
         callStarted = response.ok;
         if (!response.ok) console.error("Vapi call creation failed:", response.status);
