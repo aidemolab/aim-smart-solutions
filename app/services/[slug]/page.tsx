@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { pillars } from "@/lib/site";
 import { basePath } from "@/lib/base-path";
-import { demoById } from "@/lib/demos";
+import { demoById, PHARMA_VIDEO } from "@/lib/demos";
 import { services, serviceBySlug, type Service } from "../data";
 import { BookingButton, CtaBand, EnquiryJourney } from "../../components/Blocks";
 import DemoCard from "../../components/DemoCard";
@@ -141,8 +141,8 @@ export default async function ServicePage({ params }: Params) {
         {service.slug === "smart-apps" && (
           <figure className="demo-video">
             <h3>Watch the 1-minute demo</h3>
-            <video controls preload="none" playsInline poster={`${basePath}/assets/videos/pharma-demo-v5-poster.jpg`} aria-label="Narrated 1-minute video demo of the pharmaceutical market intelligence app, with captions">
-              <source src={`${basePath}/assets/videos/pharma-demo-v5.mp4`} type="video/mp4" />
+            <video controls preload="none" playsInline poster={`${basePath}/assets/videos/${PHARMA_VIDEO}-poster.jpg`} aria-label="Narrated 1-minute video demo of the pharmaceutical market intelligence app, with captions">
+              <source src={`${basePath}/assets/videos/${PHARMA_VIDEO}.mp4`} type="video/mp4" />
             </video>
           </figure>
         )}

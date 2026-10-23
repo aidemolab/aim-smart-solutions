@@ -14,7 +14,11 @@ export type Demo = {
   service: string; // slug of the service page that features it
   pain?: string; // one-line problem the app solves (shown on /live-demos)
   video?: string; // versioned file name in public/assets/videos (no extension), shown on the service page
+  videoLabel?: string; // short name for a video link when a card has more than one
 };
+
+// The pharma video sits at the top of the AI Smart Apps demo section rather than in its card.
+export const PHARMA_VIDEO = "pharma-demo-v5";
 
 export const demos: Demo[] = [
   {
@@ -104,6 +108,7 @@ export const demos: Demo[] = [
     external: true,
     badge: "Live",
     video: "property-v2",
+    videoLabel: "property dashboard",
     tryLabel: "Try it",
     service: "smart-apps",
   },
@@ -115,6 +120,7 @@ export const demos: Demo[] = [
     href: "https://aidemolab.github.io/aim-pharmaceutical-ai-demo/",
     external: true,
     badge: "Illustrative data",
+    videoLabel: "pharma app",
     tryLabel: "Try it",
     service: "smart-apps",
   },
