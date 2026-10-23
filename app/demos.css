@@ -103,6 +103,17 @@
 .gen-keywords>div{padding:16px;border:1px solid var(--line);border-radius:10px;background:#fff}
 .gen-keywords h5{margin:0 0 8px;color:var(--navy);font-size:14px}
 .gen-keywords ul{margin:0;padding-left:18px;color:var(--slate);font-size:14px;line-height:1.7}
+.gen-trends-note{margin:0 0 12px;color:var(--slate);font-size:14px;line-height:1.6}
+.gen-trends .gen-keywords{grid-template-columns:repeat(2,minmax(0,1fr))}
+.gen-keywords ul.gen-trend-list{padding:0;list-style:none;line-height:1.4}
+.gen-trend-list li{display:grid;grid-template-columns:minmax(0,1fr) 70px 36px;gap:10px;align-items:center;padding:5px 0;border-bottom:1px solid var(--line)}
+.gen-trend-list.is-rising li{grid-template-columns:minmax(0,1fr) auto}
+.gen-trend-list li:last-child{border-bottom:0}
+.gen-trend-list li>span:first-child{overflow-wrap:anywhere}
+.gen-trend-list strong{text-align:right;color:var(--navy);font-size:13px;white-space:nowrap}
+.gen-bar{display:block;height:8px;border-radius:999px;background:#E2E8F0;overflow:hidden}
+.gen-bar>span{display:block;height:100%;background:#2563EB}
+.gen-trends-small{margin:8px 0 0;color:var(--slate);font-size:12px}
 .gen-cta{margin-top:28px;padding:22px;border-radius:12px;background:var(--navy);color:#fff}
 .gen-cta h4{margin:0 0 8px;color:#fff}.gen-cta p{margin:0 0 16px;color:#CBD5E1;line-height:1.6}
-@media(max-width:900px){.gen-form,.gen-posts,.gen-keywords{grid-template-columns:1fr}.gen-plan li{grid-template-columns:1fr;gap:4px}}
+@media(max-width:900px){.gen-form,.gen-posts,.gen-keywords,.gen-trends .gen-keywords{grid-template-columns:1fr}.gen-plan li{grid-template-columns:1fr;gap:4px}}
