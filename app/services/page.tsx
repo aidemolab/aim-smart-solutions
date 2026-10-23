@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { pillars } from "@/lib/site";
-import { demoById } from "@/lib/demos";
+import { demoById, PHARMA_VIDEO } from "@/lib/demos";
 import { serviceBySlug } from "./data";
 import { BookingButton, pillarNumber } from "../components/Blocks";
 import DemoBadge from "../components/DemoBadge";
+import VideoModalLink from "../components/VideoModalLink";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/services/" },
@@ -42,11 +43,20 @@ export default function Services() {
               const service = serviceBySlug(slug);
               if (!service) return null;
               const badges = Array.from(new Set(service.demos.map((id) => demoById(id)?.badge).filter((badge) => badge !== undefined)));
+              // Demo videos already used on the service page (same versioned files).
+              const videos = service.demos.map(demoById).filter((demo) => demo !== undefined)
+                .map((demo) => ({ id: demo.id, title: demo.title, short: demo.videoLabel, video: demo.id === "pharma-market-intelligence" ? PHARMA_VIDEO : demo.video }))
+                .filter((item): item is typeof item & { video: string } => item.video !== undefined);
               return (
                 <article className="services-list-card" key={slug}>
                   {badges.length > 0 && <p className="card-badges">{badges.map((badge) => <DemoBadge key={badge} kind={badge} />)}<span>Demo available</span></p>}
                   <h3>{service.name}</h3>
                   <p>{service.tagline}</p>
+                  {videos.length > 0 && (
+                    <div className="card-videos">
+                      {videos.map((item) => <VideoModalLink key={item.id} video={item.video} title={item.title} label={videos.length > 1 ? `Watch the 1-minute demo: ${item.short}` : undefined} />)}
+                    </div>
+                  )}
                   <Link href={`/services/${slug}/`}>Explore {service.name} <span aria-hidden="true">→</span></Link>
                 </article>
               );
