@@ -138,6 +138,7 @@ footer.site-footer{max-width:1440px;margin:0 auto;padding:56px 6vw 28px;display:
 .service-demo{padding:72px 8vw;background:var(--light);border-top:1px solid var(--line);scroll-margin-top:90px}
 .service-demo>h2{margin-bottom:32px;font-size:clamp(32px,3.6vw,48px)}
 .demo-video{max-width:960px;margin:0 0 28px}.demo-video h3{margin:0 0 14px;font:600 24px/1.2 Georgia,serif}.demo-video video{display:block;width:100%;height:auto;aspect-ratio:16/9;background:var(--navy);border-radius:10px}
+.demo-video-card{width:100%;margin:0 0 20px}.demo-video-card h4{margin:0 0 10px;font:600 18px/1.2 Georgia,serif}
 .demo-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
 .demo-tile{display:flex;flex-direction:column;align-items:flex-start;padding:28px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 28px rgba(11,31,51,.06)}
 .demo-tile h2,.demo-tile h3{margin:16px 0 10px;font:600 24px/1.2 Georgia,serif;letter-spacing:-.02em}

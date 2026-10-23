@@ -51,7 +51,7 @@ function ServiceDemo({ service }: { service: Service }) {
   return (
     <>
       {featured?.render()}
-      {list.length > 0 && <div className={`demo-tiles${featured ? " demo-tiles-after" : ""}`}>{list.map((demo) => <DemoCard key={demo.id} demo={demo} />)}</div>}
+      {list.length > 0 && <div className={`demo-tiles${featured ? " demo-tiles-after" : ""}`}>{list.map((demo) => <DemoCard key={demo.id} demo={demo} showVideo />)}</div>}
     </>
   );
 }
