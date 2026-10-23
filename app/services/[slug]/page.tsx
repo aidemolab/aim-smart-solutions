@@ -48,8 +48,17 @@ function ServiceDemo({ service }: { service: Service }) {
       </div>
     );
   }
+  const featuredDemo = featured ? demoById(featured.id) : undefined;
   return (
     <>
+      {featuredDemo?.video && (
+        <figure className="demo-video">
+          <h3>Watch the 1-minute demo</h3>
+          <video controls preload="none" playsInline poster={`${basePath}/assets/videos/${featuredDemo.video}-poster.jpg`} aria-label={`Narrated 1-minute video demo of the ${featuredDemo.title}, with captions`}>
+            <source src={`${basePath}/assets/videos/${featuredDemo.video}.mp4`} type="video/mp4" />
+          </video>
+        </figure>
+      )}
       {featured?.render()}
       {list.length > 0 && <div className={`demo-tiles${featured ? " demo-tiles-after" : ""}`}>{list.map((demo) => <DemoCard key={demo.id} demo={demo} showVideo />)}</div>}
     </>
