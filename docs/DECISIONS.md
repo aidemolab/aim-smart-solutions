@@ -77,3 +77,8 @@ than rewriting history; if a decision changes, add a new entry that replaces the
 - pg_cron job `appointment-reminders-hourly` (minute 5) calls it via pg_net. One customer and one
   business reminder per appointment, sent when the appointment is 2 to 24 hours away; each flag is
   claimed before sending (no duplicates) and released if sending fails.
+
+## Demo video files (2026-10-23)
+- Every demo video and poster in `public/assets/videos/` has its version in the file name
+  (e.g. `pharma-demo-v5.mp4`, `pharma-demo-v5-poster.jpg`, `supplier-risk-v2.mp4`), so browsers
+  and the CDN never serve a cached older cut. A new cut gets a new name; old names are removed.

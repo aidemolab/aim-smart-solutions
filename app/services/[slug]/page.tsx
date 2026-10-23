@@ -141,8 +141,8 @@ export default async function ServicePage({ params }: Params) {
         {service.slug === "smart-apps" && (
           <figure className="demo-video">
             <h3>Watch the 1-minute demo</h3>
-            <video controls preload="none" playsInline poster={`${basePath}/assets/videos/pharma-demo-poster.jpg`} aria-label="Narrated 1-minute video demo of the pharmaceutical market intelligence app, with captions">
-              <source src={`${basePath}/assets/videos/pharma-demo.mp4`} type="video/mp4" />
+            <video controls preload="none" playsInline poster={`${basePath}/assets/videos/pharma-demo-v5-poster.jpg`} aria-label="Narrated 1-minute video demo of the pharmaceutical market intelligence app, with captions">
+              <source src={`${basePath}/assets/videos/pharma-demo-v5.mp4`} type="video/mp4" />
             </video>
           </figure>
         )}
