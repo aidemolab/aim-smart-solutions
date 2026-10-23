@@ -13,6 +13,7 @@ export type Demo = {
   tryLabel: string;
   service: string; // slug of the service page that features it
   pain?: string; // one-line problem the app solves (shown on /live-demos)
+  video?: string; // versioned file name in public/assets/videos (no extension), shown on the service page
 };
 
 export const demos: Demo[] = [
@@ -78,6 +79,7 @@ export const demos: Demo[] = [
     href: "https://aidemolab.github.io/aim-supplier-risk-demo/",
     external: true,
     badge: "Live",
+    video: "supplier-risk-v2",
     tryLabel: "Try it",
     service: "data-analytics",
   },
@@ -89,6 +91,7 @@ export const demos: Demo[] = [
     href: "https://aidemolab.github.io/aim-sales-lead-scoring-demo/",
     external: true,
     badge: "Live",
+    video: "sales-leads-v2",
     tryLabel: "Try it",
     service: "sales-marketing",
   },
@@ -100,6 +103,7 @@ export const demos: Demo[] = [
     href: "https://aidemolab.github.io/aim-property-investment-demo/",
     external: true,
     badge: "Live",
+    video: "property-v2",
     tryLabel: "Try it",
     service: "smart-apps",
   },
