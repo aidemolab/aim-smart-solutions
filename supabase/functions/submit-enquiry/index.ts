@@ -1,7 +1,6 @@
 // submit-enquiry: the enquiry endpoint for the static (GitHub Pages) site.
-// Deployed 2026-10-22. It replaces the old /api/calls route + save-business-enquiry
-// pair for the new site only; save-business-enquiry stays untouched for the
-// live ChatGPT Sites version.
+// Deployed 2026-10-22. It replaced the old site's /api/calls route and
+// save-business-enquiry function (both since removed).
 //
 // Steps: honeypot -> Turnstile check (only when configured) -> validation ->
 // per-IP daily enquiry limits -> save customer + enquiry ->
@@ -17,7 +16,7 @@
 // Secrets it needs (Supabase > Edge Functions > Secrets):
 //   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY        (provided by Supabase)
 //   TURNSTILE_SECRET_KEY                           (optional: set it to enable AI calls)
-//   VAPI_API_KEY, VAPI_ASSISTANT_ID, VAPI_PHONE_NUMBER_ID   (already set for vapi-outbound-call)
+//   VAPI_API_KEY, VAPI_ASSISTANT_ID, VAPI_PHONE_NUMBER_ID   (already set)
 //   IONOS_SMTP_HOST, IONOS_SMTP_PORT, IONOS_SMTP_USER, IONOS_SMTP_PASSWORD (already set)
 // Optional: RATE_LIMIT_SALT, ALLOWED_ORIGINS, TURNSTILE_HOSTNAMES,
 //           OWNER_EMAIL (default enquiry@aimsmartsolutions.tech)

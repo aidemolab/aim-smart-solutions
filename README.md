@@ -55,9 +55,7 @@ Third-party components remain subject to their respective licences.
 
 ## Supabase functions
 
-`supabase/functions/` holds the Edge Functions. `save-business-enquiry` and
-`vapi-outbound-call` are copies of the deployed versions (v12 and v5), kept for
-reference: the live site still uses them, so do not change or redeploy them.
+`supabase/functions/` holds the Edge Functions this site uses.
 
 `submit-enquiry` is the new enquiry endpoint for this site. It is **not deployed yet**.
 Before deploying it:

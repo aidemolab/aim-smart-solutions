@@ -14,8 +14,8 @@ than rewriting history; if a decision changes, add a new entry that replaces the
 - **Forms call Supabase Edge Functions directly** from the browser with the public anon key:
   `submit-enquiry` (enquiry), `save-service-request` (instant quote), `appointment-booking`
   (availability and booking). Secrets live only in Supabase function settings.
-- **`save-business-enquiry` and `vapi-outbound-call` are frozen** copies of deployed versions
-  used by the old site. Never change or redeploy them.
+- **Old-site functions removed** (2026-10-24): `save-business-enquiry`, `vapi-outbound-call`
+  and `test-ionos-smtp` served only the old ChatGPT Sites version and are deleted from Supabase.
 - **Spam protection:** a hidden honeypot field (`website`) on every form, daily limits in
   `submit-enquiry`, and Cloudflare Turnstile once its keys are added.
 - **The AI call-back is off** until Turnstile keys are added. Without a site key the enquiry

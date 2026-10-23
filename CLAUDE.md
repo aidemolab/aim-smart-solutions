@@ -13,7 +13,6 @@ Read this and `docs/DECISIONS.md` before changing anything. British English thro
 
 ## Never
 - Never touch DNS or email settings.
-- Never modify `supabase/functions/save-business-enquiry` or `supabase/functions/vapi-outbound-call`.
 - Never put secrets in GitHub or in browser code. Only `NEXT_PUBLIC_` values that are public by
   design (Supabase URL, anon key, Turnstile site key) may reach the build.
 
