@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { pillars } from "@/lib/site";
+import { basePath } from "@/lib/base-path";
 import { demoById } from "@/lib/demos";
 import { services, serviceBySlug, type Service } from "../data";
 import { BookingButton, CtaBand, EnquiryJourney } from "../../components/Blocks";
@@ -137,6 +138,14 @@ export default async function ServicePage({ params }: Params) {
       <section className="service-demo" id="demo" aria-labelledby="demo-title">
         <p className="kicker">Try it</p>
         <h2 id="demo-title">See it <em>working.</em></h2>
+        {service.slug === "smart-apps" && (
+          <figure className="demo-video">
+            <h3>Watch the 45-second demo</h3>
+            <video controls preload="none" playsInline poster={`${basePath}/assets/videos/pharma-demo-poster.jpg`} aria-label="Narrated 45-second video demo of the pharmaceutical market intelligence app, with captions">
+              <source src={`${basePath}/assets/videos/pharma-demo.mp4`} type="video/mp4" />
+            </video>
+          </figure>
+        )}
         <ServiceDemo service={service} />
       </section>
 
