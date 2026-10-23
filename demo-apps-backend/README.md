@@ -9,6 +9,8 @@ Solutions customer project (`pabdxvsukpznvfgathre`).
 | `schema.sql` | Tables, constraints, RLS, per-IP limit function, hourly 24-hour cleanup (pg_cron) |
 | `seed.sql` | The sample rows (generated from each app's original data) |
 | `supabase/functions/demo-data/index.ts` | The only write path: origin lock, validation, rate limits |
+| `content_generator.sql`, `supabase/functions/content-generator/` | AI Content & Keyword Generator (OpenRouter) |
+| `keyword_trends.sql`, `supabase/functions/keyword-trends/` | UK search trends for the generator (Firecrawl): 24-hour cache, 20 per IP and 100 Firecrawl calls per day. Secret: `FIRECRAWL_API_KEY` |
 
 Apply (from this folder, linked to the demo project):
 

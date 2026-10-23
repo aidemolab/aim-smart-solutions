@@ -82,3 +82,18 @@ than rewriting history; if a decision changes, add a new entry that replaces the
 - Every demo video and poster in `public/assets/videos/` has its version in the file name
   (e.g. `pharma-demo-v5.mp4`, `pharma-demo-v5-poster.jpg`, `supplier-risk-v2.mp4`), so browsers
   and the CDN never serve a cached older cut. A new cut gets a new name; old names are removed.
+
+## Keyword demo: real UK trend data (2026-10-23)
+- The AI Content & Keyword Generator first calls the `keyword-trends` Edge Function (demo project
+  `xlxyphqzdzhipmllhxaq`, no JWT): Google Trends related queries via Firecrawl (`firecrawl-trends`,
+  geo GB, last 12 months), seeded with the visitor's business type. Source:
+  `demo-apps-backend/supabase/functions/keyword-trends/` and `keyword_trends.sql`.
+- Noise is removed before showing: a blocklist (brands, retailers, closures, news, jobs, courses)
+  plus one AI pass that keeps only generic, commercially useful phrases. The filtered phrases are
+  passed to `content-generator` as `trendKeywords` and shape the keyword ideas and posts.
+- Shown as "UK search popularity (0-100, last 12 months)" and "Rising searches", labelled as
+  popularity scores, never search volumes.
+- Protection: origin lock, 20 lookups per IP per UTC day, each seed cached 24 hours in
+  `keyword_trends_cache`, at most 100 Firecrawl calls per UTC day. On any failure or the cap the
+  page falls back to AI-only keyword ideas with a short note. `FIRECRAWL_API_KEY` lives only as a
+  Supabase secret in the demo project.

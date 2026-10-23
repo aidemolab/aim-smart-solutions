@@ -1,14 +1,16 @@
 "use client";
 
-// AI Content & Keyword Generator (live demo). One AI call creates three social posts, a 7-day plan and
-// ten local keyword ideas. Runs through the content-generator Edge Function in the demo Supabase project;
-// nothing the visitor types is stored.
+// AI Content & Keyword Generator (live demo). First looks up real UK search trends for the business type
+// (keyword-trends Edge Function: Google Trends via Firecrawl, filtered, cached 24 hours), then one AI call
+// creates three social posts, a 7-day plan and ten local keyword ideas built on those trends. Both run in
+// the demo Supabase project; nothing the visitor types is stored (only the trend data per keyword is cached).
 import { FormEvent, useId, useState } from "react";
 import DemoBadge from "../DemoBadge";
 import { BookingButton } from "../Blocks";
 import PrivacyNote from "../PrivacyNote";
 
 const ENDPOINT = "https://xlxyphqzdzhipmllhxaq.supabase.co/functions/v1/content-generator";
+const TRENDS_ENDPOINT = "https://xlxyphqzdzhipmllhxaq.supabase.co/functions/v1/keyword-trends";
 const TONES = [
   { id: "friendly", label: "Friendly" },
   { id: "professional", label: "Professional" },
@@ -26,6 +28,7 @@ type Result = {
   plan: { day: string; idea: string; format: string }[];
   keywords: { urgent: string[]; research: string[]; comparison: string[] };
 };
+type Trends = { seed: string; top: { query: string; value: number }[]; rising: { query: string; label: string }[] };
 type Inputs = { businessType: string; town: string; targetCustomer: string; tone: string };
 
 const LIMITS = { businessType: [2, 60], town: [2, 40], targetCustomer: [2, 80] } as const;
@@ -40,6 +43,23 @@ async function callAi(body: Record<string, unknown>) {
   const data = await res.json().catch(() => null);
   if (!res.ok || !data?.ok) throw new Error(data?.error ?? "Something went wrong. Please try again.");
   return data;
+}
+
+// Real UK trend data, or null if it is unavailable (the demo then uses AI-only keyword ideas).
+async function fetchTrends(seed: string): Promise<Trends | null> {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 40000);
+  try {
+    const res = await fetch(TRENDS_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ seed }), signal: ctrl.signal });
+    const data = await res.json().catch(() => null);
+    if (!res.ok || !data?.ok) return null;
+    const trends: Trends = { seed: data.seed, top: data.top ?? [], rising: data.rising ?? [] };
+    return trends.top.length + trends.rising.length > 0 ? trends : null;
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 function CopyButton({ text, label }: { text: string; label: string }) {
@@ -72,6 +92,8 @@ export default function ContentGenerator() {
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
   const [message, setMessage] = useState("");
   const [result, setResult] = useState<Result | null>(null);
+  const [trends, setTrends] = useState<Trends | null>(null);
+  const [phase, setPhase] = useState<"trends" | "ai">("trends");
   const [used, setUsed] = useState<Inputs | null>(null);
   const [regenerating, setRegenerating] = useState<PlatformId | null>(null);
   const [postError, setPostError] = useState("");
@@ -98,7 +120,12 @@ export default function ContentGenerator() {
     setPostError("");
     const sent = { ...inputs, businessType: inputs.businessType.trim(), town: inputs.town.trim(), targetCustomer: inputs.targetCustomer.trim() };
     try {
-      const data = await callAi({ ...sent, mode: "all" });
+      setPhase("trends");
+      const found = await fetchTrends(sent.businessType);
+      setPhase("ai");
+      const trendKeywords = found ? [...found.top.map((t) => t.query), ...found.rising.map((t) => t.query)].slice(0, 15) : [];
+      const data = await callAi({ ...sent, mode: "all", trendKeywords });
+      setTrends(found);
       setResult(data.result);
       setUsed(sent);
       setStatus("done");
@@ -136,7 +163,7 @@ export default function ContentGenerator() {
       <div className="demo-app-head">
         <DemoBadge kind="Live" />
         <h3 id={`${uid}-title`}>AI Content &amp; Keyword Generator</h3>
-        <p>Tell the AI about your business and get three ready-to-edit social posts, a week of content ideas and local keyword ideas, usually in 10 to 30 seconds.</p>
+        <p>Tell the AI about your business and get real UK search trends, three ready-to-edit social posts, a week of content ideas and local keyword ideas, usually in 15 to 45 seconds.</p>
       </div>
 
       <form className="gen-form" onSubmit={generate} noValidate>
@@ -156,11 +183,11 @@ export default function ContentGenerator() {
           <button type="submit" className="button primary" disabled={status === "loading"} id="gen-submit">
             {status === "loading" ? "Generating…" : result ? "Generate again" : "Generate my content"}
           </button>
-          <PrivacyNote text="Your answers are sent to an AI service to create the content and are not stored. Up to 10 generations a day." />
+          <PrivacyNote text="Your answers are sent to an AI service to create the content and are not stored. Your business type is also used to look up UK search trends. Up to 10 generations a day." />
         </div>
       </form>
 
-      {status === "loading" && <p className="gen-loading" role="status">Writing your posts, plan and keyword ideas. This usually takes 10 to 30 seconds…</p>}
+      {status === "loading" && <p className="gen-loading" role="status">{phase === "trends" ? "Looking up real UK search trends for your business…" : "Writing your posts, plan and keyword ideas. This usually takes 10 to 30 seconds…"}</p>}
       {status === "error" && <p className="gen-alert" role="alert">{message}</p>}
 
       {result && (
@@ -190,8 +217,42 @@ export default function ContentGenerator() {
             {result.plan.map((d, i) => <li key={i}><strong>{d.day}</strong><span>{d.idea}</span>{d.format && <em>{d.format}</em>}</li>)}
           </ol>
 
+          <h4>Real UK search trends</h4>
+          {trends ? (
+            <div className="gen-trends" data-source="trends">
+              <p className="gen-trends-note">Google Trends data for “{trends.seed}”, UK, last 12 months, with brands, news and job searches removed. These are <strong>popularity scores, not search volumes</strong>: 100 is the most-searched related phrase and the rest are relative to it.</p>
+              <div className="gen-keywords">
+                {trends.top.length > 0 && (
+                  <div>
+                    <h5>UK search popularity (0-100, last 12 months)</h5>
+                    <ul className="gen-trend-list">
+                      {trends.top.map((t) => (
+                        <li key={t.query}>
+                          <span>{t.query}</span>
+                          <span className="gen-bar" aria-hidden="true"><span style={{ width: `${Math.max(4, Math.min(100, t.value))}%` }} /></span>
+                          <strong aria-label={`popularity score ${t.value} out of 100`}>{t.value}</strong>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {trends.rising.length > 0 && (
+                  <div>
+                    <h5>Rising searches</h5>
+                    <ul className="gen-trend-list is-rising">
+                      {trends.rising.map((t) => <li key={t.query}><span>{t.query}</span><strong>{t.label}</strong></li>)}
+                    </ul>
+                    <p className="gen-trends-small">Growth in popularity compared with the previous period. “Breakout” means very large growth from a low base.</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : (
+            <p className="gen-trends-note" data-source="ai-only">Live UK trend data is not available for this search right now, so the keyword ideas below are AI-only.</p>
+          )}
+
           <h4>Local keyword ideas</h4>
-          <p className="gen-label is-soft">AI-suggested ideas — check search volumes in a keyword tool before relying on them</p>
+          <p className="gen-label is-soft">{trends ? "AI ideas built on the UK trends above" : "AI-suggested ideas"} — check search volumes in a keyword tool before relying on them</p>
           <div className="gen-keywords">
             {([["urgent", "Urgent: needs help now"], ["research", "Research: exploring options"], ["comparison", "Comparison: choosing a provider"]] as const).map(([k, label]) => (
               <div key={k}>
