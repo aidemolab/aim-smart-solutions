@@ -20,6 +20,10 @@ export type Demo = {
 // The pharma video sits at the top of the AI Smart Apps demo section rather than in its card.
 export const PHARMA_VIDEO = "pharma-demo-v5";
 
+// The AI Voice Agents explainer is an animated concept video, not a demo recording. It sits at the
+// top of the AI Voice Agents demo section and in that card's pop-up on /services/.
+export const VOICE_AGENTS_VIDEO = "voice-agents-v1";
+
 export const demos: Demo[] = [
   {
     id: "content-generator",

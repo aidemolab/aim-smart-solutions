@@ -11,6 +11,8 @@
    recording over 0.5s. Its length is max(7s, first intro line + 0.6s).
 5. Optional eased zooms (--zoom) onto parts of the recording, e.g. a new table row.
 6. End card (navy, AIM logo, aimsmartsolutions.tech) with a 0.5s fade, at least 3s.
+   --card-head adds a headline above the address; --card-site changes the address.
+   --no-caption 2,3 leaves those lines (1-based) uncaptioned, e.g. a title scene.
 7. Normalises the voice to -16 LUFS. With --music, adds that track at -24 LUFS.
 
 Lines file: one line per voiceover sentence, in the order they are spoken:
@@ -72,6 +74,7 @@ class Line:
     seg: tuple[float, float] = (0.0, 0.0)  # position in the voiceover file
     asked: float = 0.0  # requested output start
     at: float = 0.0  # placed output start
+    nocap: bool = False  # set by --no-caption
 
     @property
     def length(self) -> float:
@@ -79,7 +82,7 @@ class Line:
 
     @property
     def captioned(self) -> bool:
-        return self.kind not in ("intro", "card")
+        return self.kind not in ("intro", "card") and not self.nocap
 
 
 @dataclass
@@ -292,6 +295,9 @@ def main() -> None:
     ap.add_argument("--logo", type=Path, default=DEFAULT_LOGO)
     ap.add_argument("--font", type=Path, default=DEFAULT_FONT, help="caption and card font (default Arial Bold)")
     ap.add_argument("--sub-font", type=Path, default=DEFAULT_SUB_FONT, help="intro subline font (default Arial)")
+    ap.add_argument("--card-head", help="optional end card headline above the address (e.g. 'Try it yourself')")
+    ap.add_argument("--card-site", default=SITE, help=f"end card address (default {SITE})")
+    ap.add_argument("--no-caption", default="", metavar="N,N", help="1-based line numbers to leave uncaptioned")
     ap.add_argument("--card", type=float, default=3.0, help="minimum end card length in seconds (default 3)")
     ap.add_argument("--gap", type=float, default=0.25, help="minimum pause between placed lines (default 0.25s)")
     ap.add_argument("--noise", type=float, default=-35, help="silence threshold in dB (default -35)")
@@ -321,6 +327,8 @@ def main() -> None:
         segs = match_chunks(speech_chunks(args.voice, args.noise, args.silence), len(lines), args.split)
     for l, seg in zip(lines, segs):
         l.seg = seg
+    for n in filter(None, args.no_caption.split(",")):
+        lines[int(n) - 1].nocap = True
     intro, main_end, card_voice = place(lines, V, args.gap)
     card_len = max(args.card, card_voice + FADE)
     total = main_end + card_len
@@ -385,6 +393,17 @@ def main() -> None:
                 f"enable='between(t,{l.at:.2f},{l.at + l.length + 0.1:.2f})'"
             )
 
+        # End card text: the address (shrunk to fit the width), with an optional headline above it.
+        write_lf(tmp / "site.txt", args.card_site)
+        fit_fs = min(site_fs, int(W * 0.9 / (len(args.card_site) * 0.56)))
+        if args.card_head:
+            write_lf(tmp / "card_head.txt", args.card_head)
+            ch_y = round(50 * k)
+            card_text = (f"drawtext=fontfile=font.ttf:textfile=card_head.txt:fontsize={head_fs}:fontcolor=white:x=(w-text_w)/2:y=h/2+{ch_y},"
+                         f"drawtext=fontfile=font.ttf:textfile=site.txt:fontsize={fit_fs}:fontcolor=white:"
+                         f"x=(w-text_w)/2:y=h/2+{ch_y + head_fs + round(30 * k)}")
+        else:
+            card_text = f"drawtext=fontfile=font.ttf:textfile=site.txt:fontsize={fit_fs}:fontcolor=white:x=(w-text_w)/2:y=h/2+{site_fs}"
         box = f"drawbox=x=(iw-{box_w})/2:y=ih/2-{box_h}:w={box_w}:h={box_h}:color=white:t=fill"
         hold = main_end - rec_end + FADE
         rec = "[0:v]fps=30,settb=AVTB," + (zoom_filter(args.zoom, W, H) + ",settb=AVTB," if args.zoom else "")
@@ -392,8 +411,7 @@ def main() -> None:
             f"[1:v]scale={logo_w}:-1:flags=lanczos,format=rgba,split[logo_i][logo_c]",
             f"{rec}tpad=stop_mode=clone:stop_duration={hold:.3f},format=yuv420p[rec]",
             f"color=c={NAVY}:s={W}x{H}:r=30:d={card_len:.3f},{box}[cb]",
-            f"[cb][logo_c]overlay=(W-w)/2:H/2-h-40,drawtext=fontfile=font.ttf:text={SITE}:fontsize={site_fs}:fontcolor=white:"
-            f"x=(w-text_w)/2:y=h/2+{site_fs},format=yuv420p,settb=AVTB[card]",
+            f"[cb][logo_c]overlay=(W-w)/2:H/2-h-40,{card_text},format=yuv420p,settb=AVTB[card]",
         ]
         if args.intro:
             shutil.copy(args.sub_font, tmp / "font_sub.ttf")
