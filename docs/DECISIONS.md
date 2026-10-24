@@ -101,3 +101,11 @@ than rewriting history; if a decision changes, add a new entry that replaces the
   `keyword_trends_cache`, at most 100 Firecrawl calls per UTC day. On any failure or the cap the
   page falls back to AI-only keyword ideas with a short note. `FIRECRAWL_API_KEY` lives only as a
   Supabase secret in the demo project.
+
+## AI Voice Agents explainer video (2026-10-24)
+- The AI Voice Agents page has an animated concept explainer (`voice-agents-v1`), not a recording:
+  the calls are simulated chat bubbles on a phone, marked "Illustrative example" on screen. It is
+  labelled "Watch the 1-minute explainer" on the service page and in the `/services/` pop-up.
+- Source: `video/voice-agents/scenes.html` (drawn by `render(t)`), captured frame by frame by
+  `video/voice-agents/capture.cjs`, then finished with `video/finish.py` (Jamie voiceover, captions,
+  end card with `--card-head` and `--card-site`). Lines: `video/voice-agents/lines.txt`.

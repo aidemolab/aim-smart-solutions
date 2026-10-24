@@ -1,0 +1,363 @@
+<!doctype html>
+<!--
+  AI Voice Agents explainer: scenes S1-S5 (0-46s). S6 is the end card added by video/finish.py.
+  Open with ?f=16x9 (1920x1080) or ?f=1x1 (1080x1080). Everything is drawn by render(t), so
+  video/voice-agents/capture.cjs can capture exact frames at 30fps. The calls are illustrative.
+  Keep the bottom ~260px light on detail: finish.py burns captions there.
+-->
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>AI Voice Agents explainer</title>
+<style>
+  :root { --navy:#0B1F33; --slate:#1E293B; --cobalt:#2563EB; --amber:#F59E0B; --light:#F8FAFC; --grey:#CBD5E1; --mid:#64748B; --red:#DC2626; --green:#16A34A; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { width:100%; height:100%; overflow:hidden; background:var(--navy); font-family:Arial, Helvetica, sans-serif; color:#fff; }
+  #stage { position:relative; overflow:hidden; background:radial-gradient(120% 90% at 50% 0%, #16304d 0%, var(--navy) 60%); }
+  .scene { position:absolute; inset:0; opacity:0; }
+  .abs { position:absolute; }
+  [data-in] { will-change:opacity, transform; }
+
+  /* Label pill */
+  .label { left:50%; top:var(--label-top); transform:translateX(-50%); padding:14px 30px; border-radius:999px; background:var(--amber); color:var(--navy);
+    font-weight:700; font-size:var(--label-fs); letter-spacing:.02em; white-space:nowrap; display:flex; align-items:center; gap:12px; }
+  .label svg { width:1.1em; height:1.1em; }
+  .tag { right:28px; top:28px; padding:8px 14px; border:1px solid rgba(203,213,225,.45); border-radius:8px; color:var(--grey); font-size:18px; }
+
+  /* Phone */
+  .phone { left:var(--phone-x); top:var(--phone-y); width:var(--phone-w); height:var(--phone-h); border-radius:54px; background:#0a0f18;
+    border:3px solid #33415a; box-shadow:0 30px 80px rgba(0,0,0,.45), inset 0 0 0 9px #0a0f18; padding:16px; }
+  .screen { position:relative; width:100%; height:100%; border-radius:40px; overflow:hidden; background:var(--light); color:var(--navy); }
+  .notch { position:absolute; left:50%; top:12px; width:110px; height:28px; margin-left:-55px; border-radius:20px; background:#0a0f18; z-index:5; }
+  .callhead { position:absolute; left:0; right:0; top:0; padding:58px 22px 18px; text-align:center; background:var(--slate); color:#fff; }
+  .callhead .who { font-size:var(--who-fs); font-weight:700; }
+  .callhead .sub { margin-top:6px; font-size:var(--sub-fs); color:var(--grey); }
+  .callhead .sub b { color:#4ade80; font-weight:700; }
+  .avatar { width:var(--av); height:var(--av); margin:0 auto 12px; border-radius:50%; display:grid; place-items:center; background:var(--cobalt); }
+  .avatar svg { width:56%; height:56%; }
+  .chat { position:absolute; left:0; right:0; top:230px; padding:18px 16px; display:flex; flex-direction:column; gap:14px; }
+  .bubble { max-width:84%; padding:14px 18px; border-radius:22px; font-size:var(--bub-fs); line-height:1.32; box-shadow:0 2px 6px rgba(15,23,42,.08); }
+  .bubble small { display:block; margin-bottom:4px; font-size:.72em; font-weight:700; letter-spacing:.04em; text-transform:uppercase; opacity:.75; }
+  .them { align-self:flex-start; background:#fff; border:1px solid #e2e8f0; border-bottom-left-radius:6px; }
+  .ai { align-self:flex-end; background:var(--cobalt); color:#fff; border-bottom-right-radius:6px; }
+  .typing { padding:16px 20px; display:flex; gap:7px; }
+  .typing i { width:10px; height:10px; border-radius:50%; background:currentColor; opacity:.5; display:block; }
+  .controls { position:absolute; left:0; right:0; bottom:22px; display:flex; justify-content:center; gap:46px; }
+  .controls span { width:72px; height:72px; border-radius:50%; display:grid; place-items:center; }
+  .controls svg { width:34px; height:34px; }
+  .dec { background:var(--red); } .acc { background:var(--green); }
+
+  /* S1 */
+  .ring { left:calc(var(--phone-x) + var(--phone-w) / 2); top:calc(var(--phone-y) + var(--phone-h) * .36); width:10px; height:10px; border:4px solid var(--cobalt); border-radius:50%; }
+  .badge { right:-18px; top:-18px; min-width:64px; height:64px; padding:0 14px; border-radius:32px; background:var(--red); color:#fff; font-weight:700; font-size:34px;
+    display:grid; place-items:center; border:4px solid var(--navy); z-index:9; }
+  .missed { width:var(--miss-w); padding:16px 20px; border-radius:18px; background:#fff; color:var(--navy); display:flex; align-items:center; gap:16px;
+    box-shadow:0 14px 34px rgba(0,0,0,.35); font-size:var(--miss-fs); }
+  .missed .ic { flex:none; width:46px; height:46px; border-radius:50%; background:#fee2e2; display:grid; place-items:center; }
+  .missed .ic svg { width:24px; height:24px; }
+  .missed b { display:block; color:var(--red); }
+  .missed span { color:var(--mid); font-size:.86em; }
+
+  /* S2 (matches the finish.py intro card) */
+  .brandbox { left:50%; top:50%; width:var(--box-w); height:var(--box-h); margin-left:calc(var(--box-w) / -2); margin-top:calc(var(--box-h) * -1); background:#fff;
+    display:grid; place-items:center; }
+  .brandbox img { width:var(--logo-w); }
+  .headline { left:0; right:0; top:calc(50% + var(--head-gap)); text-align:center; font-weight:700; font-size:var(--head-fs); }
+  .subline { left:0; right:0; top:calc(50% + var(--head-gap) + var(--head-fs) + 30px); text-align:center; font-size:var(--subl-fs); color:var(--grey); }
+  .subline em { font-style:normal; color:var(--amber); font-weight:700; }
+
+  /* Side cards */
+  .card { width:var(--card-w); padding:24px 26px; border-radius:22px; background:#fff; color:var(--navy); box-shadow:0 18px 44px rgba(0,0,0,.35); font-size:var(--card-fs); }
+  .card h4 { font-size:1.05em; display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+  .card h4 .ic { flex:none; width:48px; height:48px; border-radius:14px; display:grid; place-items:center; background:#dbeafe; }
+  .card h4 .ic svg { width:28px; height:28px; }
+  .card .muted { color:var(--mid); font-size:.86em; }
+  .owner .status { display:inline-flex; align-items:center; gap:10px; margin-top:6px; padding:8px 14px; border-radius:999px; background:#fef3c7; color:#92400e; font-weight:700; font-size:.9em; }
+  .owner .status i { width:12px; height:12px; border-radius:50%; background:var(--amber); display:block; }
+  .slots { display:flex; flex-direction:column; gap:10px; }
+  .slot { position:relative; display:flex; gap:16px; align-items:center; padding:12px 14px; border-radius:12px; background:var(--light); border:1px solid #e2e8f0; overflow:hidden; }
+  .slot b { width:64px; flex:none; }
+  .slot .fill { position:absolute; inset:0; background:var(--cobalt); color:#fff; display:flex; align-items:center; gap:16px; padding:12px 14px; font-weight:700; }
+  .slot .fill b { width:64px; }
+  .alert { width:var(--card-w); padding:20px 24px; border-radius:18px; background:var(--red); color:#fff; font-weight:700; font-size:var(--card-fs);
+    display:flex; align-items:center; gap:16px; box-shadow:0 18px 44px rgba(220,38,38,.45); }
+  .alert svg { flex:none; width:40px; height:40px; }
+  .alert span { display:block; font-weight:400; font-size:.82em; opacity:.92; margin-top:4px; }
+  .form .row { display:flex; justify-content:space-between; gap:12px; padding:10px 0; border-bottom:1px solid #e2e8f0; }
+  .form .row:last-of-type { border-bottom:0; }
+  .form .row span { color:var(--mid); }
+  .form .new { display:inline-block; margin-left:auto; padding:5px 12px; border-radius:999px; background:var(--amber); color:var(--navy); font-size:.7em; letter-spacing:.04em; }
+  .chip { padding:12px 20px; border-radius:999px; background:rgba(37,99,235,.18); border:2px solid var(--cobalt); color:#fff; font-weight:700; font-size:var(--card-fs);
+    display:flex; align-items:center; gap:10px; white-space:nowrap; }
+  .chip svg { width:26px; height:26px; }
+  .done { width:var(--card-w); padding:24px 26px; border-radius:22px; background:#fff; color:var(--navy); box-shadow:0 18px 44px rgba(0,0,0,.35); font-size:var(--card-fs); }
+  .done .tick { width:64px; height:64px; border-radius:50%; background:var(--green); display:grid; place-items:center; margin-bottom:14px; }
+  .done .tick svg { width:36px; height:36px; }
+  .done strong { display:block; font-size:1.15em; }
+  .done .when { margin-top:12px; display:inline-flex; gap:10px; padding:8px 14px; border-radius:10px; background:#dbeafe; color:var(--cobalt); font-weight:700; }
+  .link { height:4px; background:repeating-linear-gradient(90deg, var(--amber) 0 16px, transparent 16px 26px); transform-origin:left center; }
+
+  /* S5 */
+  .s5title { left:0; right:0; top:var(--s5-title-top); text-align:center; font-family:Georgia, 'Times New Roman', serif; font-size:var(--s5-title-fs); letter-spacing:-.02em; }
+  .s5title em { color:var(--amber); }
+  .benefit { width:var(--ben-w); height:var(--ben-h); border-radius:28px; background:#fff; color:var(--navy); display:flex; flex-direction:column; align-items:center;
+    justify-content:center; gap:22px; text-align:center; font-weight:700; font-size:var(--ben-fs); box-shadow:0 22px 50px rgba(0,0,0,.35); }
+  .benefit .ic { width:var(--ben-ic); height:var(--ben-ic); border-radius:50%; display:grid; place-items:center; background:var(--cobalt); }
+  .benefit .ic svg { width:52%; height:52%; }
+
+  /* Formats */
+  body.f16 #stage { width:1920px; height:1080px; }
+  body.f16 { --label-top:56px; --label-fs:30px; --phone-x:740px; --phone-y:140px; --phone-w:440px; --phone-h:700px; --who-fs:28px; --sub-fs:20px; --av:84px;
+    --bub-fs:22px; --miss-w:430px; --miss-fs:22px; --box-w:720px; --box-h:496px; --logo-w:640px; --head-gap:60px; --head-fs:76px; --subl-fs:44px;
+    --card-w:470px; --card-fs:23px; --s5-title-top:150px; --s5-title-fs:64px; --ben-w:440px; --ben-h:380px; --ben-fs:34px; --ben-ic:130px; }
+  body.f16 #s1 { --phone-x:560px; }
+  body.f1 #stage { width:1080px; height:1080px; }
+  body.f1 { --label-top:34px; --label-fs:26px; --phone-x:56px; --phone-y:116px; --phone-w:420px; --phone-h:640px; --who-fs:25px; --sub-fs:18px; --av:70px;
+    --bub-fs:19px; --miss-w:440px; --miss-fs:21px; --box-w:640px; --box-h:444px; --logo-w:560px; --head-gap:56px; --head-fs:58px; --subl-fs:38px;
+    --card-w:520px; --card-fs:22px; --s5-title-top:80px; --s5-title-fs:52px; --ben-w:300px; --ben-h:330px; --ben-fs:27px; --ben-ic:110px; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path fill="currentColor" d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></symbol>
+    <symbol id="i-missed" viewBox="0 0 24 24"><path fill="none" stroke="#DC2626" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M4 4l8 8 5-5M17 7h-4M17 7v4"/><path fill="#DC2626" d="M3 18.5c4.9-4 13.1-4 18 0l-2.3 2.3-3.2-1.6v-2.5a10.6 10.6 0 0 0-7 0v2.5l-3.2 1.6z"/></symbol>
+    <symbol id="i-van" viewBox="0 0 24 24"><path fill="#2563EB" d="M2 6.5A1.5 1.5 0 0 1 3.5 5H14v10H2zM15 8h3.6l3.4 4v3h-7z"/><circle cx="6.5" cy="17" r="2.2" fill="#0B1F33"/><circle cx="17.5" cy="17" r="2.2" fill="#0B1F33"/><path fill="#fff" d="M17 9.5h1.3l1.9 2.3H17z"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M3 10h18M8 3v4M16 3v4"/></symbol>
+    <symbol id="i-calcheck" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M3 10h18M8 3v4M16 3v4"/><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M8.5 15.5l2.3 2.2 4.7-4.7"/></symbol>
+    <symbol id="i-warn" viewBox="0 0 24 24"><path fill="#fff" d="M12 2.5l10.5 18.5h-21z"/><path fill="#DC2626" d="M11 9h2v6h-2zM11 16.6h2v2h-2z"/></symbol>
+    <symbol id="i-tick" viewBox="0 0 24 24"><path fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 2L4 13.5h6.5L9.5 22 20 9.5h-6.5z"/></symbol>
+    <symbol id="i-form" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2.5" fill="none" stroke="#2563EB" stroke-width="2"/><path stroke="#2563EB" stroke-width="2" stroke-linecap="round" d="M8 8h8M8 12h8M8 16h5"/></symbol>
+    <symbol id="i-bot" viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="12" rx="4" fill="#fff"/><circle cx="9.5" cy="13" r="1.6" fill="#2563EB"/><circle cx="14.5" cy="13" r="1.6" fill="#2563EB"/><path stroke="#fff" stroke-width="2" stroke-linecap="round" d="M12 7V4"/><circle cx="12" cy="3.5" r="1.5" fill="#F59E0B"/></symbol>
+    <symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="#fff"/><path fill="#fff" d="M4 21c.6-4.4 3.9-7 8-7s7.4 2.6 8 7z"/></symbol>
+  </defs>
+</svg>
+
+<div id="stage">
+
+  <!-- S1 0-6s: phone ringing, missed calls pile up -->
+  <section class="scene" id="s1" data-scene="0,6">
+    <div class="abs ring" data-ring="0"></div><div class="abs ring" data-ring="1"></div><div class="abs ring" data-ring="2"></div>
+    <div class="abs phone" id="s1phone">
+      <div class="abs badge" id="s1badge" data-in="2.0" data-anim="pop">0</div>
+      <div class="screen">
+        <div class="notch"></div>
+        <div class="callhead" style="bottom:0;padding-top:120px">
+          <div class="avatar" id="s1avatar"><svg style="color:#fff"><use href="#i-phone"/></svg></div>
+          <div class="who" id="s1who">Incoming call</div>
+          <div class="sub" id="s1sub">07700 900183</div>
+        </div>
+        <div class="controls" id="s1controls"><span class="dec"><svg style="color:#fff;transform:rotate(135deg)"><use href="#i-phone"/></svg></span><span class="acc"><svg style="color:#fff"><use href="#i-phone"/></svg></span></div>
+      </div>
+    </div>
+    <div id="s1missed"></div>
+  </section>
+
+  <!-- S2 6-12s: AIM logo + title -->
+  <section class="scene" id="s2" data-scene="6,12">
+    <div class="abs brandbox" data-in="6.15" data-anim="pop"><img src="../../public/aim-logo.webp" alt="AIM Smart Solutions"></div>
+    <div class="abs headline" data-in="6.7" data-anim="up">AI Voice Agents</div>
+    <div class="abs subline" data-in="7.3" data-anim="up">Answer and call, <em>24/7</em></div>
+  </section>
+
+  <!-- S3 12-26s: incoming call answered by the AI agent -->
+  <section class="scene" id="s3" data-scene="12,26">
+    <div class="abs label" data-in="12.2" data-anim="drop"><svg><use href="#i-phone"/></svg>Incoming calls</div>
+    <div class="abs tag" data-in="12.2">Illustrative example</div>
+    <div class="abs card owner" id="s3owner" data-in="12.5" data-anim="left">
+      <h4><span class="ic"><svg><use href="#i-van"/></svg></span>Plumbing business</h4>
+      <div class="status"><i></i>Owner busy on a job</div>
+      <p class="muted" style="margin-top:12px">Can't get to the phone</p>
+    </div>
+    <div class="abs phone" id="s3phone" data-in="12.3" data-anim="up">
+      <div class="screen">
+        <div class="notch"></div>
+        <div class="callhead">
+          <div class="avatar"><svg><use href="#i-bot"/></svg></div>
+          <div class="who">AI agent answering</div>
+          <div class="sub"><b>●</b> On call <span class="timer" data-from="12.8">00:00</span></div>
+        </div>
+        <div class="chat">
+          <div class="bubble them typing" data-in="13.3" data-out="14.0"><i></i><i></i><i></i></div>
+          <div class="bubble them" data-in="14.0" data-anim="bubble"><small>Caller</small>My boiler's leaking, can someone come today?</div>
+          <div class="bubble ai typing" data-in="16.2" data-out="16.9" style="color:#fff"><i></i><i></i><i></i></div>
+          <div class="bubble ai" data-in="16.9" data-anim="bubble"><small>AI agent</small>I'm sorry to hear that. I can book an urgent visit for 2pm. Can I take your name and postcode?</div>
+        </div>
+      </div>
+    </div>
+    <div class="abs card" id="s3cal" data-in="18.8" data-anim="right">
+      <h4><span class="ic" style="color:#2563EB"><svg><use href="#i-cal"/></svg></span>Today's calendar</h4>
+      <div class="slots">
+        <div class="slot"><b>12:00</b><span class="muted">Job: bathroom tap</span></div>
+        <div class="slot"><b>13:00</b><span class="muted">Free</span></div>
+        <div class="slot"><b>14:00</b><span class="muted">Free</span><div class="fill" id="s3fill"><b>14:00</b>Urgent visit: boiler leak</div></div>
+      </div>
+    </div>
+    <div class="abs alert" id="s3alert" data-in="20.9" data-anim="pop"><svg><use href="#i-warn"/></svg><div>URGENT, owner notified<span>Boiler leak, visit booked 2pm</span></div></div>
+  </section>
+
+  <!-- S4 26-40s: new web enquiry, AI calls the lead -->
+  <section class="scene" id="s4" data-scene="26,40">
+    <div class="abs label" data-in="26.2" data-anim="drop"><svg style="transform:scaleX(-1)"><use href="#i-phone"/></svg>Outgoing calls</div>
+    <div class="abs tag" data-in="26.2">Illustrative example</div>
+    <div class="abs card form" id="s4form" data-in="26.6" data-anim="left">
+      <h4><span class="ic"><svg><use href="#i-form"/></svg></span>New enquiry<span class="new">JUST NOW</span></h4>
+      <div class="row"><span>Name</span><b>Sarah</b></div>
+      <div class="row"><span>Interested in</span><b>Kitchen quote</b></div>
+      <div class="row"><span>Phone</span><b>07700 900456</b></div>
+    </div>
+    <div class="abs link" id="s4link"></div>
+    <div class="abs chip" id="s4chip" data-in="28.2" data-anim="pop"><svg><use href="#i-bolt"/></svg>Calling within seconds</div>
+    <div class="abs phone" id="s4phone" data-in="26.4" data-anim="up">
+      <div class="screen">
+        <div class="notch"></div>
+        <div class="callhead">
+          <div class="avatar" id="s4avatar"><svg><use href="#i-person"/></svg></div>
+          <div class="who">Sarah</div>
+          <div class="sub" id="s4sub">Calling…</div>
+        </div>
+        <div class="chat">
+          <div class="bubble ai typing" data-in="29.4" data-out="30.0" style="color:#fff"><i></i><i></i><i></i></div>
+          <div class="bubble ai" data-in="30.0" data-anim="bubble"><small>AI agent</small>Hi Sarah, thanks for your enquiry about a kitchen quote. Is now a good time?</div>
+          <div class="bubble them typing" data-in="32.0" data-out="32.6"><i></i><i></i><i></i></div>
+          <div class="bubble them" data-in="32.6" data-anim="bubble"><small>Sarah</small>Yes, perfect.</div>
+          <div class="bubble ai typing" data-in="33.4" data-out="34.0" style="color:#fff"><i></i><i></i><i></i></div>
+          <div class="bubble ai" data-in="34.0" data-anim="bubble"><small>AI agent</small>Great. I can book a free visit on Thursday at 10am. Does that work?</div>
+        </div>
+      </div>
+    </div>
+    <div class="abs done" id="s4done" data-in="36.3" data-anim="right">
+      <div class="tick" id="s4tick"><svg><use href="#i-tick"/></svg></div>
+      <strong>Lead qualified, visit booked</strong>
+      <div class="when"><svg width="22" height="22" style="color:#2563EB"><use href="#i-calcheck"/></svg>Thursday 10:00, free visit</div>
+    </div>
+  </section>
+
+  <!-- S5 40-46s: three benefits -->
+  <section class="scene" id="s5" data-scene="40,47">
+    <h2 class="abs s5title" data-in="40.1" data-anim="up">What it means <em>for you</em></h2>
+    <div class="abs benefit" id="b1" data-in="40.5" data-anim="pop"><span class="ic"><svg style="color:#fff"><use href="#i-phone"/></svg></span>Never miss a call</div>
+    <div class="abs benefit" id="b2" data-in="42.0" data-anim="pop"><span class="ic"><svg style="color:#fff"><use href="#i-bolt"/></svg></span>Faster follow-up</div>
+    <div class="abs benefit" id="b3" data-in="43.6" data-anim="pop"><span class="ic"><svg style="color:#fff"><use href="#i-calcheck"/></svg></span>More bookings</div>
+  </section>
+</div>
+
+<script>
+const F = new URLSearchParams(location.search).get('f') === '1x1' ? '1x1' : '16x9';
+document.body.className = F === '1x1' ? 'f1' : 'f16';
+const W = F === '1x1' ? 1080 : 1920, H = 1080;
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => [...document.querySelectorAll(s)];
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const easeOut = (p) => 1 - Math.pow(1 - p, 3);
+const easeBack = (p) => { const c = 1.6; return 1 + (c + 1) * Math.pow(p - 1, 3) + c * Math.pow(p - 1, 2); };
+const prog = (t, a, d) => clamp((t - a) / d);
+const place = (el, x, y) => { el.style.left = x + 'px'; el.style.top = y + 'px'; };
+
+// ---- Layout per format (px on the stage) ----
+const L = F === '16x9' ? {
+  missed: { x: 1130, y0: 170, step: 104 },
+  owner: [150, 300], form: [150, 250], cal: [1300, 230], alert: [1300, 590], done: [1300, 320],
+  chip: [150, 560], link: { x: 620, y: 380, w: 120 },
+  benefits: [[260, 300], [740, 300], [1220, 300]],
+} : {
+  missed: { x: 560, y0: 150, step: 100 },
+  owner: [516, 140], form: [516, 140], cal: [516, 140], alert: [516, 450], done: [516, 520],
+  chip: [516, 430], link: null,
+  benefits: [[60, 260], [390, 260], [720, 260]],
+};
+place($('#s3owner'), ...L.owner); place($('#s4form'), ...L.form); place($('#s3cal'), ...L.cal);
+place($('#s3alert'), ...L.alert); place($('#s4done'), ...L.done); place($('#s4chip'), ...L.chip);
+['#b1', '#b2', '#b3'].forEach((s, i) => place($(s), ...L.benefits[i]));
+if (F === '1x1') $('#s3owner').dataset.out = '18.7';
+$$('.chat').forEach((c) => (c.style.top = c.previousElementSibling.offsetHeight + 'px'));
+if (L.link) place($('#s4link'), L.link.x, L.link.y), ($('#s4link').style.width = L.link.w + 'px'); else $('#s4link').style.display = 'none';
+
+// S1 missed-call notifications (fictional Ofcom drama numbers)
+const MISSED = [['07700 900183', '08:12'], ['07700 900247', '09:40'], ['07700 900315', '11:05'], ['07700 900092', '12:31'], ['07700 900468', '14:18'], ['07700 900731', '16:52']];
+const MISSED_AT = [1.9, 2.5, 3.0, 3.45, 3.85, 4.2];
+MISSED.forEach(([num, time], i) => {
+  const d = document.createElement('div');
+  d.className = 'abs missed';
+  d.dataset.in = MISSED_AT[i];
+  d.dataset.anim = 'drop';
+  d.innerHTML = `<span class="ic"><svg><use href="#i-missed"/></svg></span><div><b>Missed call</b><span>${num} · ${time}</span></div>`;
+  place(d, L.missed.x, L.missed.y0 + i * L.missed.step);
+  $('#s1missed').appendChild(d);
+});
+if (F === '1x1') $$('.missed').forEach((d) => (d.style.left = L.missed.x + 'px'));
+
+// ---- Generic entrances: data-in (start), data-out (hide), data-anim ----
+function entrance(el, t) {
+  const a = parseFloat(el.dataset.in), out = el.dataset.out ? parseFloat(el.dataset.out) : Infinity;
+  const anim = el.dataset.anim || 'fade';
+  const d = anim === 'bubble' ? 0.35 : 0.5;
+  const p = prog(t, a, d);
+  if (t >= out || t < a) { el.style.opacity = 0; if (el.classList.contains('bubble')) el.style.display = 'none'; return; }
+  if (el.classList.contains('bubble')) el.style.display = '';
+  const e = easeOut(p);
+  let tf = '';
+  if (anim === 'up') tf = `translateY(${(1 - e) * 40}px)`;
+  if (anim === 'drop') tf = `translateY(${(1 - e) * -40}px)`;
+  if (anim === 'left') tf = `translateX(${(1 - e) * -80}px)`;
+  if (anim === 'right') tf = `translateX(${(1 - e) * 80}px)`;
+  if (anim === 'pop' || anim === 'bubble') tf = `scale(${0.6 + 0.4 * easeBack(p)})`;
+  if (el.classList.contains('label')) tf = 'translateX(-50%) ' + tf;
+  el.style.opacity = e * (out === Infinity ? 1 : clamp((out - t) / 0.25));
+  el.style.transform = tf;
+}
+
+const mmss = (s) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+
+function render(t) {
+  // Scenes cross-fade over 0.4s at both ends (S1 starts fully visible).
+  $$('.scene').forEach((s) => {
+    const [a, b] = s.dataset.scene.split(',').map(Number);
+    const o = a === 0 ? clamp((b - t) / 0.4) : Math.min(prog(t, a, 0.4), clamp((b - t) / 0.4));
+    s.style.opacity = t >= a - 0.01 && t <= b ? o : 0;
+    s.style.visibility = s.style.opacity > 0 ? 'visible' : 'hidden';
+  });
+  $$('[data-in]').forEach((el) => entrance(el, t));
+
+  // S1: ringing until 1.8s, then missed.
+  const ringing = t < 1.8;
+  const shake = ringing ? Math.sin(t * 55) * 6 * (Math.sin(t * 6) > -0.2 ? 1 : 0) : 0;
+  $('#s1phone').style.transform = `rotate(${shake * 0.5}deg) translateX(${shake}px)`;
+  $$('[data-ring]').forEach((r) => {
+    const k = +r.dataset.ring;
+    const p = ((t + k * 0.45) % 1.35) / 1.35;
+    const size = 120 + p * 520;
+    r.style.width = r.style.height = size + 'px';
+    r.style.marginLeft = r.style.marginTop = -size / 2 + 'px';
+    r.style.opacity = ringing ? (1 - p) * 0.7 : 0;
+  });
+  $('#s1who').textContent = ringing ? 'Incoming call' : 'Missed call';
+  $('#s1who').style.color = ringing ? '#fff' : '#fca5a5';
+  $('#s1avatar').style.background = ringing ? '#2563EB' : '#DC2626';
+  $('#s1sub').textContent = ringing ? '07700 900183' : 'No one available';
+  $('#s1controls').style.opacity = ringing ? 1 : 0;
+  $('#s1badge').textContent = MISSED_AT.filter((m) => t >= m).length || 1;
+
+  // Call timers
+  $$('.timer').forEach((el) => (el.textContent = mmss(Math.max(0, t - parseFloat(el.dataset.from)))));
+
+  // S3: 2pm slot fills in.
+  const fp = easeOut(prog(t, 19.6, 0.6));
+  $('#s3fill').style.clipPath = `inset(0 ${100 - fp * 100}% 0 0)`;
+  $('#s3alert').style.boxShadow = t > 20.9 ? `0 18px 44px rgba(220,38,38,.45), 0 0 0 ${8 + 8 * Math.abs(Math.sin((t - 20.9) * 3))}px rgba(220,38,38,.25)` : '';
+
+  // S4: link draws from the form to the phone, then the call connects.
+  $('#s4link').style.transform = `scaleX(${easeOut(prog(t, 27.6, 0.6))})`;
+  const connected = t >= 29.3;
+  const ringP = connected ? 0 : Math.abs(Math.sin((t - 28) * 5));
+  $('#s4avatar').style.boxShadow = t > 28 && !connected ? `0 0 0 ${ringP * 14}px rgba(37,99,235,.35)` : '';
+  $('#s4sub').innerHTML = connected ? `<b>●</b> AI agent on call ${mmss(t - 29.3)}` : 'AI agent calling…';
+  $('#s4tick').style.transform = `scale(${t >= 36.3 ? 0.6 + 0.4 * easeBack(prog(t, 36.5, 0.45)) : 0.6})`;
+}
+window.render = render;
+window.FORMAT = F;
+render(0);
+</script>
+</body>
+</html>
