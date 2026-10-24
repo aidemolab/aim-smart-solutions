@@ -1,0 +1,11 @@
+# Business Process Automation video: Jamie voiceover lines for video/finish.py (times in output
+# seconds, which equal scenes.html time). Line 2 plays over the logo scene and is left
+# uncaptioned (--no-caption 2). Segments for voiceover-automation-jamie.mp3:
+#   0.00-4.96,5.96-11.56,12.56-18.00,19.00-26.20,27.20-31.44,32.44-37.08,38.08-41.76
+0.5     Your team loses hours every week repeating the same manual steps.
+6.0     AIM connects your tools so routine work runs on its own, in any business.
+12.6    Here's our live enquiry journey: a customer fills in your website form.
+19.0    The moment they press send, the enquiry is saved and they get an instant confirmation email.
+27.0    And you get an alert with every detail, ready to reply.
+36.5    Less admin, fewer mistakes, and customers looked after faster.
+card    Try the live demo at aimsmartsolutions.tech.
