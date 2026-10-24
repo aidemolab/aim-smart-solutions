@@ -1,0 +1,201 @@
+<!doctype html>
+<!--
+  Business Process Automation video: animated scenes around the S3 screen recording.
+  S1 0-6s (pain), S2 6-12s (offer), S4 35.6-42s (outcomes). S3 (11.6-36s) is the recording from
+  video/automation/record.cjs; S5 is the end card added by video/finish.py.
+  Open with ?f=16x9 (1920x1080) or ?f=1x1 (1080x1080). Everything is drawn by render(t), so
+  video/automation/capture.cjs can capture exact 30fps frames for any time range.
+  Keep the bottom ~260px light on detail: finish.py burns captions there.
+-->
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Business Process Automation video scenes</title>
+<style>
+  :root { --navy:#0B1F33; --slate:#1E293B; --cobalt:#2563EB; --amber:#F59E0B; --light:#F8FAFC; --grey:#CBD5E1; --mid:#64748B; --red:#DC2626; --green:#16A34A; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { width:100%; height:100%; overflow:hidden; background:var(--navy); font-family:Arial, Helvetica, sans-serif; color:#fff; }
+  #stage { position:relative; overflow:hidden; background:radial-gradient(120% 90% at 50% 0%, #16304d 0%, var(--navy) 60%); }
+  .scene { position:absolute; inset:0; opacity:0; }
+  .abs { position:absolute; }
+
+  /* S1: windows */
+  .win { background:#fff; color:var(--navy); border-radius:16px; box-shadow:0 24px 60px rgba(0,0,0,.45); overflow:hidden; }
+  .win .bar { height:48px; background:#E2E8F0; display:flex; align-items:center; gap:8px; padding:0 14px; font-size:16px; font-weight:700; color:var(--slate); }
+  .win .bar i { width:12px; height:12px; border-radius:50%; background:#CBD5E1; display:block; }
+  .win .bar span { margin-left:8px; }
+  .mail { display:flex; gap:14px; align-items:center; padding:12px 16px; border-bottom:1px solid #E2E8F0; font-size:var(--fs); }
+  .mail .dot { flex:none; width:10px; height:10px; border-radius:50%; background:var(--cobalt); }
+  .mail b { display:block; } .mail small { color:var(--mid); font-size:.85em; }
+  .count { position:absolute; right:12px; top:7px; min-width:30px; height:26px; padding:0 8px; border-radius:13px; background:var(--red); color:#fff; font-size:16px; font-weight:700; display:grid; place-items:center; }
+  table.sheet { border-collapse:collapse; width:100%; font-size:var(--fs); }
+  .sheet td, .sheet th { border:1px solid #E2E8F0; padding:9px 10px; text-align:left; white-space:nowrap; height:44px; }
+  .sheet th { background:#F1F5F9; color:var(--mid); font-size:.8em; letter-spacing:.04em; text-transform:uppercase; }
+  .sheet td.hl { outline:3px solid var(--green); outline-offset:-3px; background:#F0FDF4; }
+  .chip { padding:10px 18px; border-radius:12px; background:var(--amber); color:var(--navy); font-weight:700; font-size:var(--chip-fs); box-shadow:0 12px 30px rgba(0,0,0,.35); white-space:nowrap; }
+  .clock { width:var(--clock); height:var(--clock); border-radius:50%; border:6px solid #fff; }
+  .clock .hand { position:absolute; left:50%; bottom:50%; width:6px; margin-left:-3px; border-radius:3px; background:var(--amber); transform-origin:50% 100%; }
+  .clock .hand.h { height:30%; background:#fff; } .clock .hand.m { height:40%; }
+  .s1label { left:0; right:0; text-align:center; font-weight:700; font-size:var(--s1-fs); }
+  .s1label em { font-style:normal; color:var(--amber); }
+
+  /* S2 (matches the finish.py card style) */
+  .brandbox { left:50%; top:50%; width:var(--box-w); height:var(--box-h); margin-left:calc(var(--box-w) / -2); margin-top:calc(var(--box-h) * -1); background:#fff; display:grid; place-items:center; }
+  .brandbox img { width:var(--logo-w); }
+  .headline { left:0; right:0; top:calc(50% + var(--head-gap)); text-align:center; font-weight:700; font-size:var(--head-fs); }
+  .subline { left:0; right:0; top:calc(50% + var(--head-gap) + var(--head-fs) + 26px); text-align:center; font-size:var(--subl-fs); color:var(--grey); padding:0 40px; }
+  .subline em { font-style:normal; color:var(--amber); font-weight:700; }
+
+  /* S4 */
+  .s4title { left:0; right:0; top:var(--s4-title-top); text-align:center; font-family:Georgia, 'Times New Roman', serif; font-size:var(--s4-title-fs); letter-spacing:-.02em; }
+  .s4title em { color:var(--amber); }
+  .benefit { width:var(--ben-w); height:var(--ben-h); border-radius:28px; background:#fff; color:var(--navy); display:flex; flex-direction:column; align-items:center;
+    justify-content:center; gap:22px; text-align:center; font-weight:700; font-size:var(--ben-fs); box-shadow:0 22px 50px rgba(0,0,0,.35); }
+  .benefit .ic { width:var(--ben-ic); height:var(--ben-ic); border-radius:50%; display:grid; place-items:center; background:var(--cobalt); }
+  .benefit .ic svg { width:52%; height:52%; }
+
+  body.f16 #stage { width:1920px; height:1080px; }
+  body.f16 { --fs:27px; --chip-fs:26px; --clock:120px; --s1-fs:44px; --box-w:720px; --box-h:496px; --logo-w:640px; --head-gap:56px; --head-fs:70px; --subl-fs:38px;
+    --s4-title-top:150px; --s4-title-fs:64px; --ben-w:440px; --ben-h:380px; --ben-fs:34px; --ben-ic:130px; }
+  body.f1 #stage { width:1080px; height:1080px; }
+  body.f1 { --fs:20px; --chip-fs:22px; --clock:100px; --s1-fs:36px; --box-w:640px; --box-h:444px; --logo-w:560px; --head-gap:50px; --head-fs:52px; --subl-fs:30px;
+    --s4-title-top:80px; --s4-title-fs:52px; --ben-w:300px; --ben-h:330px; --ben-fs:27px; --ben-ic:110px; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="#fff" stroke-width="2.2"/><path fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" d="M12 7v5l3.5 2"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path fill="none" stroke="#fff" stroke-width="2.2" stroke-linejoin="round" d="M12 3l8 3v6c0 4.6-3.4 8.2-8 9-4.6-.8-8-4.4-8-9V6z"/><path fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M8.5 12.3l2.4 2.4 4.6-4.8"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path fill="#fff" d="M13.5 2L4 13.5h6.5L9.5 22 20 9.5h-6.5z"/></symbol>
+  </defs>
+</svg>
+
+<div id="stage">
+  <!-- S1 0-6s: the same manual steps, again and again -->
+  <section class="scene" id="s1" data-scene="0,6">
+    <div class="abs win" id="inbox">
+      <div class="bar"><i></i><i></i><i></i><span>Inbox</span><div class="count" id="count">3</div></div>
+      <div id="mails"></div>
+    </div>
+    <div class="abs win" id="sheetwin">
+      <div class="bar"><i></i><i></i><i></i><span>Enquiries.xlsx</span></div>
+      <table class="sheet"><thead><tr><th>Name</th><th>Business</th><th>Email</th><th>Status</th></tr></thead><tbody id="rows"></tbody></table>
+    </div>
+    <div class="abs chip" id="copy">Copy</div>
+    <div class="abs chip" id="paste">Paste</div>
+    <div class="abs clock" id="clock"><div class="hand h" id="hh"></div><div class="hand m" id="mh"></div></div>
+    <div class="abs s1label" id="s1label">The same manual steps, <em>every day</em></div>
+  </section>
+
+  <!-- S2 6-12s: AIM logo + offer -->
+  <section class="scene" id="s2" data-scene="6,12">
+    <div class="abs brandbox" data-in="6.15" data-anim="pop"><img src="../../public/aim-logo.webp" alt="AIM Smart Solutions"></div>
+    <div class="abs headline" data-in="6.7" data-anim="up">Business Process Automation</div>
+    <div class="abs subline" data-in="7.3" data-anim="up">Connect the steps your team <em>repeats every day</em></div>
+  </section>
+
+  <!-- S4 35.6-42s: outcomes -->
+  <section class="scene" id="s4" data-scene="35.6,42.1">
+    <h2 class="abs s4title" data-in="35.8" data-anim="up">What it means <em>for you</em></h2>
+    <div class="abs benefit" id="b1" data-in="36.4" data-anim="pop"><span class="ic"><svg><use href="#i-clock"/></svg></span>Hours saved</div>
+    <div class="abs benefit" id="b2" data-in="37.6" data-anim="pop"><span class="ic"><svg><use href="#i-shield"/></svg></span>Fewer errors</div>
+    <div class="abs benefit" id="b3" data-in="39.0" data-anim="pop"><span class="ic"><svg><use href="#i-bolt"/></svg></span>Faster response</div>
+  </section>
+</div>
+
+<script>
+const F = new URLSearchParams(location.search).get('f') === '1x1' ? '1x1' : '16x9';
+document.body.className = F === '1x1' ? 'f1' : 'f16';
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => [...document.querySelectorAll(s)];
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const easeOut = (p) => 1 - Math.pow(1 - p, 3);
+const easeInOut = (p) => (p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2);
+const easeBack = (p) => { const c = 1.6; return 1 + (c + 1) * Math.pow(p - 1, 3) + c * Math.pow(p - 1, 2); };
+const prog = (t, a, d) => clamp((t - a) / d);
+const box = (el, x, y, w) => { el.style.left = x + 'px'; el.style.top = y + 'px'; if (w) el.style.width = w + 'px'; };
+
+// Fictional enquiries (example.com addresses are reserved).
+const PEOPLE = [['Sarah', 'Bright Smile Dental'], ['Tom', 'Hale Plumbing'], ['Priya', 'Kew Accountants'], ['Dan', 'Oak Lettings'], ['Amy', 'Fern Florists']];
+const L = F === '16x9'
+  ? { inbox: [110, 230, 700], sheet: [860, 290, 950], clock: [1650, 690], label: 100, rowsShown: 4 }
+  : { inbox: [60, 110, 600], sheet: [60, 580, 960], clock: [820, 170], label: 40, rowsShown: 4 };
+box($('#inbox'), ...L.inbox); box($('#sheetwin'), ...L.sheet); box($('#clock'), ...L.clock);
+$('#s1label').style.top = L.label + 'px';
+PEOPLE.forEach(([n, b], i) => {
+  const m = document.createElement('div'); m.className = 'mail'; m.dataset.at = i * 0.75 - 0.8;
+  m.innerHTML = `<span class="dot"></span><div><b>New enquiry: ${b}</b><small>From ${n} · Please can you call me back?</small></div>`;
+  $('#mails').appendChild(m);
+});
+PEOPLE.slice(0, L.rowsShown).forEach(([n, b]) => {
+  const r = document.createElement('tr');
+  r.innerHTML = `<td>${n}</td><td>${b}</td><td>${n.toLowerCase()}@example.com</td><td>To reply</td>`;
+  $('#rows').appendChild(r);
+});
+const rows = $$('#rows tr');
+const PASTE_AT = [0.9, 1.9, 2.9, 3.9];
+
+const S4 = F === '16x9' ? [[260, 330], [740, 330], [1220, 330]] : [[60, 270], [390, 270], [720, 270]];
+['#b1', '#b2', '#b3'].forEach((s, i) => box($(s), ...S4[i]));
+
+function entrance(el, t) {
+  const a = parseFloat(el.dataset.in), anim = el.dataset.anim || 'fade';
+  const p = prog(t, a, 0.5), e = easeOut(p);
+  if (t < a) { el.style.opacity = 0; return; }
+  let tf = '';
+  if (anim === 'up') tf = `translateY(${(1 - e) * 40}px)`;
+  if (anim === 'pop') tf = `scale(${0.6 + 0.4 * easeBack(p)})`;
+  el.style.opacity = e; el.style.transform = tf;
+}
+
+function render(t) {
+  $$('.scene').forEach((s) => {
+    const [a, b] = s.dataset.scene.split(',').map(Number);
+    const o = a === 0 ? clamp((b - t) / 0.4) : Math.min(prog(t, a, 0.4), clamp((b - t) / 0.4));
+    s.style.opacity = t >= a - 0.01 && t <= b ? o : 0;
+    s.style.visibility = s.style.opacity > 0 ? 'visible' : 'hidden';
+  });
+  $$('[data-in]').forEach((el) => entrance(el, t));
+
+  // S1: emails keep arriving, details are copied into the sheet row by row, the clock spins.
+  let unread = 1;
+  $$('.mail').forEach((m) => {
+    const p = prog(t, parseFloat(m.dataset.at), 0.35);
+    m.style.display = p > 0 ? '' : 'none';
+    m.style.opacity = easeOut(p); m.style.transform = `translateY(${(1 - easeOut(p)) * -20}px)`;
+    if (p > 0) unread++;
+  });
+  $('#mails').style.flexDirection = 'column';
+  $('#mails').style.display = 'flex'; $('#mails').style.flexDirection = 'column-reverse';
+  $('#count').textContent = unread;
+  rows.forEach((r, i) => {
+    const filled = t >= PASTE_AT[i] + 0.55;
+    r.style.opacity = filled ? 1 : 0.15;
+    r.querySelectorAll('td').forEach((c) => c.classList.toggle('hl', t >= PASTE_AT[i] + 0.55 && t < PASTE_AT[i] + 1.05));
+  });
+  // Copy chip travels from the inbox to the next empty row; Paste pops at the row.
+  const i = PASTE_AT.findIndex((a) => t >= a && t < a + 0.9);
+  const inb = $('#inbox').getBoundingClientRect(), sh = $('#sheetwin').getBoundingClientRect();
+  if (i >= 0) {
+    const p = easeInOut(prog(t, PASTE_AT[i], 0.5));
+    const r = rows[i].getBoundingClientRect();
+    const x0 = inb.left + inb.width * 0.55, y0 = inb.top + 90, x1 = sh.left + 40, y1 = r.top - 6;
+    box($('#copy'), x0 + (x1 - x0) * p, y0 + (y1 - y0) * p);
+    $('#copy').style.opacity = p < 1 ? 1 : 0;
+    const q = prog(t, PASTE_AT[i] + 0.5, 0.3);
+    box($('#paste'), x1, y1); $('#paste').style.opacity = q > 0 && t < PASTE_AT[i] + 0.9 ? 1 : 0;
+    $('#paste').style.transform = `scale(${0.6 + 0.4 * easeBack(q)})`;
+  } else { $('#copy').style.opacity = 0; $('#paste').style.opacity = 0; }
+  $('#mh').style.transform = `rotate(${t * 360}deg)`;
+  $('#hh').style.transform = `rotate(${t * 30}deg)`;
+  const lp = easeOut(prog(t, 1.2, 0.5));
+  $('#s1label').style.opacity = lp; $('#s1label').style.transform = `translateY(${(1 - lp) * 30}px)`;
+  $('#clock').style.opacity = easeOut(prog(t, 0.2, 0.5));
+}
+window.render = render;
+window.FORMAT = F;
+render(0);
+</script>
+</body>
+</html>

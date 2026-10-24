@@ -109,3 +109,15 @@ than rewriting history; if a decision changes, add a new entry that replaces the
 - Source: `video/voice-agents/scenes.html` (drawn by `render(t)`), captured frame by frame by
   `video/voice-agents/capture.cjs`, then finished with `video/finish.py` (Jamie voiceover, captions,
   end card with `--card-head` and `--card-site`). Lines: `video/voice-agents/lines.txt`.
+
+## Business Process Automation demo video (2026-10-24)
+- The Business Process Automation page features `automation-demo-v1` (set as the enquiry-journey
+  demo's `video`, so it shows on the service page and in the `/services/` pop-up).
+- S3 records the real `/business-enquiry/` page, but on a local build with Cloudflare's invisible
+  always-pass test Turnstile key, and the `submit-enquiry` call is answered with the live
+  function's exact success response. The live form is behind Turnstile, which an automated
+  browser must not get past, so no real enquiry is saved and no email is sent while recording.
+  The steps panel shows only what `submit-enquiry` really does (save, customer email, owner
+  email) with its real subjects and wording.
+- Source: `video/automation/` (`scenes.html` + `capture.cjs` for S1, S2 and S4, `record.cjs` for
+  S3, `assemble.sh` to join them, `lines.txt` for `video/finish.py`).

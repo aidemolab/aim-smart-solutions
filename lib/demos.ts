@@ -52,6 +52,7 @@ export const demos: Demo[] = [
     summary: "Send an enquiry and receive an instant acknowledgement by email while the business owner gets an alert. An AI call-back for urgent enquiries can be added.",
     href: "/business-enquiry/",
     badge: "Live",
+    video: "automation-demo-v1",
     tryLabel: "Try the enquiry journey",
     service: "business-automation",
   },
