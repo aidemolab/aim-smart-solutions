@@ -204,7 +204,7 @@ export const services: Service[] = [
     description: "Courses, workshops and training materials designed and built around your business: outlines, sessions, slides, activities, and learner and trainer guides.",
     explanation: [
       "Off-the-shelf training rarely fits. It teaches the general idea rather than how your team actually works, so people finish the course and go back to doing things the old way. Good training starts with what your people need to be able to do, and works backwards from there.",
-      "With more than 20 years in education and training, AIM is led by a trainer who understands your pain, builds the solution and teaches you to use it. You receive complete, ready-to-deliver materials, and we can show your own trainers how to run them.",
+      "AIM is led by a trainer with more than 20 years in education and training, who understands your pain, builds the solution and teaches you to use it. You receive complete, ready-to-deliver materials, and we can show your own trainers how to run them.",
     ],
     benefits: [
       { title: "Built around your business", body: "Examples, activities and language come from your own work, not a generic syllabus." },
