@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { pillars } from "@/lib/site";
 import { basePath } from "@/lib/base-path";
-import { demoById, PHARMA_VIDEO, VOICE_AGENTS_VIDEO } from "@/lib/demos";
+import { demoById, PHARMA_VIDEO, VOICE_AGENTS_VIDEO, videoExamples } from "@/lib/demos";
 import { services, serviceBySlug, type Service } from "../data";
 import { BookingButton, CtaBand, EnquiryJourney } from "../../components/Blocks";
 import DemoCard from "../../components/DemoCard";
@@ -163,7 +163,26 @@ export default async function ServicePage({ params }: Params) {
             </video>
           </figure>
         )}
-        <ServiceDemo service={service} />
+        {service.slug === "video-production" && (
+          <>
+            <p className="kicker">Examples of our work</p>
+            <div className="demo-tiles">
+              {videoExamples.map((item) => (
+                <article className="demo-tile" key={item.video}>
+                  <h3>{item.title}</h3>
+                  <p className="demo-pain">{item.kind}</p>
+                  <p>{item.summary}</p>
+                  <figure className="demo-video demo-video-card">
+                    <video controls preload="none" playsInline poster={`${basePath}/assets/videos/${item.video}-poster.jpg`} aria-label={`Narrated 1-minute video: ${item.title}, with captions`}>
+                      <source src={`${basePath}/assets/videos/${item.video}.mp4`} type="video/mp4" />
+                    </video>
+                  </figure>
+                </article>
+              ))}
+            </div>
+          </>
+        )}
+        {service.slug !== "video-production" && <ServiceDemo service={service} />}
       </section>
 
       {siblings.length > 0 && (

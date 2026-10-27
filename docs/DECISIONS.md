@@ -121,3 +121,12 @@ than rewriting history; if a decision changes, add a new entry that replaces the
   email) with its real subjects and wording.
 - Source: `video/automation/` (`scenes.html` + `capture.cjs` for S1, S2 and S4, `record.cjs` for
   S3, `assemble.sh` to join them, `lines.txt` for `video/finish.py`).
+
+## Video Production and Course Design & Build services (2026-10-27)
+- Two services added, now nine: **Video Production** (Win More Customers, after AI Sales & Marketing)
+  and **Course Design & Build** (Decide Better, after AI & Data Training). Each pillar gained one
+  "pain" line.
+- Video Production's proof is the existing AIM videos (`videoExamples` in `lib/demos.ts`), labelled
+  as an animated explainer or demo walkthroughs. They are our own demos, not client work.
+- Course Design & Build links the existing AI Skills Taster demo. "More than 20 years in education
+  and training" is the owner's own statement; the site gives no other figures or client names.
