@@ -29,8 +29,8 @@ export const pillars: Pillar[] = [
     name: "Win More Customers",
     promise: "Never miss a lead or a call again",
     intro: "Respond to every enquiry and call promptly, capture the right details first time and keep promising opportunities moving.",
-    problems: ["Calls go unanswered while you are busy", "Enquiries wait in an inbox", "Follow-up depends on someone remembering"],
-    services: ["ai-voice-agents", "sales-marketing"],
+    problems: ["Calls go unanswered while you are busy", "Enquiries wait in an inbox", "Follow-up depends on someone remembering", "Customers cannot see what you actually do"],
+    services: ["ai-voice-agents", "sales-marketing", "video-production"],
   },
   {
     id: "save-time",
@@ -45,8 +45,8 @@ export const pillars: Pillar[] = [
     name: "Decide Better",
     promise: "Turn your data into clear decisions",
     intro: "Bring scattered figures into one clear view, build your team's confidence with AI and data, and choose the technology that is worth your investment.",
-    problems: ["Figures spread across spreadsheets and systems", "A team unsure how to use AI well", "Not knowing where AI would genuinely help"],
-    services: ["data-analytics", "training", "ai-consultancy"],
+    problems: ["Figures spread across spreadsheets and systems", "A team unsure how to use AI well", "Not knowing where AI would genuinely help", "Training that does not fit how your team works"],
+    services: ["data-analytics", "training", "course-design", "ai-consultancy"],
   },
 ];
 

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { pillars } from "@/lib/site";
-import { demoById, PHARMA_VIDEO, VOICE_AGENTS_VIDEO } from "@/lib/demos";
+import { demoById, PHARMA_VIDEO, VOICE_AGENTS_VIDEO, videoExamples } from "@/lib/demos";
 import { serviceBySlug } from "./data";
 import { BookingButton, pillarNumber } from "../components/Blocks";
 import DemoBadge from "../components/DemoBadge";
@@ -19,7 +19,7 @@ export default function Services() {
       <section className="services-hero">
         <p className="kicker">Our services</p>
         <h1>Practical technology for <em>three business pains.</em></h1>
-        <p>Seven services, grouped by what they change for your business. Each one starts with the pain and uses the smallest practical solution.</p>
+        <p>Nine services, grouped by what they change for your business. Each one starts with the pain and uses the smallest practical solution.</p>
         <nav className="pillar-jump" aria-label="Jump to a pillar">
           {pillars.map((pillar) => <a key={pillar.id} href={`#${pillar.id}`}>{pillar.name}</a>)}
         </nav>
@@ -55,6 +55,11 @@ export default function Services() {
                   {slug === "ai-voice-agents" && (
                     <div className="card-videos">
                       <VideoModalLink video={VOICE_AGENTS_VIDEO} title="AI Voice Agents explainer" label="Watch the 1-minute explainer" />
+                    </div>
+                  )}
+                  {slug === "video-production" && (
+                    <div className="card-videos">
+                      {videoExamples.map((item) => <VideoModalLink key={item.video} video={item.video} title={item.title} label={`Watch: ${item.title}`} />)}
                     </div>
                   )}
                   {videos.length > 0 && (

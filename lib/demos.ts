@@ -24,6 +24,14 @@ export const PHARMA_VIDEO = "pharma-demo-v5";
 // top of the AI Voice Agents demo section and in that card's pop-up on /services/.
 export const VOICE_AGENTS_VIDEO = "voice-agents-v1";
 
+// Existing AIM videos shown as examples on the Video Production page and its /services/ pop-ups.
+// The voice agents video is an animated explainer; the others are narrated demo walkthroughs.
+export const videoExamples = [
+  { video: VOICE_AGENTS_VIDEO, title: "AI Voice Agents explainer", kind: "Animated explainer", summary: "An animated one-minute explainer of how a voice agent answers calls and follows up new leads." },
+  { video: "automation-demo-v1", title: "Business Process Automation demo", kind: "Demo walkthrough", summary: "A narrated walkthrough of an enquiry arriving, the customer reply and the owner alert." },
+  { video: PHARMA_VIDEO, title: "Pharmaceutical market intelligence app demo", kind: "Demo walkthrough", summary: "A narrated tour of a purpose-built decision tool, using illustrative data." },
+];
+
 export const demos: Demo[] = [
   {
     id: "content-generator",

@@ -10,7 +10,8 @@ const out = fileURLToPath(new URL("../out/", import.meta.url));
 const routes = [
   "", "services", "services/smart-apps", "services/ai-voice-agents",
   "services/business-automation", "services/data-analytics", "services/sales-marketing",
-  "services/training", "services/ai-consultancy", "live-demos", "about", "contact",
+  "services/training", "services/ai-consultancy",
+  "services/video-production", "services/course-design", "live-demos", "about", "contact",
   "book-appointment", "business-enquiry", "instant-quote", "privacy",
 ];
 
