@@ -40,10 +40,10 @@ test("every page has a unique title and meta description", () => {
 test("every page has an Open Graph image and a canonical URL", () => {
   for (const route of routes) {
     const html = page(route);
-    assert.match(html, /<meta property="og:image" content="https:\/\/aimsmartsolutions\.tech\/og\.png"/, `${label(route)} has no og:image`);
+    assert.match(html, /<meta property="og:image" content="https:\/\/aimsmartsolutions\.tech\/og-v2.png"/, `${label(route)} has no og:image`);
     assert.match(html, /<link rel="canonical" href="https:\/\/aimsmartsolutions\.tech\//, `${label(route)} has no canonical URL`);
   }
-  assert.ok(existsSync(join(out, "og.png")), "og.png is missing");
+  assert.ok(existsSync(join(out, "og-v2.png")), "og-v2.png is missing");
 });
 
 test("internal links and images all point at files that exist", () => {

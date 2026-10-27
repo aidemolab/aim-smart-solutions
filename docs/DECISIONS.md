@@ -46,7 +46,7 @@ than rewriting history; if a decision changes, add a new entry that replaces the
   images, sitemap, robots.txt, custom 404, the main call to action on every page, demo badges
   and the honesty rules.
 - **Images** are small WebP files (`aim-logo.webp`, `alaa-mostafa.webp`); the sharing image is
-  an AIM-branded `og.png` (1200×630).
+  an AIM-branded `og-v2.png` (1200×630; renamed from `og.png` so LinkedIn and others refetch it).
 - **Performance:** accessibility and SEO score 100. Mobile performance is limited mainly by the
   Next.js/React JavaScript every page loads; inlining CSS was tried and made it worse, so it
   is off.
