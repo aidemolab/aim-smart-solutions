@@ -14,10 +14,11 @@
   var DEMOS = [
     { id: "aim-pharmaceutical-ai-demo", name: "Pharmaceutical market intelligence", url: "https://aidemolab.github.io/aim-pharmaceutical-ai-demo/", service: "AI Smart Apps", serviceUrl: SITE + "/services/smart-apps/" },
     { id: "aim-supplier-risk-demo", name: "Supplier risk scoring", url: "https://aidemolab.github.io/aim-supplier-risk-demo/", service: "Data & Dashboards", serviceUrl: SITE + "/services/data-analytics/" },
-    { id: "aim-sales-lead-scoring-demo", name: "Sales lead scoring", url: "https://aidemolab.github.io/aim-sales-lead-scoring-demo/", service: "AI Sales & Marketing", serviceUrl: SITE + "/services/sales-marketing/" },
-    { id: "aim-property-investment-demo", name: "Property investment analysis", url: "https://aidemolab.github.io/aim-property-investment-demo/", service: "AI Smart Apps", serviceUrl: SITE + "/services/smart-apps/" }
+    { id: "aim-sales-lead-scoring-demo", name: "Sales lead scoring", url: "https://aidemolab.github.io/aim-sales-lead-scoring-demo/", service: "Data & Dashboards", serviceUrl: SITE + "/services/data-analytics/" },
+    { id: "aim-property-investment-demo", name: "Property investment analysis", url: "https://aidemolab.github.io/aim-property-investment-demo/", service: "Data & Dashboards", serviceUrl: SITE + "/services/data-analytics/" }
   ];
-  var ALL_DEMOS = SITE + "/live-demos/";
+  // All demo videos now live on the Services page.
+  var ALL_DEMOS = SITE + "/services/";
   var BOOK = SITE + "/book-appointment/";
 
   var current = DEMOS.filter(function (d) { return location.pathname.indexOf("/" + d.id) === 0; })[0] || null;
@@ -48,13 +49,14 @@
     ".panel .book-m{display:none;background:#2563EB;color:#fff;text-align:center;font-weight:700;margin-top:6px}",
     ".book{flex:none;padding:9px 14px;border-radius:6px;background:#2563EB;color:#fff;font-weight:700;white-space:nowrap}",
     ".book:hover{background:#1D4ED8}",
-    ".label-short{display:none}",
-    "@media(max-width:640px){.bar{gap:8px;padding:0 12px}.back .text,.book,.label-long{display:none}.label-short{display:inline}.back{padding:8px 12px}.panel .book-m{display:block}}"
+    ".label-short,.text-short{display:none}",
+    "@media(max-width:640px){.bar{gap:8px;padding:0 12px}.back .text,.book,.label-long{display:none}.label-short,.back .text-short{display:inline}.back{padding:8px 12px}.panel .book-m{display:block}}"
   ].join("");
 
-  var back = current
-    ? '<a class="back" href="' + esc(current.serviceUrl) + '" aria-label="Back to ' + esc(current.service) + '"><span class="arrow" aria-hidden="true">&larr;</span><span class="text">Back to ' + esc(current.service) + "</span></a>"
-    : '<a class="back" href="' + ALL_DEMOS + '" aria-label="Back to all demos"><span class="arrow" aria-hidden="true">&larr;</span><span class="text">Back to all demos</span></a>';
+  // "← Back to AIM Smart Solutions", to this demo's service page ("Back" on small screens).
+  var backUrl = current ? current.serviceUrl : ALL_DEMOS;
+  var backLabel = "Back to AIM Smart Solutions" + (current ? ": " + current.service : "");
+  var back = '<a class="back" href="' + esc(backUrl) + '" aria-label="' + esc(backLabel) + '" title="' + esc(backLabel) + '"><span class="arrow" aria-hidden="true">&larr;</span><span class="text">Back to AIM Smart Solutions</span><span class="text-short">Back</span></a>';
 
   var items = DEMOS.map(function (d) {
     return '<a href="' + esc(d.url) + '"' + (current && d.id === current.id ? ' aria-current="page"' : "") + ">" + esc(d.name) + "</a>";
@@ -68,7 +70,7 @@
     '<div class="menu"><button class="menu-btn" type="button" aria-expanded="false" aria-controls="aim-demos-panel">' +
     '<span class="label-long">Other demos</span><span class="label-short">Demos</span><span aria-hidden="true">&#9662;</span></button>' +
     '<div class="panel" id="aim-demos-panel" hidden>' + items +
-    '<a class="all" href="' + ALL_DEMOS + '">All demos &rarr;</a>' +
+    '<a class="all" href="' + ALL_DEMOS + '">All services and demos &rarr;</a>' +
     '<a class="book-m" href="' + BOOK + '">Book a call</a></div></div>' +
     '<a class="book" href="' + BOOK + '">Book a call</a>' +
     "</nav>";

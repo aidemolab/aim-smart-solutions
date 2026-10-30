@@ -38,6 +38,20 @@ export default function SiteHeader() {
   const close = () => setOpen(false);
   // On the booking page the booking button would only reload the same page, so it is hidden there.
   const onBooking = pathname.startsWith(BOOKING_CTA.href.replace(/\/$/, ""));
+  // Homepage only: the hero has its own booking button, so the header one fades out while the
+  // hero's is on screen and fades back once the visitor scrolls past it.
+  const onHome = pathname === "/";
+  const [heroCtaVisible, setHeroCtaVisible] = useState(true);
+  useEffect(() => {
+    if (!onHome) return;
+    const target = document.querySelector(".funnel-hero .hero-actions .button.primary");
+    if (!target) return;
+    const headerHeight = Math.round(document.querySelector(".site-header")?.getBoundingClientRect().height ?? 0);
+    const observer = new IntersectionObserver(([entry]) => setHeroCtaVisible(entry.isIntersecting), { rootMargin: `-${headerHeight}px 0px 0px 0px` });
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [onHome]);
+  const hideCta = onHome && heroCtaVisible;
 
   // Close the mobile menu with Escape.
   useEffect(() => {
@@ -62,7 +76,7 @@ export default function SiteHeader() {
         {links.map((link) => <Link key={link.href} href={link.href} aria-current={isCurrent(link.href) ? "page" : undefined}>{link.label}</Link>)}
       </nav>
 
-      {!onBooking && <Link className="nav-cta" href={BOOKING_CTA.href}>{BOOKING_CTA.label}</Link>}
+      {!onBooking && <Link className={`nav-cta${hideCta ? " is-hidden" : ""}`} href={BOOKING_CTA.href} aria-hidden={hideCta || undefined} tabIndex={hideCta ? -1 : undefined}>{BOOKING_CTA.label}</Link>}
 
       <button type="button" className="menu-toggle" aria-expanded={open} aria-controls="mobile-menu" onClick={() => setOpen((value) => !value)}>
         <span className="menu-toggle-bars" aria-hidden="true" />

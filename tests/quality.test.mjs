@@ -146,8 +146,20 @@ test("/services/ shows each service's demo videos, with no try buttons or contac
   const main = html.slice(html.indexOf('class="pillar-section"'), html.indexOf('class="services-cta"'));
   const cards = main.split('class="services-list-card service-video-card"').slice(1);
   assert.equal(cards.length, 9, `expected 9 service cards, found ${cards.length}`);
-  const buttons = (main.match(/Watch the demo video/g) ?? []).length;
-  assert.ok(buttons >= 12, `expected at least 12 demo video buttons, found ${buttons}`);
+  // Exactly the agreed videos per service (Course Design & Build points to the Skills Taster).
+  const expected = { "ai-voice-agents": ["voice-agents-v1"], "sales-marketing": ["keywords-demo-v1"], "video-production": ["showreel-v1"],
+    "business-automation": ["automation-demo-v1"], "smart-apps": ["pharma-demo-v5"], "data-analytics": ["supplier-risk-v2", "sales-leads-v2", "property-v2"],
+    "ai-consultancy": ["consultancy-demo-v1"], training: ["training-demo-v1"], "course-design": [] };
+  for (const [slug, videos] of Object.entries(expected)) {
+    const card = main.slice(main.indexOf(`id="service-${slug}"`), main.indexOf("</article>", main.indexOf(`id="service-${slug}"`)));
+    const found = [...card.matchAll(/data-video="([^"]+)"/g)].map((m) => m[1]);
+    assert.deepEqual(found, videos, `/services/ ${slug} shows ${found.join(", ") || "no videos"}`);
+    // The service page shows the same videos.
+    if (slug !== "course-design") {
+      const onPage = [...new Set([...page(`services/${slug}`).matchAll(/data-video="([^"]+)"/g)].map((m) => m[1]))];
+      assert.deepEqual(onPage.sort(), [...videos].sort(), `/services/${slug}/ shows ${onPage.join(", ")}`);
+    }
+  }
   for (const id of ["win-more-customers", "save-time", "decide-better", "train-your-team"]) assert.ok(html.includes(`id="${id}"`), `#${id} anchor missing`);
   assert.doesNotMatch(main, /class="demo-try"|class="demo-badge|Generate content|Get your score|Start the taster|Try it →/, "a try button or badge is on /services/");
   assert.doesNotMatch(main, /Enquiry journey|Instant quote request|Online booking/, "a contact page is shown as a demo");
@@ -163,4 +175,14 @@ test("/live-demos/ only redirects to /services/, and nothing links to it", () =>
     assert.doesNotMatch(other, /href="(\/aim-smart-solutions)?\/live-demos\//, `${label(route)} still links to /live-demos/`);
   }
   assert.doesNotMatch(readFileSync(join(out, "sitemap.xml"), "utf8"), /live-demos/, "sitemap still lists /live-demos/");
+});
+
+test("the shared demo bar sends visitors back to AIM, not to the old Live demos page", () => {
+  const bar = readFileSync(join(out, "assets", "aim-demo-bar.js"), "utf8");
+  assert.doesNotMatch(bar, /live-demos/, "aim-demo-bar.js still links to /live-demos/");
+  assert.match(bar, /Back to AIM Smart Solutions/, "aim-demo-bar.js has no 'Back to AIM Smart Solutions' link");
+  for (const app of ["aim-sales-lead-scoring-demo", "aim-property-investment-demo", "aim-supplier-risk-demo"]) {
+    assert.ok(new RegExp(`id: "${app}"[^}]*serviceUrl: SITE [+] "/services/data-analytics/"`).test(bar), `${app} should go back to Data & Dashboards`);
+  }
+  assert.match(bar, /id: "aim-pharmaceutical-ai-demo"[^}]*serviceUrl: SITE \+ "\/services\/smart-apps\/"/, "pharma app should go back to AI Smart Apps");
 });

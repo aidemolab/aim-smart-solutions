@@ -3,9 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { pillars, type Pillar } from "@/lib/site";
 import { basePath } from "@/lib/base-path";
-import { demoById, PHARMA_VIDEO, VOICE_AGENTS_VIDEO, videoExamples } from "@/lib/demos";
+import { demoById, serviceVideos } from "@/lib/demos";
 import { services, serviceBySlug, type Service } from "../data";
-import { BookingButton, CostOfWaiting, CtaBand, EnquiryJourney, ProofJourneys, StartHere } from "../../components/Blocks";
+import { BookingButton, CostOfWaiting, CtaBand, StartHere } from "../../components/Blocks";
 import DemoCard from "../../components/DemoCard";
 import OpportunityScore from "../../components/demos/OpportunityScore";
 import SkillsTaster from "../../components/demos/SkillsTaster";
@@ -42,51 +42,50 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   };
 }
 
-// The demo shown on each service page: an optional featured built-in demo, then cards for the others.
+// Interactive demos built into the page (the rest are standalone apps shown as cards).
 const FEATURED: Record<string, { id: string; render: () => React.ReactNode }> = {
   "sales-marketing": { id: "content-generator", render: () => <ContentGenerator /> },
-  "business-automation": { id: "enquiry-journey", render: () => <EnquiryJourney /> },
   "ai-consultancy": { id: "ai-opportunity-score", render: () => <OpportunityScore /> },
   training: { id: "ai-skills-taster", render: () => <SkillsTaster /> },
 };
 
+// The page's demo section: the same video(s) as on /services/ (serviceVideos), then the
+// interactive demo(s). A standalone app's video sits inside its card, next to "Try it".
 function ServiceDemo({ service }: { service: Service }) {
+  const videos = serviceVideos[service.slug] ?? [];
   const featured = FEATURED[service.slug];
-  const list = service.demos.filter((id) => id !== featured?.id).map(demoById).filter((demo) => demo !== undefined);
-  if (!featured && list.length === 0) {
-    return (
-      <div className="demo-placeholder">
-        <h3>See it for your business</h3>
-        <p>On the free call we can walk through a relevant example using the kind of data and processes you work with.</p>
-        <BookingButton />
-      </div>
-    );
-  }
-  const featuredDemo = featured ? demoById(featured.id) : undefined;
+  const cards = service.demos.filter((id) => id !== featured?.id).map(demoById).filter((demo) => demo !== undefined);
+  const inCard = new Map(videos.filter((v) => v.demoId && cards.some((demo) => demo.id === v.demoId && demo.external)).map((v) => [v.demoId!, v.video]));
+  const top = videos.filter((v) => !(v.demoId && inCard.has(v.demoId)));
   return (
     <>
-      {featuredDemo?.video && (
-        <figure className="demo-video">
-          <h3>Watch the 1-minute demo</h3>
-          <video controls preload="none" playsInline poster={`${basePath}/assets/videos/${featuredDemo.video}-poster.jpg`} aria-label={`Narrated 1-minute video demo of the ${featuredDemo.title}, with captions`}>
-            <source src={`${basePath}/assets/videos/${featuredDemo.video}.mp4`} type="video/mp4" />
+      {top.map((v) => (
+        <figure className="demo-video" key={v.video}>
+          <h3>{top.length > 1 ? `Watch the demo video: ${v.title}` : "Watch the demo video"}</h3>
+          <video controls preload="none" playsInline poster={`${basePath}/assets/videos/${v.video}-poster.jpg`} aria-label={`${v.title} video`} data-video={v.video}>
+            <source src={`${basePath}/assets/videos/${v.video}.mp4`} type="video/mp4" />
           </video>
         </figure>
-      )}
+      ))}
       {featured?.render()}
-      {list.length > 0 && <div className={`demo-tiles${featured ? " demo-tiles-after" : ""}`}>{list.map((demo) => <DemoCard key={demo.id} demo={demo} showVideo />)}</div>}
+      {cards.length > 0 && <div className={`demo-tiles${featured ? " demo-tiles-after" : ""}`}>{cards.map((demo) => <DemoCard key={demo.id} demo={demo} video={inCard.get(demo.id)} />)}</div>}
+      {top.length === 0 && !featured && cards.length === 0 && (
+        <div className="demo-placeholder">
+          <h3>See it for your business</h3>
+          <p>On the free call we can walk through a relevant example using the kind of data and processes you work with.</p>
+          <BookingButton />
+        </div>
+      )}
     </>
   );
 }
 
-// "Try the live demo": straight to the app when the page features exactly one demo
-// and it is a standalone app; otherwise to the demo section on this page.
+// Pages with something to try say "Try the live demo"; video-only pages say "Watch the demo".
+// Either way the hero button scrolls to this page's own #demo section.
+const hasTryable = (service: Service) => Boolean(FEATURED[service.slug]) || service.demos.length > 0;
+
 function TryDemoButton({ service }: { service: Service }) {
-  const featured = FEATURED[service.slug];
-  const all = service.demos.map(demoById).filter((demo) => demo !== undefined);
-  if (!featured && all.length === 0) return <a className="button secondary" href="#demo">{service.slug === "video-production" ? "Watch examples" : "See the demo"} <span aria-hidden="true">↓</span></a>;
-  const only = !featured && all.length === 1 && all[0].external ? all[0] : undefined;
-  return <a className="button secondary try-live-demo" href={only ? only.href : "#demo"}>Try the live demo <span aria-hidden="true">{only ? "→" : "↓"}</span></a>;
+  return <a className="button secondary try-live-demo" href="#demo">{hasTryable(service) ? "Try the live demo" : "Watch the demo"} <span aria-hidden="true">↓</span></a>;
 }
 
 export default async function ServicePage({ params }: Params) {
@@ -102,16 +101,9 @@ export default async function ServicePage({ params }: Params) {
   const index = ordered.findIndex((item) => item.slug === service.slug);
   const prev = ordered[(index - 1 + ordered.length) % ordered.length];
   const next = ordered[(index + 1) % ordered.length];
-  // AI Voice Agents tells one story: pain → explanation → offer → proof → book a call.
+  // AI Voice Agents opens with the cost of missed calls and adds the AI Receptionist offer
+  // before its demo; otherwise every service page has the same sections in the same order.
   const story = service.slug === "ai-voice-agents";
-  const voiceVideo = (
-    <figure className="demo-video">
-      <h3>Watch the 1-minute explainer</h3>
-      <video controls preload="none" playsInline poster={`${basePath}/assets/videos/${VOICE_AGENTS_VIDEO}-poster.jpg`} aria-label="Narrated 1-minute explainer video of AI Voice Agents answering calls and calling new leads, with captions">
-        <source src={`${basePath}/assets/videos/${VOICE_AGENTS_VIDEO}.mp4`} type="video/mp4" />
-      </video>
-    </figure>
-  );
   const ctaBand = <CtaBand title={`Could ${service.name} help your business?`} body="Book a free AI Opportunity Call. We will look at where it fits and whether it is the right first step." />;
 
   return (
@@ -174,41 +166,13 @@ export default async function ServicePage({ params }: Params) {
 
       {story && <div className="section start-here-wrap service-offer"><StartHere /></div>}
 
-      {story && <ProofJourneys>{voiceVideo}</ProofJourneys>}
-      {story && ctaBand}
-
-      {!story && <section className="service-demo" id="demo" aria-labelledby="demo-title">
-        <p className="kicker">Try it</p>
+      <section className="service-demo" id="demo" aria-labelledby="demo-title">
+        <p className="kicker">{hasTryable(service) ? "Try it" : "Watch it"}</p>
         <h2 id="demo-title">See it <em>working.</em></h2>
-        {service.slug === "smart-apps" && (
-          <figure className="demo-video">
-            <h3>Watch the 1-minute demo</h3>
-            <video controls preload="none" playsInline poster={`${basePath}/assets/videos/${PHARMA_VIDEO}-poster.jpg`} aria-label="Narrated 1-minute video demo of the pharmaceutical market intelligence app, with captions">
-              <source src={`${basePath}/assets/videos/${PHARMA_VIDEO}.mp4`} type="video/mp4" />
-            </video>
-          </figure>
-        )}
-        {service.slug === "video-production" && (
-          <>
-            <p className="kicker">Examples of our work</p>
-            <div className="demo-tiles">
-              {videoExamples.map((item) => (
-                <article className="demo-tile" key={item.video}>
-                  <h3>{item.title}</h3>
-                  <p className="demo-pain">{item.kind}</p>
-                  <p>{item.summary}</p>
-                  <figure className="demo-video demo-video-card">
-                    <video controls preload="none" playsInline poster={`${basePath}/assets/videos/${item.video}-poster.jpg`} aria-label={`Narrated 1-minute video: ${item.title}, with captions`}>
-                      <source src={`${basePath}/assets/videos/${item.video}.mp4`} type="video/mp4" />
-                    </video>
-                  </figure>
-                </article>
-              ))}
-            </div>
-          </>
-        )}
-        {service.slug !== "video-production" && <ServiceDemo service={service} />}
-      </section>}
+        <ServiceDemo service={service} />
+      </section>
+
+      {ctaBand}
 
       {siblings.length > 0 && (
         <section className="related-services" aria-labelledby="related-title">
@@ -219,11 +183,9 @@ export default async function ServicePage({ params }: Params) {
 
       <nav className="service-pager" aria-label="More services">
         <Link className="pager-link" href={`/services/${prev.slug}/`} rel="prev"><span>← Previous service</span><strong>{prev.name}</strong></Link>
-        <a className="button secondary pager-demo" href="#demo">Try the demo <span aria-hidden="true">↑</span></a>
+        <a className="button secondary pager-demo" href="#demo">{hasTryable(service) ? "Try the demo" : "Watch the demo"} <span aria-hidden="true">↑</span></a>
         <Link className="pager-link is-next" href={`/services/${next.slug}/`} rel="next"><span>Next service →</span><strong>{next.name}</strong></Link>
       </nav>
-
-      {!story && ctaBand}
     </main>
   );
 }

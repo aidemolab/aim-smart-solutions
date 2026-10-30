@@ -7,7 +7,7 @@ import { BookingButton, CtaBand, HowWeWork } from "../components/Blocks";
 export const metadata: Metadata = {
   alternates: { canonical: "/about/" },
   title: "About AIM",
-  description: "AIM Smart Solutions is a Bolton-based AI and automation consultancy founded by Alaa Mostafa (PhD, Semiconductor Physics), supporting UK service businesses.",
+  description: "AIM Smart Solutions is a Bolton-based AI and automation consultancy founded by Alaa Mostafa (PhD, Semiconductor Physics), supporting solo traders and small businesses across the UK.",
 };
 
 const principles = [
@@ -22,7 +22,7 @@ export default function About() {
       <section className="services-hero">
         <p className="kicker">About AIM</p>
         <h1>Technical depth. <em>Commercial clarity.</em></h1>
-        <p>AIM Smart Solutions helps UK service businesses win more customers, save time and decide better through AI, automation and data analytics, and trains their teams to use it. It is based in Bolton, Greater Manchester, and supports businesses across the UK.</p>
+        <p>AIM Smart Solutions helps solo traders and small businesses win more customers, save time and decide better through AI, automation and data analytics, and trains their teams to use it. It is based in Bolton, Greater Manchester, and supports businesses across the UK.</p>
         <BookingButton />
       </section>
 
@@ -46,8 +46,8 @@ export default function About() {
       <section className="section about-who" aria-labelledby="who-title">
         <div className="fit-copy">
           <p className="kicker">Who AIM works with</p>
-          <h2 id="who-title">Small and growing <em>service businesses.</em></h2>
-          <p>AIM works with small and growing service businesses, particularly training, education, professional and local services, that depend on enquiries, quotations, appointments and good communication, and want hands-on support without employing an in-house data, automation or AI specialist.</p>
+          <h2 id="who-title">Solo traders and <em>small businesses.</em></h2>
+          <p>AIM works with solo traders and small businesses, particularly training, education, professional and local services, that depend on enquiries, quotations, appointments and good communication, and want hands-on support without employing an in-house data, automation or AI specialist.</p>
         </div>
         <div className="fit-checklist">
           <h3>What AIM helps with</h3>

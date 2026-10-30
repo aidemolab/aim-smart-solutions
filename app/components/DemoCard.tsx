@@ -3,9 +3,9 @@ import type { Demo } from "@/lib/demos";
 import { basePath } from "@/lib/base-path";
 import DemoBadge from "./DemoBadge";
 
-export default function DemoCard({ demo, headingLevel = 3, showVideo = false }: { demo: Demo; headingLevel?: 2 | 3; showVideo?: boolean }) {
+// A demo card: badge, title, summary, optionally its demo video, and the "Try it" link.
+export default function DemoCard({ demo, headingLevel = 3, video }: { demo: Demo; headingLevel?: 2 | 3; video?: string }) {
   const Heading = headingLevel === 2 ? "h2" : "h3";
-  const video = showVideo ? demo.video : undefined;
   return (
     <article className="demo-tile">
       <DemoBadge kind={demo.badge} />
@@ -14,8 +14,8 @@ export default function DemoCard({ demo, headingLevel = 3, showVideo = false }: 
       <p>{demo.summary}</p>
       {video && (
         <figure className="demo-video demo-video-card">
-          <h4>Watch the 1-minute demo</h4>
-          <video controls preload="none" playsInline poster={`${basePath}/assets/videos/${video}-poster.jpg`} aria-label={`Narrated 1-minute video demo of the ${demo.title}, with captions`}>
+          <h4>Watch the demo video</h4>
+          <video controls preload="none" playsInline poster={`${basePath}/assets/videos/${video}-poster.jpg`} aria-label={`${demo.title} video`} data-video={video}>
             <source src={`${basePath}/assets/videos/${video}.mp4`} type="video/mp4" />
           </video>
         </figure>

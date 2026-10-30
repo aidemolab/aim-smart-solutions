@@ -14,7 +14,7 @@ export default function Home() {
           <p className="eyebrow"><span /> AI for solo traders and small businesses · Bolton, UK</p>
           <h1>AI that grows your business. <em>Built for you. Taught to you.</em></h1>
           <p className="hero-lede">We fix four everyday pains, from missed calls and repetitive admin to tools nobody knows how to use. We understand your pain, build the solution, and teach you to use it.</p>
-          <div className="hero-actions"><BookingButton /><Link className="button secondary" href="/services/">Try a live demo <span aria-hidden="true">→</span></Link></div>
+          <div className="hero-actions"><BookingButton /><Link className="button secondary" href="/services/">Watch our demos <span aria-hidden="true">→</span></Link></div>
           <div className="risk-reversal"><span>✓ Free initial call</span><span>✓ No technical knowledge needed</span><span>✓ No obligation</span></div>
         </div>
       </section>

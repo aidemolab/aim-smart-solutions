@@ -322,3 +322,7 @@ footer.site-footer{max-width:1440px;margin:0 auto;padding:56px 6vw 28px;display:
 .service-videos .video-link{padding:10px 16px;border:1px solid var(--cobalt);border-radius:6px;color:var(--cobalt-dark);font-weight:800}.service-videos .video-link:hover{background:#EFF6FF;text-decoration:none}
 .service-video-shared{margin:6px 0 18px;color:var(--ink-soft);font-size:15px;line-height:1.6}.service-video-shared a{color:var(--cobalt-dark);font-weight:700;text-decoration:underline;text-underline-offset:3px}
 .service-video-card a.service-explore{margin-top:auto}
+
+/* Homepage: header booking button fades while the hero's own booking button is on screen */
+.site-header .nav-cta{transition:opacity .3s ease,visibility .3s ease}
+.site-header .nav-cta.is-hidden{opacity:0;visibility:hidden;pointer-events:none}

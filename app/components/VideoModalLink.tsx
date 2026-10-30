@@ -12,7 +12,7 @@ export default function VideoModalLink({ video, title, label = "Watch the 1-minu
 
   return (
     <>
-      <button type="button" className="video-link" aria-haspopup="dialog" onClick={() => { setOpen(true); dialog.current?.showModal(); }}>
+      <button type="button" className="video-link" aria-haspopup="dialog" data-video={video} onClick={() => { setOpen(true); dialog.current?.showModal(); }}>
         <svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16"><circle cx="8" cy="8" r="8" fill="currentColor" /><path d="M6.4 4.9v6.2L11.2 8z" fill="#fff" /></svg>
         {label}
       </button>
