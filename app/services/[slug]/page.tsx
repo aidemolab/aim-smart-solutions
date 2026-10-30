@@ -61,7 +61,7 @@ function ServiceDemo({ service }: { service: Service }) {
     <>
       {top.map((v) => (
         <figure className="demo-video" key={v.video}>
-          <h3>{top.length > 1 ? `Watch the demo video: ${v.title}` : "Watch the demo video"}</h3>
+          <h3>{v.buttonLabel ?? (top.length > 1 ? `Watch the demo video: ${v.title}` : "Watch the demo video")}</h3>
           <video controls preload="none" playsInline poster={`${basePath}/assets/videos/${v.video}-poster.jpg`} aria-label={`${v.title} video`} data-video={v.video}>
             <source src={`${basePath}/assets/videos/${v.video}.mp4`} type="video/mp4" />
           </video>

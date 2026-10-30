@@ -149,16 +149,14 @@ test("/services/ shows each service's demo videos, with no try buttons or contac
   // Exactly the agreed videos per service (Course Design & Build points to the Skills Taster).
   const expected = { "ai-voice-agents": ["voice-agents-v1"], "sales-marketing": ["keywords-demo-v1"], "video-production": ["showreel-v1"],
     "business-automation": ["automation-demo-v1"], "smart-apps": ["pharma-demo-v5"], "data-analytics": ["supplier-risk-v2", "sales-leads-v2", "property-v2"],
-    "ai-consultancy": ["consultancy-demo-v1"], training: ["training-demo-v1"], "course-design": [] };
+    "ai-consultancy": ["consultancy-demo-v1"], training: ["training-demo-v1"], "course-design": ["training-demo-v1"] };
   for (const [slug, videos] of Object.entries(expected)) {
     const card = main.slice(main.indexOf(`id="service-${slug}"`), main.indexOf("</article>", main.indexOf(`id="service-${slug}"`)));
     const found = [...card.matchAll(/data-video="([^"]+)"/g)].map((m) => m[1]);
     assert.deepEqual(found, videos, `/services/ ${slug} shows ${found.join(", ") || "no videos"}`);
     // The service page shows the same videos.
-    if (slug !== "course-design") {
-      const onPage = [...new Set([...page(`services/${slug}`).matchAll(/data-video="([^"]+)"/g)].map((m) => m[1]))];
-      assert.deepEqual(onPage.sort(), [...videos].sort(), `/services/${slug}/ shows ${onPage.join(", ")}`);
-    }
+    const onPage = [...new Set([...page(`services/${slug}`).matchAll(/data-video="([^"]+)"/g)].map((m) => m[1]))];
+    assert.deepEqual(onPage.sort(), [...videos].sort(), `/services/${slug}/ shows ${onPage.join(", ")}`);
   }
   for (const id of ["win-more-customers", "save-time", "decide-better", "train-your-team"]) assert.ok(html.includes(`id="${id}"`), `#${id} anchor missing`);
   assert.doesNotMatch(main, /class="demo-try"|class="demo-badge|Generate content|Get your score|Start the taster|Try it →/, "a try button or badge is on /services/");

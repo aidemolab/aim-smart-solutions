@@ -258,3 +258,18 @@ than rewriting history; if a decision changes, add a new entry that replaces the
 - Homepage only: the header "Book a Free AI Opportunity Call" fades out while the hero's own booking
   button is on screen and returns once the visitor scrolls past it (hidden from clicks and
   keyboard while faded). The hero's secondary button is "Watch our demos →" (/services/).
+
+## Final fixes from the screenshot review (2026-10-30)
+- Contact forms use real-form wording: the enquiry button is "Send my enquiry".
+- The quote form lists the nine services grouped by pillar, plus "Not sure yet / something else".
+  The names are sent as they appear, so the quote emails show them. At most 6 can be chosen,
+  because the save-service-request function keeps 6 services per request.
+- Booking: the first availability request after a quiet spell can take over 10 seconds (the
+  Google Apps Script calendar behind GOOGLE_BOOKING_URL warms up). After 8 seconds, or on failure,
+  the page shows "We couldn't load the available times. Please try again or email
+  enquiry@aimsmartsolutions.tech." with a "Try again" button; times that arrive later still appear.
+- Course Design & Build shows the AI Skills Taster video on its page and its /services/ card.
+  Video Production's button is "Watch our showreel".
+- Every demo video has a branded cover (AIM logo, service, title, a subtitle for that service).
+- Header booking button reads "Book a call" under 768px wide. Homepage pillar cards have the same
+  spacing around the divider. Form text areas use the site font.

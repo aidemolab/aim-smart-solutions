@@ -120,7 +120,7 @@ export default function BusinessEnquiryPage() {
           {urgent && <label htmlFor="call-consent" style={{ display: "flex", alignItems: "flex-start", gap: 10, margin: "0 0 20px", fontSize: 14, letterSpacing: 0, textTransform: "none", cursor: "pointer" }}><input id="call-consent" style={{ width: 18, height: 18, margin: "2px 0 0", flex: "none" }} name="consent" type="checkbox" value="yes" required /> {CALL_CONSENT_TEXT}</label>}
           </> : <p className="field-help urgency-help" style={{ margin: "0 0 20px" }}>{PRIORITY_NOTE}</p>}
           <Turnstile onToken={setTurnstileToken} resetKey={turnstileKey} />
-          <button type="submit" disabled={state === "submitting"}>{state === "submitting" ? "Submitting…" : "Try the enquiry journey"}<span>→</span></button>
+          <button type="submit" disabled={state === "submitting"}>{state === "submitting" ? "Sending…" : "Send my enquiry"}<span>→</span></button>
           {message && <p id="enquiry-status" className={`submission-message ${state}`} role="status" aria-live="polite">{message}</p>}
           <PrivacyNote text="We use your details only to reply to your enquiry." />
         </form>

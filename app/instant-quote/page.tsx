@@ -4,17 +4,19 @@ import ContactCrumbs from "../components/ContactCrumbs";
 import { FormEvent, useMemo, useState } from "react";
 import PrivacyNote from "../components/PrivacyNote";
 import { callFunction, HONEYPOT_FIELD, toUkE164 } from "@/lib/supabase-functions";
+import { pillars } from "@/lib/site";
+import { serviceBySlug } from "../services/data";
 import "./quote.css";
 
-const services = [
-  { id: "discovery", name: "Automation Discovery & Workflow Plan" },
-  { id: "email", name: "Customer Email Automation" },
-  { id: "quote", name: "Automatic Quote Workflow" },
-  { id: "booking", name: "Appointment Booking & Reminders" },
-  { id: "dashboard", name: "Business Dashboard" },
-  { id: "voice", name: "AI Voice Agent Setup" },
-  { id: "other", name: "Other service not listed" },
-];
+// The nine services, grouped by pillar, plus "Not sure yet". Their names go into the quote
+// emails as they appear here. The save-service-request function keeps up to 6 per request.
+const NOT_SURE = { id: "not-sure", name: "Not sure yet / something else" };
+const groups = pillars.map((pillar) => ({
+  name: pillar.name,
+  services: pillar.services.map((slug) => ({ id: slug, name: serviceBySlug(slug)?.name ?? slug })),
+}));
+const services = [...groups.flatMap((group) => group.services), NOT_SURE];
+const MAX_SERVICES = 6;
 
 type SubmissionState = "ready" | "submitting" | "success" | "error";
 
@@ -33,6 +35,7 @@ export default function InstantQuotePage() {
     setState("ready");
     setMessage("");
     setSelected((current) => {
+      if (!current.includes(id) && current.length >= MAX_SERVICES) return current;
       const next = current.includes(id) ? current.filter((item) => item !== id) : [...current, id];
       setActiveIndex((index) => Math.min(index, Math.max(next.length - 1, 0)));
       return next;
@@ -90,15 +93,25 @@ export default function InstantQuotePage() {
             <div aria-hidden="true" style={{ position: "absolute", left: "-10000px", width: 1, height: 1, overflow: "hidden" }}><label htmlFor="quote-website">Website<input id="quote-website" name={HONEYPOT_FIELD} type="text" tabIndex={-1} autoComplete="off" /></label></div>
           </div>
 
-          <div className="quote-step service-step"><span>02</span><div><h2>Select the support you may need</h2><p>Not sure? Choose “Automation Discovery &amp; Workflow Plan” or book a free call first.</p></div></div>
-          <div className="quote-services">
-            {services.map((service) => (
-              <label className={selected.includes(service.id) ? "selected" : ""} key={service.id}>
-                <input type="checkbox" checked={selected.includes(service.id)} onChange={() => toggle(service.id)} />
-                <span><strong>{service.name}</strong></span>
-              </label>
-            ))}
-          </div>
+          <div className="quote-step service-step"><span>02</span><div><h2>Select the support you may need</h2><p>Choose up to {MAX_SERVICES}. Not sure which fits? Choose “{NOT_SURE.name}” or book a free call first.</p></div></div>
+          {[...groups, { name: "Something else", services: [NOT_SURE] }].map((group) => (
+            <fieldset className="quote-service-group" key={group.name}>
+              <legend>{group.name}</legend>
+              <div className="quote-services">
+                {group.services.map((service) => {
+                  const isOn = selected.includes(service.id);
+                  const full = !isOn && selected.length >= MAX_SERVICES;
+                  return (
+                    <label className={`${isOn ? "selected" : ""}${full ? " is-full" : ""}`} key={service.id}>
+                      <input type="checkbox" checked={isOn} disabled={full} onChange={() => toggle(service.id)} />
+                      <span><strong>{service.name}</strong></span>
+                    </label>
+                  );
+                })}
+              </div>
+            </fieldset>
+          ))}
+          {selected.length >= MAX_SERVICES && <p className="quote-limit" role="status">You have chosen {MAX_SERVICES} services, the most one request can hold. Untick one to choose another.</p>}
         </div>
 
         <aside className="service-details-panel" aria-live="polite">
