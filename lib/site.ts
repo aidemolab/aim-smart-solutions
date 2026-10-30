@@ -12,7 +12,7 @@ export const BOOKING_CTA = {
   href: "/book-appointment/",
 } as const;
 
-export type PillarId = "win-more-customers" | "save-time" | "decide-better";
+export type PillarId = "win-more-customers" | "save-time" | "decide-better" | "train-your-team";
 
 export type Pillar = {
   id: PillarId;
@@ -44,9 +44,17 @@ export const pillars: Pillar[] = [
     id: "decide-better",
     name: "Decide Better",
     promise: "Turn your data into clear decisions",
-    intro: "Bring scattered figures into one clear view, build your team's confidence with AI and data, and choose the technology that is worth your investment.",
-    problems: ["Figures spread across spreadsheets and systems", "A team unsure how to use AI well", "Not knowing where AI would genuinely help", "Training that does not fit how your team works"],
-    services: ["data-analytics", "training", "course-design", "ai-consultancy"],
+    intro: "Bring scattered figures into one clear view and choose the technology that is worth your investment.",
+    problems: ["Figures spread across spreadsheets and systems", "Not knowing where AI would genuinely help"],
+    services: ["data-analytics", "ai-consultancy"],
+  },
+  {
+    id: "train-your-team",
+    name: "Train Your Team",
+    promise: "Help your team use AI with confidence",
+    intro: "Build your team's confidence with AI and data, with training and courses designed around how your team works.",
+    problems: ["A team unsure how to use AI well", "Training that does not fit how your team works"],
+    services: ["training", "course-design"],
   },
 ];
 

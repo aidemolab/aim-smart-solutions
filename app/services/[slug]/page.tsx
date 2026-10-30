@@ -1,24 +1,38 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { pillars } from "@/lib/site";
+import { pillars, type Pillar } from "@/lib/site";
 import { basePath } from "@/lib/base-path";
 import { demoById, PHARMA_VIDEO, VOICE_AGENTS_VIDEO, videoExamples } from "@/lib/demos";
 import { services, serviceBySlug, type Service } from "../data";
-import { BookingButton, CtaBand, EnquiryJourney } from "../../components/Blocks";
+import { BookingButton, CostOfWaiting, CtaBand, EnquiryJourney, ProofJourneys, StartHere } from "../../components/Blocks";
 import DemoCard from "../../components/DemoCard";
 import OpportunityScore from "../../components/demos/OpportunityScore";
 import SkillsTaster from "../../components/demos/SkillsTaster";
 import ContentGenerator from "../../components/demos/ContentGenerator";
+import PillarPage from "../PillarPage";
 
 type Params = { params: Promise<{ slug: string }> };
 
 export function generateStaticParams() {
-  return services.map((service) => ({ slug: service.slug }));
+  return [...pillars.map((pillar) => ({ slug: pillar.id })), ...services.map((service) => ({ slug: service.slug }))];
 }
 
+const pillarBySlug = (slug: string): Pillar | undefined => pillars.find((pillar) => pillar.id === slug);
+
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
-  const service = serviceBySlug((await params).slug);
+  const slug = (await params).slug;
+  const pillar = pillarBySlug(slug);
+  if (pillar) {
+    const description = `${pillar.promise}. ${pillar.intro}`;
+    return {
+      title: `${pillar.name}: ${pillar.promise}`,
+      alternates: { canonical: `/services/${pillar.id}/` },
+      description,
+      openGraph: { title: `${pillar.name} | AIM Smart Solutions`, description, images: [{ url: "/og-v2.png", width: 1200, height: 630, alt: "AIM Smart Solutions" }] },
+    };
+  }
+  const service = serviceBySlug(slug);
   if (!service) return {};
   return {
     title: service.title,
@@ -76,7 +90,10 @@ function TryDemoButton({ service }: { service: Service }) {
 }
 
 export default async function ServicePage({ params }: Params) {
-  const service = serviceBySlug((await params).slug);
+  const slug = (await params).slug;
+  const pillarPage = pillarBySlug(slug);
+  if (pillarPage) return <PillarPage pillar={pillarPage} />;
+  const service = serviceBySlug(slug);
   if (!service) notFound();
   const pillar = pillars.find((item) => item.id === service.pillar)!;
   const siblings = pillar.services.filter((slug) => slug !== service.slug).map(serviceBySlug).filter((item) => item !== undefined);
@@ -85,6 +102,17 @@ export default async function ServicePage({ params }: Params) {
   const index = ordered.findIndex((item) => item.slug === service.slug);
   const prev = ordered[(index - 1 + ordered.length) % ordered.length];
   const next = ordered[(index + 1) % ordered.length];
+  // AI Voice Agents tells one story: pain → explanation → offer → proof → book a call.
+  const story = service.slug === "ai-voice-agents";
+  const voiceVideo = (
+    <figure className="demo-video">
+      <h3>Watch the 1-minute explainer</h3>
+      <video controls preload="none" playsInline poster={`${basePath}/assets/videos/${VOICE_AGENTS_VIDEO}-poster.jpg`} aria-label="Narrated 1-minute explainer video of AI Voice Agents answering calls and calling new leads, with captions">
+        <source src={`${basePath}/assets/videos/${VOICE_AGENTS_VIDEO}.mp4`} type="video/mp4" />
+      </video>
+    </figure>
+  );
+  const ctaBand = <CtaBand title={`Could ${service.name} help your business?`} body="Book a free AI Opportunity Call. We will look at where it fits and whether it is the right first step." />;
 
   return (
     <main id="main" className="services-main">
@@ -92,8 +120,7 @@ export default async function ServicePage({ params }: Params) {
         <nav aria-label="Breadcrumb" className="breadcrumbs">
           <ol>
             <li><Link href="/">Home</Link></li>
-            <li><Link href="/services/">Services</Link></li>
-            <li><Link href={`/services/#${pillar.id}`}>{pillar.name}</Link></li>
+            <li><Link href={`/services/${pillar.id}/`}>{pillar.name}</Link></li>
             <li aria-current="page">{service.name}</li>
           </ol>
         </nav>
@@ -101,9 +128,8 @@ export default async function ServicePage({ params }: Params) {
           "@context": "https://schema.org", "@type": "BreadcrumbList",
           itemListElement: [
             { "@type": "ListItem", position: 1, name: "Home", item: "https://aimsmartsolutions.tech/" },
-            { "@type": "ListItem", position: 2, name: "Services", item: "https://aimsmartsolutions.tech/services/" },
-            { "@type": "ListItem", position: 3, name: pillar.name, item: `https://aimsmartsolutions.tech/services/#${pillar.id}` },
-            { "@type": "ListItem", position: 4, name: service.name, item: `https://aimsmartsolutions.tech/services/${service.slug}/` },
+            { "@type": "ListItem", position: 2, name: pillar.name, item: `https://aimsmartsolutions.tech/services/${pillar.id}/` },
+            { "@type": "ListItem", position: 3, name: service.name, item: `https://aimsmartsolutions.tech/services/${service.slug}/` },
           ],
         }) }} />
         <h1>{service.title}</h1>
@@ -114,6 +140,8 @@ export default async function ServicePage({ params }: Params) {
           <TryDemoButton service={service} />
         </div>
       </section>
+
+      {story && <CostOfWaiting />}
 
       <section className="service-explain">
         <div>
@@ -144,7 +172,12 @@ export default async function ServicePage({ params }: Params) {
         </aside>
       </section>
 
-      <section className="service-demo" id="demo" aria-labelledby="demo-title">
+      {story && <div className="section start-here-wrap service-offer"><StartHere /></div>}
+
+      {story && <ProofJourneys>{voiceVideo}</ProofJourneys>}
+      {story && ctaBand}
+
+      {!story && <section className="service-demo" id="demo" aria-labelledby="demo-title">
         <p className="kicker">Try it</p>
         <h2 id="demo-title">See it <em>working.</em></h2>
         {service.slug === "smart-apps" && (
@@ -152,14 +185,6 @@ export default async function ServicePage({ params }: Params) {
             <h3>Watch the 1-minute demo</h3>
             <video controls preload="none" playsInline poster={`${basePath}/assets/videos/${PHARMA_VIDEO}-poster.jpg`} aria-label="Narrated 1-minute video demo of the pharmaceutical market intelligence app, with captions">
               <source src={`${basePath}/assets/videos/${PHARMA_VIDEO}.mp4`} type="video/mp4" />
-            </video>
-          </figure>
-        )}
-        {service.slug === "ai-voice-agents" && (
-          <figure className="demo-video">
-            <h3>Watch the 1-minute explainer</h3>
-            <video controls preload="none" playsInline poster={`${basePath}/assets/videos/${VOICE_AGENTS_VIDEO}-poster.jpg`} aria-label="Narrated 1-minute explainer video of AI Voice Agents answering calls and calling new leads, with captions">
-              <source src={`${basePath}/assets/videos/${VOICE_AGENTS_VIDEO}.mp4`} type="video/mp4" />
             </video>
           </figure>
         )}
@@ -183,7 +208,7 @@ export default async function ServicePage({ params }: Params) {
           </>
         )}
         {service.slug !== "video-production" && <ServiceDemo service={service} />}
-      </section>
+      </section>}
 
       {siblings.length > 0 && (
         <section className="related-services" aria-labelledby="related-title">
@@ -198,7 +223,7 @@ export default async function ServicePage({ params }: Params) {
         <Link className="pager-link is-next" href={`/services/${next.slug}/`} rel="next"><span>Next service →</span><strong>{next.name}</strong></Link>
       </nav>
 
-      <CtaBand title={`Could ${service.name} help your business?`} body="Book a free AI Opportunity Call. We will look at where it fits and whether it is the right first step." />
+      {!story && ctaBand}
     </main>
   );
 }

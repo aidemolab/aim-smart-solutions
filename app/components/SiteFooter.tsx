@@ -15,7 +15,7 @@ export default function SiteFooter() {
       </div>
       {pillars.map((pillar) => (
         <nav key={pillar.id} aria-label={pillar.name}>
-          <h2><Link href={`/services/#${pillar.id}`}>{pillar.name}</Link></h2>
+          <h2><Link href={`/services/${pillar.id}/`}>{pillar.name}</Link></h2>
           {pillar.services.map((slug) => <Link key={slug} href={`/services/${slug}/`}>{serviceBySlug(slug)?.name}</Link>)}
         </nav>
       ))}
