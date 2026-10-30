@@ -7,6 +7,7 @@ import { withBase } from "@/lib/base-path";
 import { BOOKING_CTA, pillars } from "@/lib/site";
 import { appDemos } from "@/lib/demos";
 import { serviceBySlug } from "../services/data";
+import { CONTACT_SECTION } from "./ContactCrumbs";
 
 const links = [
   { href: "/about/", label: "About AIM" },
@@ -42,7 +43,9 @@ function DemosMenu({ onNavigate }: { onNavigate?: () => void }) {
 export default function SiteHeader() {
   const pathname = usePathname() ?? "/";
   const [open, setOpen] = useState(false);
-  const isCurrent = (href: string) => pathname === href || pathname === href.replace(/\/$/, "");
+  // Booking, enquiry and quote pages belong to the Contact section, so Contact stays highlighted there.
+  const isCurrent = (href: string) => pathname === href || pathname === href.replace(/\/$/, "")
+    || (href === "/contact/" && CONTACT_SECTION.some((path) => pathname.startsWith(path)));
   const close = () => setOpen(false);
 
   // Close the mobile menu with Escape.

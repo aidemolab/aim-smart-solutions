@@ -1,5 +1,6 @@
 "use client";
 
+import ContactCrumbs from "../components/ContactCrumbs";
 import { FormEvent, useMemo, useState } from "react";
 import PrivacyNote from "../components/PrivacyNote";
 import { callFunction, HONEYPOT_FIELD, toUkE164 } from "@/lib/supabase-functions";
@@ -73,6 +74,7 @@ export default function InstantQuotePage() {
   return (
     <main id="main">
       <section className="quote-hero">
+        <ContactCrumbs name="Request a quote" path="/instant-quote/" />
         <p className="kicker"><DemoBadge kind="Live" /> Tailored proposal request</p>
         <h1>Tell us the outcome your business <em>needs.</em></h1>
         <p>If you already have a defined requirement, select the relevant support and describe the result you want. We will review it and contact you within 24 hours.</p>

@@ -2,6 +2,8 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import PrivacyNote from "../components/PrivacyNote";
+import ContactCrumbs from "../components/ContactCrumbs";
+import { BOOKING_CTA } from "@/lib/site";
 import { callFunction, HONEYPOT_FIELD } from "@/lib/supabase-functions";
 import "./booking.css";
 
@@ -60,10 +62,11 @@ export default function BookAppointmentPage() {
     <main id="main">
       <section className="section booking-page">
         <div className="booking-copy">
+          <ContactCrumbs name={BOOKING_CTA.label} path="/book-appointment/" />
           <p className="kicker">Free AI Opportunity Call</p>
           <h1>Find the first improvement <em>worth making.</em></h1>
           <p>Choose an available consultation. We will discuss one costly bottleneck, connect it to a business outcome and identify a practical next step. There is no fee and no obligation.</p>
-          <ul className="booking-value"><li>✓ Bring one process that is losing time, customers or clarity</li><li>✓ Talk directly with Alaa—not a sales team</li><li>✓ Leave with a focused next step, even if we do not work together</li></ul>
+          <ul className="booking-value"><li>✓ Bring one process that is losing time, customers or clarity</li><li>✓ Talk directly with the person who builds your solution, not a sales team</li><li>✓ Leave with a focused next step, even if we do not work together</li></ul>
         </div>
 
         <form className="contact-form booking-form" onSubmit={submitBooking}>

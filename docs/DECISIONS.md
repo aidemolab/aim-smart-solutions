@@ -174,3 +174,11 @@ than rewriting history; if a decision changes, add a new entry that replaces the
   (`service.demos`). The three journeys appear under both AI Voice Agents and Business Process
   Automation because both pages use them. Video Production shows its video examples; Course
   Design & Build points to the AI Skills Taster under AI & Data Training instead of repeating it.
+
+## Contact section (2026-10-30)
+- `/book-appointment/`, `/business-enquiry/` and `/instant-quote/` belong to the Contact section
+  but keep their URLs (the booking link is shared on LinkedIn), so no redirects are needed.
+- Each shows "← Back to Contact", the breadcrumb Home › Contact › page, and matching BreadcrumbList
+  JSON-LD (`app/components/ContactCrumbs.tsx`). "Contact" is highlighted in the desktop and mobile
+  menus on all four Contact pages.
+- The booking page says "Talk directly with the person who builds your solution, not a sales team".

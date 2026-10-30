@@ -87,6 +87,14 @@ test("every service is linked from its pillar page and the Services menu", () =>
     assert.ok(page(`services/${pillar}`).includes(`class="pillar-service-card" ${href}`) || page(`services/${pillar}`).includes(href), `${route} is not linked from /services/${pillar}/`);
     assert.match(page(route), /"@type":"BreadcrumbList"/, `${route} has no BreadcrumbList JSON-LD`);
   }
+  // Contact section pages keep their URLs and show Home › Contact › page, a back link and JSON-LD.
+  for (const route of ["book-appointment", "business-enquiry", "instant-quote"]) {
+    const html = page(route);
+    const crumb = html.match(/class="breadcrumbs"[^]*?<\/nav>/)?.[0] ?? "";
+    assert.ok(crumb.includes(`href="${base}/contact/"`), `${route} breadcrumb does not go through Contact`);
+    assert.match(html, /class="back-to-contact"[^>]*>[^]*?Back to Contact/, `${route} has no Back to Contact link`);
+    assert.match(html, /"@type":"BreadcrumbList"[^<]*"name":"Contact"/, `${route} JSON-LD does not match the breadcrumb`);
+  }
   for (const id of pillarIds) {
     assert.match(page(`services/${id}`), /"@type":"BreadcrumbList"/, `${id} has no BreadcrumbList JSON-LD`);
     assert.ok(page("").includes(`href="${base}/services/${id}/"`), `homepage does not link to ${id}`);
