@@ -7,11 +7,12 @@ import { BOOKING_CTA } from "@/lib/site";
 import { callFunction, CONTACT_EMAIL, HONEYPOT_FIELD } from "@/lib/supabase-functions";
 import "./booking.css";
 
-type BookingState = "loading" | "ready" | "slotsError" | "submitting" | "success" | "error";
+type BookingState = "loading" | "slow" | "ready" | "slotsError" | "submitting" | "success" | "error";
 
-// The calendar can take several seconds on its first request after a quiet spell. After 8 seconds
-// the visitor sees this message and a "Try again" button; if the times arrive later they still appear.
-const SLOT_TIMEOUT_MS = 8000;
+// The calendar is kept warm (.github/workflows/warm-booking.yml), but if times take over 8 seconds
+// the page says they are still loading and offers the email address; they appear when they arrive.
+// Only a failed request shows the "couldn't load" message and a "Try again" button.
+const SLOW_AFTER_MS = 8000;
 const SLOTS_FAILED = `We couldn't load the available times. Please try again or email ${CONTACT_EMAIL}.`;
 
 const formatSlot = (slot: string) => new Intl.DateTimeFormat("en-GB", {
@@ -32,7 +33,7 @@ export default function BookAppointmentPage() {
 
   // State is only set once the request settles, never synchronously inside the effect.
   function showSlots(request: Promise<string[]>) {
-    const timer = window.setTimeout(() => { setState("slotsError"); setMessage(SLOTS_FAILED); }, SLOT_TIMEOUT_MS);
+    const timer = window.setTimeout(() => setState((current) => (current === "loading" ? "slow" : current)), SLOW_AFTER_MS);
     request.then(
       (loaded) => { window.clearTimeout(timer); setSlots(loaded); setState("ready"); setMessage(""); },
       () => { window.clearTimeout(timer); setState("slotsError"); setMessage(SLOTS_FAILED); },
@@ -90,6 +91,7 @@ export default function BookAppointmentPage() {
             <fieldset className="slot-field">
               <legend>Available appointment times</legend>
               {state === "loading" && <p className="slot-loading">Loading available times…</p>}
+              {state === "slow" && <div className="slot-slow" role="status"><p className="slot-loading">Still loading available times…</p><p className="slot-fallback">If they do not appear, email <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> and we will find a time with you.</p></div>}
               {state === "ready" && slots.length === 0 && <p className="slot-loading">No appointment times are currently available.</p>}
               <div className="slot-grid">{slots.map((slot) => <button key={slot} type="button" className={selectedSlot === slot ? "selected" : ""} onClick={() => setSelectedSlot(slot)}>{formatSlot(slot)}</button>)}</div>
             </fieldset>
