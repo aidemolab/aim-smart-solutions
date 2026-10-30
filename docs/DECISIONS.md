@@ -215,13 +215,16 @@ than rewriting history; if a decision changes, add a new entry that replaces the
   scrolls to the top after each page change except `#anchor` links and Back/Forward (so Back still
   returns to where the visitor was).
 
-## Live demos: video cards only (2026-10-30, replaces the earlier Live demos layout)
-- `/live-demos/` shows one card per demo video, grouped by service in pillar order: a title, one
-  short line and "Watch the demo video" (the site's pop-up player). No try buttons on this page;
-  under each service heading, "Go to [service] →" links to that service page's demo section, where
-  the interactive demos stay.
-- The enquiry, quote and booking pages are not shown as demos: they are AIM's real contact pages.
-- The mapping lives in `serviceVideos` (`lib/demos.ts`). Course Design & Build points to the AI
-  Skills Taster video under AI & Data Training. Cards that record a demo keep its badge;
-  explainers and examples have none.
-- The "Live demos" menu lists the nine services and jumps to each one's videos.
+## /services/ is the overview and video page; Live demos removed (2026-10-30)
+- Replaces the Live demos layouts above. `/services/` shows the four pillars in order (number,
+  title linking to the pillar page, tagline, pain lines), then each service: name, one-line
+  description, its demo video(s) as "Watch the demo video" buttons (pop-up player), and
+  "Explore [service] →". No try buttons, forms, contact pages or badges here: these are videos,
+  and each service page keeps its own badged, interactive demo. Course Design & Build points to the
+  AI Skills Taster video under AI & Data Training. Videos per service: `serviceVideos` in
+  `lib/demos.ts`.
+- The enquiry, quote and booking pages are AIM's real contact pages, not demos.
+- `/live-demos/` is only a redirect to `/services/` (instant in the browser, with a meta refresh
+  without JavaScript; old `#demos-<service>` anchors land on `#service-<service>`). It is not in the
+  sitemap, is marked noindex, and nothing links to it. "Live demos" is gone from the menus, footer
+  and 404 page; the hero's "Try a live demo" button goes to `/services/`.

@@ -29,19 +29,6 @@ function ServicesMenu({ onNavigate }: { onNavigate?: () => void }) {
   );
 }
 
-// Matches /live-demos/: one entry per service (in pillar order), jumping to its demo videos.
-// Plain links, so a jump between sections of /live-demos/ never stacks two #anchors.
-function DemosMenu({ onNavigate }: { onNavigate?: () => void }) {
-  return (
-    <div className="demos-menu">
-      {pillars.flatMap((pillar) => pillar.services).map((slug) => (
-        <a key={slug} href={withBase(`/live-demos/#demos-${slug}`)} onClick={onNavigate}>{serviceBySlug(slug)?.name}</a>
-      ))}
-      <Link className="demos-menu-all" href="/live-demos/" onClick={onNavigate}>All demos →</Link>
-    </div>
-  );
-}
-
 export default function SiteHeader() {
   const pathname = usePathname() ?? "/";
   const [open, setOpen] = useState(false);
@@ -72,10 +59,6 @@ export default function SiteHeader() {
           <Link href="/services/" aria-current={pathname.startsWith("/services") ? "page" : undefined} aria-haspopup="true">Services <span aria-hidden="true">▾</span></Link>
           <div className="nav-dropdown-panel"><ServicesMenu /></div>
         </div>
-        <div className="nav-dropdown">
-          <Link href="/live-demos/" aria-current={isCurrent("/live-demos/") ? "page" : undefined} aria-haspopup="true">Live demos <span aria-hidden="true">▾</span></Link>
-          <div className="nav-dropdown-panel"><DemosMenu /></div>
-        </div>
         {links.map((link) => <Link key={link.href} href={link.href} aria-current={isCurrent(link.href) ? "page" : undefined}>{link.label}</Link>)}
       </nav>
 
@@ -91,8 +74,6 @@ export default function SiteHeader() {
           <Link href="/" onClick={close} aria-current={isCurrent("/") ? "page" : undefined}>Home</Link>
           <Link href="/services/" onClick={close} aria-current={isCurrent("/services/") ? "page" : undefined}>All services</Link>
           <ServicesMenu onNavigate={close} />
-          <Link href="/live-demos/" onClick={close} aria-current={isCurrent("/live-demos/") ? "page" : undefined}>Live demos</Link>
-          <DemosMenu onNavigate={close} />
           {links.map((link) => <Link key={link.href} href={link.href} onClick={close} aria-current={isCurrent(link.href) ? "page" : undefined}>{link.label}</Link>)}
           {!onBooking && <Link className="button primary" href={BOOKING_CTA.href} onClick={close}>{BOOKING_CTA.label}</Link>}
         </nav>

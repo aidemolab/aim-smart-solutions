@@ -21,7 +21,6 @@ export default function SiteFooter() {
       ))}
       <nav aria-label="Company">
         <h2>AIM</h2>
-        <Link href="/live-demos/">Live AI Demos</Link>
         <Link href="/about/">About AIM</Link>
         <Link href="/contact/">Contact</Link>
         <Link href="/privacy/">Privacy policy</Link>

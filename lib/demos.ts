@@ -12,7 +12,7 @@ export type Demo = {
   badge: DemoBadgeKind;
   tryLabel: string;
   service: string; // slug of the service page that features it
-  pain?: string; // one-line problem the app solves (shown on /live-demos)
+  pain?: string; // one-line problem the app solves
   video?: string; // versioned file name in public/assets/videos (no extension), shown on the service page
   videoLabel?: string; // short name for a video link when a card has more than one
 };
@@ -149,9 +149,8 @@ export const appDemos = demos.filter((demo) => demo.external);
 
 export const demoById = (id: string) => demos.find((demo) => demo.id === id);
 
-// /live-demos/ shows one video card per demo, grouped by service. Each card has a title, one short
-// line and a "Watch the demo video" button (pop-up player). The interactive demos stay on the
-// service pages. Badges follow the demo they record; explainers and examples have none.
+// /services/ shows each service's demo video(s) as "Watch the demo video" buttons (pop-up player).
+// The interactive demos stay on the service pages.
 export type DemoVideoCard = { title: string; line: string; video: string; badge?: DemoBadgeKind };
 
 const demoVideo = (id: string, line: string): DemoVideoCard => {

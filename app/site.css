@@ -312,3 +312,13 @@ footer.site-footer{max-width:1440px;margin:0 auto;padding:56px 6vw 28px;display:
 .lab-service .demo-tile p{margin:0 0 18px;color:var(--ink-soft);font-size:15px;line-height:1.6}
 .lab-watch{margin-top:auto}.lab-watch .video-link{padding:11px 16px;border:1px solid var(--cobalt);border-radius:6px;color:var(--cobalt-dark);font-weight:800}.lab-watch .video-link:hover{background:#EFF6FF;text-decoration:none}
 .lab-shared{margin:14px 0 14px}.lab-shared-watch{margin:0 0 36px}
+
+/* /services/: service cards with demo videos */
+.service-video-card{display:flex;flex-direction:column;scroll-margin-top:100px}
+.service-video-card>p{margin:0 0 14px;color:var(--ink-soft);font-size:15px;line-height:1.6}
+.service-videos{margin:6px 0 18px;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.service-videos li{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.service-video-name{color:var(--slate);font-size:13px;font-weight:700}
+.service-videos .video-link{padding:10px 16px;border:1px solid var(--cobalt);border-radius:6px;color:var(--cobalt-dark);font-weight:800}.service-videos .video-link:hover{background:#EFF6FF;text-decoration:none}
+.service-video-shared{margin:6px 0 18px;color:var(--ink-soft);font-size:15px;line-height:1.6}.service-video-shared a{color:var(--cobalt-dark);font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.service-video-card a.service-explore{margin-top:auto}
