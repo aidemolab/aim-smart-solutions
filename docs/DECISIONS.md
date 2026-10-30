@@ -204,3 +204,13 @@ than rewriting history; if a decision changes, add a new entry that replaces the
   fails if it returns.
 - Share image: every page uses `og-v3.png` (new tagline). `og-v2.png` stays in `public/` so old
   shared links keep their image.
+
+## New pages open at the top (2026-10-30)
+- Clicking through to a pillar, service or Contact page opened it scrolled down, with the breadcrumb
+  under the sticky header. Two causes: `html{scroll-behavior:smooth}` without Next.js's
+  `data-scroll-behavior="smooth"` opt-in (Next's scroll-to-top animated, then it scrolled the new
+  content to the window top, under the header), and Next keeping the old position after a small
+  scroll.
+- Fix: `data-scroll-behavior="smooth"` on `<html>`, and `app/components/ScrollToTop.tsx`, which
+  scrolls to the top after each page change except `#anchor` links and Back/Forward (so Back still
+  returns to where the visitor was).
