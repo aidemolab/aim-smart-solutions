@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   alternates: { canonical: "/business-enquiry/" },
   title: "Send an Enquiry",
-  description: "Send AIM Smart Solutions an enquiry and get an instant email confirmation. A live demo of automated enquiry handling for service businesses.",
+  description: "Send AIM Smart Solutions an enquiry and get an instant email confirmation. We reply within 24 hours.",
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

@@ -21,7 +21,7 @@ const faqs = [
   ["Will this replace my existing systems?", "Not necessarily. Many improvements can connect or simplify the tools you already use. The smallest solution that does the job is considered first."],
   ["Is AI suitable for every problem?", "No. Sometimes a clearer process, a simple automation or a dashboard is the better answer. You will not be sold AI for its own sake."],
   ["Will the first call cost anything?", "No. The AI Opportunity Call is free and carries no obligation. You will leave with a clearer view of the first opportunity worth exploring."],
-  ["Can you work with a small team?", "Yes. AIM is designed for small and growing service businesses that need hands-on support without employing an in-house data, automation or AI specialist."],
+  ["Can you work with a small team?", "Yes. AIM is designed for solo traders and small businesses that need hands-on support without employing an in-house data, automation or AI specialist."],
 ];
 
 export default function Contact() {

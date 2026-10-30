@@ -228,3 +228,33 @@ than rewriting history; if a decision changes, add a new entry that replaces the
   without JavaScript; old `#demos-<service>` anchors land on `#service-<service>`). It is not in the
   sitemap, is marked noindex, and nothing links to it. "Live demos" is gone from the menus, footer
   and 404 page; the hero's "Try a live demo" button goes to `/services/`.
+
+## Site audit: one job per service, demos and videos (2026-10-30)
+- Contact forms (enquiry, quote, booking) are never shown as demos: the AI Voice Agents journey
+  cards and the Business Process Automation enquiry journey are gone, and the enquiry and quote
+  pages no longer call themselves demonstrations.
+- One job per service: Voice Agents = calls (its cost-of-waiting points are all about calls); Sales
+  & Marketing = getting found (content, keywords, social posts); Business Process Automation = admin
+  workflows; Smart Apps = tools that save your team time; Data & Dashboards = your numbers;
+  Consultancy = where AI helps; Training and Course Design = skills. Win More Customers and Save Time
+  pain lines follow these jobs.
+- Demos and videos per service live in `serviceVideos` (`lib/demos.ts`), used by both /services/ and
+  the service pages, so they always match: Voice Agents explainer; Content & Keyword Generator (video
+  + built-in tool); Video Production showreel; BPA demo video; Pharmaceutical app (video + Try it);
+  Data & Dashboards: Supplier Risk, Sales Lead Scoring and Property Investment (video + Try it each);
+  Opportunity Score (video + built-in tool); Skills Taster (Course Design points to it). Sales Lead
+  Scoring and Property Investment moved to Data & Dashboards.
+- Video Production's showreel (`showreel-v1`, 38 s, silent, 16:9 and `showreel-v1-1x1` 1:1) is cut
+  from the Voice Agents explainer and the four demo apps, with AIM title and end cards. The other
+  videos were left out because they show the old site on screen.
+- Every service page: hero → how it helps → benefits → use cases and what's included → demo →
+  "Could [service] help?" → "Also in [pillar]" → previous/next. The hero button always scrolls to
+  #demo ("Try the live demo", or "Watch the demo" on video-only pages). AI Voice Agents keeps its
+  cost-of-waiting opener and the AI Receptionist offer before the demo.
+- Positioning: "solo traders and small businesses" replaces "UK service businesses", "SMEs" and
+  "small and growing service businesses".
+- The shared demo bar (`public/assets/aim-demo-bar.js`) says "← Back to AIM Smart Solutions" and
+  goes to each app's service page; "All services and demos" goes to /services/.
+- Homepage only: the header "Book a Free AI Opportunity Call" fades out while the hero's own booking
+  button is on screen and returns once the visitor scrolls past it (hidden from clicks and
+  keyboard while faded). The hero's secondary button is "Watch our demos →" (/services/).

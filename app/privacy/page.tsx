@@ -4,7 +4,7 @@ import { CONTACT_EMAIL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "How AIM Smart Solutions collects, uses and protects personal data under UK GDPR, including enquiries, quotes, bookings, AI call-backs and the live demos.",
+  description: "How AIM Smart Solutions collects, uses and protects personal data under UK GDPR, including enquiries, quotes, bookings, AI call-backs and the interactive demos.",
   alternates: { canonical: "/privacy/" },
 };
 
@@ -43,7 +43,7 @@ export default function Privacy() {
           <li><strong>Website hosting:</strong> GitHub Pages keeps standard server logs (such as IP address and browser type) for security.</li>
         </ul>
 
-        <h2>3. The live demos</h2>
+        <h2>3. The interactive demos</h2>
         <ul>
           <li><strong>Supplier risk, sales lead scoring and property apps:</strong> the sample data is fictional. Anything you add is saved against a random identifier stored in your browser (not your name) and is <strong>deleted automatically after 24 hours</strong>. Please do not enter personal or confidential information.</li>
           <li><strong>AI Content &amp; Keyword Generator:</strong> what you type is sent to an AI service through our server to create the content. We <strong>do not store your inputs or the results</strong>. We keep only a hashed IP counter for the daily limit, deleted after a few days.</li>

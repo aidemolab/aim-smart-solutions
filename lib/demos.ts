@@ -24,14 +24,6 @@ export const PHARMA_VIDEO = "pharma-demo-v5";
 // top of the AI Voice Agents demo section and in that card's pop-up on /services/.
 export const VOICE_AGENTS_VIDEO = "voice-agents-v1";
 
-// Existing AIM videos shown as examples on the Video Production page and its /services/ pop-ups.
-// The voice agents video is an animated explainer; the others are narrated demo walkthroughs.
-export const videoExamples = [
-  { video: VOICE_AGENTS_VIDEO, title: "AI Voice Agents explainer", kind: "Animated explainer", summary: "An animated one-minute explainer of how a voice agent answers calls and follows up new leads." },
-  { video: "automation-demo-v1", title: "Business Process Automation demo", kind: "Demo walkthrough", summary: "A narrated walkthrough of an enquiry arriving, the customer reply and the owner alert." },
-  { video: PHARMA_VIDEO, title: "Pharmaceutical market intelligence app demo", kind: "Demo walkthrough", summary: "A narrated tour of a purpose-built decision tool, using illustrative data." },
-];
-
 export const demos: Demo[] = [
   {
     id: "content-generator",
@@ -115,7 +107,7 @@ export const demos: Demo[] = [
     video: "sales-leads-v2",
     videoLabel: "lead scoring dashboard",
     tryLabel: "Try it",
-    service: "sales-marketing",
+    service: "data-analytics",
   },
   {
     id: "property-investment",
@@ -128,7 +120,7 @@ export const demos: Demo[] = [
     video: "property-v2",
     videoLabel: "property dashboard",
     tryLabel: "Try it",
-    service: "smart-apps",
+    service: "data-analytics",
   },
   {
     id: "pharma-market-intelligence",
@@ -145,32 +137,33 @@ export const demos: Demo[] = [
 ];
 
 // The standalone demo apps (each opens in the same tab and carries the shared demo bar).
-export const appDemos = demos.filter((demo) => demo.external);
 
 export const demoById = (id: string) => demos.find((demo) => demo.id === id);
 
-// /services/ shows each service's demo video(s) as "Watch the demo video" buttons (pop-up player).
-// The interactive demos stay on the service pages.
-export type DemoVideoCard = { title: string; line: string; video: string; badge?: DemoBadgeKind };
+// The demo video(s) for each service: the one list both /services/ and the service pages use,
+// so they always show the same videos. `demoId` ties a video to an interactive demo on the
+// service page, where it is shown inside that demo's card next to "Try it".
+export type DemoVideoCard = { title: string; line: string; video: string; demoId?: string };
+
+// Video Production's 30-45 second showreel, cut from AIM's own videos (no voiceover).
+export const SHOWREEL_VIDEO = "showreel-v1";
 
 const demoVideo = (id: string, line: string): DemoVideoCard => {
   const demo = demos.find((item) => item.id === id)!;
-  return { title: demo.title, line, video: id === "pharma-market-intelligence" ? PHARMA_VIDEO : demo.video!, badge: demo.badge };
+  return { title: demo.title, line, video: id === "pharma-market-intelligence" ? PHARMA_VIDEO : demo.video!, demoId: id };
 };
 
 export const serviceVideos: Record<string, DemoVideoCard[]> = {
-  "ai-voice-agents": [{ title: "AI Voice Agents explainer", line: "How a voice agent answers calls and follows up new leads.", video: VOICE_AGENTS_VIDEO }],
-  "sales-marketing": [
-    demoVideo("content-generator", "Turn one idea into social posts, a content plan and local keyword ideas."),
-    demoVideo("sales-lead-scoring", "Know which leads to call first instead of guessing."),
-  ],
-  "video-production": videoExamples.map((item) => ({ title: item.title, line: item.summary, video: item.video })),
+  "ai-voice-agents": [{ title: "AI Voice Agents explainer", line: "How a voice agent answers calls and calls new leads back.", video: VOICE_AGENTS_VIDEO }],
+  "sales-marketing": [demoVideo("content-generator", "Turn one idea into social posts, a content plan and local keyword ideas.")],
+  "video-production": [{ title: "AIM video showreel", line: "A short reel of explainer and demo videos made for AIM.", video: SHOWREEL_VIDEO }],
   "business-automation": [{ title: "Business Process Automation demo", line: "An enquiry arrives, the customer gets an instant reply and the owner gets an alert.", video: "automation-demo-v1" }],
-  "smart-apps": [
-    demoVideo("pharma-market-intelligence", "Decide which product to pilot, and at what price, from field survey data."),
+  "smart-apps": [demoVideo("pharma-market-intelligence", "Decide which product to pilot, and at what price, from field survey data.")],
+  "data-analytics": [
+    demoVideo("supplier-risk", "Spot risky suppliers before a delay or price rise hits your business."),
+    demoVideo("sales-lead-scoring", "Know which leads to call first instead of guessing."),
     demoVideo("property-investment", "Check whether a property's numbers stack up before you commit."),
   ],
-  "data-analytics": [demoVideo("supplier-risk", "Spot risky suppliers before a delay or price rise hits your business.")],
   "ai-consultancy": [demoVideo("ai-opportunity-score", "Answer seven quick questions and get a score with your top recommendations.")],
   training: [demoVideo("ai-skills-taster", "A short lesson on writing better AI prompts, with a quick quiz.")],
 };

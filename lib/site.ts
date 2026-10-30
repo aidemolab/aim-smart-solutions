@@ -28,8 +28,8 @@ export const pillars: Pillar[] = [
     id: "win-more-customers",
     name: "Win More Customers",
     promise: "Never miss a lead or a call again",
-    intro: "Respond to every enquiry and call promptly, capture the right details first time and keep promising opportunities moving.",
-    problems: ["Calls go unanswered while you are busy", "Enquiries wait in an inbox", "Follow-up depends on someone remembering", "Customers cannot see what you actually do"],
+    intro: "Answer every call, get found by the customers searching for you, and show them clearly what you do.",
+    problems: ["Calls go unanswered while you are busy", "Customers cannot find you online", "Social posts go quiet during busy weeks", "Customers cannot see what you actually do"],
     services: ["ai-voice-agents", "sales-marketing", "video-production"],
   },
   {
@@ -37,7 +37,7 @@ export const pillars: Pillar[] = [
     name: "Save Time",
     promise: "Hand the repetitive admin to AI",
     intro: "Automate the quoting, booking, reminders and routine steps your team repeats every day, and give people tools that make complex work simpler.",
-    problems: ["The same emails and forms, every day", "Quotes held up by missing details", "Diary chasing and manual reminders"],
+    problems: ["The same emails and forms, every day", "Quotes held up by missing details", "Diary chasing and manual reminders", "Time lost looking things up or asking the one person who knows"],
     services: ["business-automation", "smart-apps"],
   },
   {

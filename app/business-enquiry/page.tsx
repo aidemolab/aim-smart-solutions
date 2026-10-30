@@ -5,7 +5,6 @@ import { FormEvent, useState } from "react";
 import PrivacyNote from "../components/PrivacyNote";
 import { callFunction, HONEYPOT_FIELD, NETWORK_ERROR_MESSAGE, toUkE164 } from "@/lib/supabase-functions";
 import Turnstile from "../components/Turnstile";
-import DemoBadge from "../components/DemoBadge";
 import { CALL_CONSENT_TEXT, CALL_CONSENT_VERSION } from "@/lib/consent";
 
 type SubmissionState = "ready" | "submitting" | "success" | "error";
@@ -90,11 +89,11 @@ export default function BusinessEnquiryPage() {
       <section className="section enquiry-page" aria-labelledby="enquiry-title">
         <div className="enquiry-copy">
           <ContactCrumbs name="Send an enquiry" path="/business-enquiry/" />
-          <p className="kicker"><DemoBadge kind="Live" /> Live working demonstration</p>
-          <h1 id="enquiry-title">Experience a faster <em>enquiry response.</em></h1>
+          <p className="kicker">Send an enquiry</p>
+          <h1 id="enquiry-title">Tell us what <em>you need.</em></h1>
           <p>{callsEnabled
-            ? "This working demonstration shows how a business can capture an enquiry, confirm it immediately and offer an optional AI voice response for urgent requests."
-            : "This working demonstration shows how a business can capture an enquiry and confirm it immediately by email."}</p>
+            ? "Send your enquiry and you will receive an instant email confirmation. If it is urgent, our AI assistant can call you back."
+            : "Send your enquiry and you will receive an instant email confirmation and a reply within 24 hours."}</p>
           <ol className="demo-flow" aria-label="What happens next">
             <li><span>1</span>Tell us what you need</li>
             <li><span>2</span>Submit your enquiry</li>
