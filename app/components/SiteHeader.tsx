@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { withBase } from "@/lib/base-path";
 import { BOOKING_CTA, pillars } from "@/lib/site";
-import { appDemos } from "@/lib/demos";
 import { serviceBySlug } from "../services/data";
 import { CONTACT_SECTION } from "./ContactCrumbs";
 
@@ -26,16 +25,6 @@ function ServicesMenu({ onNavigate }: { onNavigate?: () => void }) {
           ))}
         </div>
       ))}
-    </div>
-  );
-}
-
-// The standalone demo apps open in the same tab so the browser Back button returns here.
-function DemosMenu({ onNavigate }: { onNavigate?: () => void }) {
-  return (
-    <div className="demos-menu">
-      {appDemos.map((demo) => <a key={demo.id} href={demo.href} onClick={onNavigate}>{demo.title}</a>)}
-      <Link className="demos-menu-all" href="/live-demos/" onClick={onNavigate}>All demos →</Link>
     </div>
   );
 }
@@ -70,10 +59,6 @@ export default function SiteHeader() {
           <Link href="/services/" aria-current={pathname.startsWith("/services") ? "page" : undefined} aria-haspopup="true">Services <span aria-hidden="true">▾</span></Link>
           <div className="nav-dropdown-panel"><ServicesMenu /></div>
         </div>
-        <div className="nav-dropdown">
-          <Link href="/live-demos/" aria-current={isCurrent("/live-demos/") ? "page" : undefined} aria-haspopup="true">Live demos <span aria-hidden="true">▾</span></Link>
-          <div className="nav-dropdown-panel"><DemosMenu /></div>
-        </div>
         {links.map((link) => <Link key={link.href} href={link.href} aria-current={isCurrent(link.href) ? "page" : undefined}>{link.label}</Link>)}
       </nav>
 
@@ -89,8 +74,6 @@ export default function SiteHeader() {
           <Link href="/" onClick={close} aria-current={isCurrent("/") ? "page" : undefined}>Home</Link>
           <Link href="/services/" onClick={close} aria-current={isCurrent("/services/") ? "page" : undefined}>All services</Link>
           <ServicesMenu onNavigate={close} />
-          <Link href="/live-demos/" onClick={close} aria-current={isCurrent("/live-demos/") ? "page" : undefined}>Live demos</Link>
-          <DemosMenu onNavigate={close} />
           {links.map((link) => <Link key={link.href} href={link.href} onClick={close} aria-current={isCurrent(link.href) ? "page" : undefined}>{link.label}</Link>)}
           {!onBooking && <Link className="button primary" href={BOOKING_CTA.href} onClick={close}>{BOOKING_CTA.label}</Link>}
         </nav>

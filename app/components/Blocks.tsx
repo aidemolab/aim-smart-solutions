@@ -73,7 +73,7 @@ export function CostOfWaiting() {
 }
 
 // The three live customer journeys (the proof). Shown on the AI Voice Agents page and, by demo id,
-// on Business Process Automation and /live-demos/.
+// on Business Process Automation.
 export const journeys = [
   {
     id: "enquiry-journey",

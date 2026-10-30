@@ -104,7 +104,8 @@ test("every service is linked from its pillar page and the Services menu", () =>
 
 test("sitemap, robots.txt and a custom 404 page exist", () => {
   const sitemap = readFileSync(join(out, "sitemap.xml"), "utf8");
-  for (const route of routes) {
+  // /live-demos/ is only a redirect to /services/, so it is left out of the sitemap.
+  for (const route of routes.filter((r) => r !== "live-demos")) {
     const loc = `<loc>https://aimsmartsolutions.tech/${route ? route + "/" : ""}</loc>`;
     assert.ok(sitemap.includes(loc), `sitemap is missing ${label(route)}`);
   }
@@ -115,12 +116,6 @@ test("sitemap, robots.txt and a custom 404 page exist", () => {
 test("every page offers the one main call to action", () => {
   const cta = new RegExp(`href="${base}/book-appointment/"[^>]*>Book a Free AI Opportunity Call`);
   for (const route of routes) assert.match(page(route), cta, `${label(route)} lacks the main call to action`);
-});
-
-test("every demo on Live demos has a Live or Illustrative data badge", () => {
-  const tiles = page("live-demos").split('class="demo-tile"').slice(1);
-  assert.ok(tiles.length >= 9, `expected at least 9 demos, found ${tiles.length}`);
-  tiles.forEach((tile, i) => assert.match(tile.slice(0, 300), /class="demo-badge [^"]+">(Live|Illustrative data)</, `demo ${i + 1} has no badge`));
 });
 
 test("honesty rules: no testimonials, client logos, savings figures or performance claims", () => {
@@ -144,4 +139,28 @@ test("\"practical\" is not used anywhere on the site", () => {
     const html = route === "404" ? readFileSync(join(out, "404.html"), "utf8") : page(route);
     assert.doesNotMatch(html, /practical/i, `${label(route)} still says "practical"`);
   }
+});
+
+test("/services/ shows each service's demo videos, with no try buttons or contact pages", () => {
+  const html = page("services");
+  const main = html.slice(html.indexOf('class="pillar-section"'), html.indexOf('class="services-cta"'));
+  const cards = main.split('class="services-list-card service-video-card"').slice(1);
+  assert.equal(cards.length, 9, `expected 9 service cards, found ${cards.length}`);
+  const buttons = (main.match(/Watch the demo video/g) ?? []).length;
+  assert.ok(buttons >= 12, `expected at least 12 demo video buttons, found ${buttons}`);
+  for (const id of ["win-more-customers", "save-time", "decide-better", "train-your-team"]) assert.ok(html.includes(`id="${id}"`), `#${id} anchor missing`);
+  assert.doesNotMatch(main, /class="demo-try"|class="demo-badge|Generate content|Get your score|Start the taster|Try it →/, "a try button or badge is on /services/");
+  assert.doesNotMatch(main, /Enquiry journey|Instant quote request|Online booking/, "a contact page is shown as a demo");
+  assert.doesNotMatch(main, /href="(\/aim-smart-solutions)?\/(business-enquiry|instant-quote|book-appointment)\/"/, "/services/ links to a contact page as a demo");
+});
+
+test("/live-demos/ only redirects to /services/, and nothing links to it", () => {
+  const html = page("live-demos");
+  assert.match(html, /http-equiv="refresh" content="0; url=(\/aim-smart-solutions)?\/services\/"/, "no meta refresh to /services/");
+  assert.match(html, /<meta name="robots" content="noindex, follow"/, "redirect page should not be indexed");
+  for (const route of [...routes.filter((r) => r !== "live-demos"), "404"]) {
+    const other = route === "404" ? readFileSync(join(out, "404.html"), "utf8") : page(route);
+    assert.doesNotMatch(other, /href="(\/aim-smart-solutions)?\/live-demos\//, `${label(route)} still links to /live-demos/`);
+  }
+  assert.doesNotMatch(readFileSync(join(out, "sitemap.xml"), "utf8"), /live-demos/, "sitemap still lists /live-demos/");
 });
