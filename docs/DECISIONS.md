@@ -273,3 +273,14 @@ than rewriting history; if a decision changes, add a new entry that replaces the
 - Every demo video has a branded cover (AIM logo, service, title, a subtitle for that service).
 - Header booking button reads "Book a call" under 768px wide. Homepage pillar cards have the same
   spacing around the divider. Form text areas use the site font.
+
+## Booking kept warm; quote form takes all 10 options (2026-10-30)
+- `.github/workflows/warm-booking.yml` asks the appointment-booking function for available times
+  every 10 minutes between 07:00 and 22:00 UK time, so the Google Apps Script calendar behind it
+  stays warm and the first visitor's load is about 2 seconds. It uses only the public Supabase URL
+  and anon key; a slow or failed call logs a warning instead of failing.
+- Booking page: after 8 seconds it shows "Still loading available times…" with the email address
+  below; times still appear when they arrive. "We couldn't load the available times" and "Try
+  again" appear only when the request actually fails.
+- `save-service-request` (Supabase, version 17) now keeps up to 10 services per request, so the
+  quote form has no limit: all nine services plus "Not sure yet" can be chosen.

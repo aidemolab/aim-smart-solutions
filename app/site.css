@@ -339,5 +339,6 @@ textarea{font-family:inherit}
 /* Quote form: services grouped by pillar */
 .quote-service-group{margin:0 0 18px;padding:0;border:0}
 .quote-service-group legend{margin:0 0 10px;padding:0;color:var(--cobalt-dark);font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
-.quote-services label.is-full{opacity:.55;cursor:not-allowed}
-.quote-limit{margin:4px 0 0;color:var(--slate);font-size:14px;font-weight:700}
+
+/* Booking: slow-loading note with the email fallback */
+.slot-slow .slot-loading{margin-bottom:6px}.slot-fallback{margin:0 0 12px;color:var(--ink-soft);font-size:14px;line-height:1.6}.slot-fallback a{color:var(--cobalt-dark);font-weight:700;text-decoration:underline;text-underline-offset:3px}

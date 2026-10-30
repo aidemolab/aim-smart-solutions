@@ -24,7 +24,7 @@ Deno.serve(withCors(async (request: Request) => {
   const services = Array.isArray(body.services) ? body.services.map((item) => {
     const service = item && typeof item === "object" ? item as Record<string, unknown> : {};
     return { id: clean(service.id, 50), name: clean(service.name, 150), details: clean(service.details, 3000) };
-  }).filter((service) => service.id && service.name && service.details).slice(0, 6) : [];
+  }).filter((service) => service.id && service.name && service.details).slice(0, 10) : []; // up to all 10 quote options
   if (!name || !businessName || !email || !mobile || services.length === 0 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return Response.json({ ok: false, message: "Complete all service request fields." }, { status: 400 });
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
