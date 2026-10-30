@@ -7,12 +7,12 @@ import { BookingButton, CtaBand, HowWeWork } from "../components/Blocks";
 export const metadata: Metadata = {
   alternates: { canonical: "/about/" },
   title: "About AIM",
-  description: "AIM Smart Solutions is a Bolton-based practical AI and automation consultancy founded by Alaa Mostafa (PhD, Semiconductor Physics), supporting UK service businesses.",
+  description: "AIM Smart Solutions is a Bolton-based AI and automation consultancy founded by Alaa Mostafa (PhD, Semiconductor Physics), supporting UK service businesses.",
 };
 
 const principles = [
   { title: "Understand the real problem", body: "Every project starts with the business problem, the cost of the current process and the outcome you want, not with a tool." },
-  { title: "Build the smallest useful solution", body: "Many improvements connect or simplify the tools you already use. The simplest practical answer is considered first, and sometimes that is not AI at all." },
+  { title: "Build the smallest useful solution", body: "Many improvements connect or simplify the tools you already use. The simplest answer that works is considered first, and sometimes that is not AI at all." },
   { title: "Support people to use it confidently", body: "A solution only helps if your team uses it. Training and clear guidance are part of the work, not an extra." },
 ];
 
@@ -22,7 +22,7 @@ export default function About() {
       <section className="services-hero">
         <p className="kicker">About AIM</p>
         <h1>Technical depth. <em>Commercial clarity.</em></h1>
-        <p>AIM Smart Solutions helps UK service businesses win more customers, save time and decide better through practical AI, automation and data analytics, and trains their teams to use it. It is based in Bolton, Greater Manchester, and supports businesses across the UK.</p>
+        <p>AIM Smart Solutions helps UK service businesses win more customers, save time and decide better through AI, automation and data analytics, and trains their teams to use it. It is based in Bolton, Greater Manchester, and supports businesses across the UK.</p>
         <BookingButton />
       </section>
 
@@ -31,10 +31,10 @@ export default function About() {
         <div className="about-copy">
           <p className="kicker">The founder</p>
           <h2>Alaa Mostafa</h2>
-          <p className="role">Founder &amp; Practical AI and Automation Consultant</p>
+          <p className="role">Founder &amp; AI and Automation Consultant</p>
           <p className="about-lead">You need someone who can understand the technology and explain what it will actually change for your business.</p>
           <p>Alaa combines experience in data analysis, business intelligence, dashboards, automation, AI and professional education. With a PhD in Semiconductor Physics and a career built around analytical problem-solving and teaching, he makes complex possibilities understandable and usable.</p>
-          <p>That mix of analysis and teaching shapes how AIM works: find the real bottleneck, build something practical, and make sure the people using it understand it.</p>
+          <p>That mix of analysis and teaching shapes how AIM works: find the real bottleneck, build something useful, and make sure the people using it understand it.</p>
         </div>
       </section>
 
@@ -47,7 +47,7 @@ export default function About() {
         <div className="fit-copy">
           <p className="kicker">Who AIM works with</p>
           <h2 id="who-title">Small and growing <em>service businesses.</em></h2>
-          <p>AIM works with small and growing service businesses, particularly training, education, professional and local services, that depend on enquiries, quotations, appointments and good communication, and want practical support without employing an in-house data, automation or AI specialist.</p>
+          <p>AIM works with small and growing service businesses, particularly training, education, professional and local services, that depend on enquiries, quotations, appointments and good communication, and want hands-on support without employing an in-house data, automation or AI specialist.</p>
         </div>
         <div className="fit-checklist">
           <h3>What AIM helps with</h3>

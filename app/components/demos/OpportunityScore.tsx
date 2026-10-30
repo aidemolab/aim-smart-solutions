@@ -35,7 +35,7 @@ const MAX = QUESTIONS.reduce((sum, q) => sum + Math.max(...q.options.map((o) => 
 const BANDS = [
   { min: 0, name: "Fine-tuning", text: "Your answers suggest your processes are already in good shape. AI is most useful here for targeted improvements, such as sharper reporting or upskilling your team, rather than big changes." },
   { min: 35, name: "Clear opportunities", text: "Your answers suggest a few clear places where automation and AI could save time and help you respond faster. Starting with one of them usually brings the quickest benefit." },
-  { min: 65, name: "Strong opportunity", text: "Your answers suggest that a lot of time goes into manual work, and that enquiries may be waiting longer than customers expect. There is plenty of room for practical automation to help." },
+  { min: 65, name: "Strong opportunity", text: "Your answers suggest that a lot of time goes into manual work, and that enquiries may be waiting longer than customers expect. There is plenty of room for automation to help." },
 ];
 
 export default function OpportunityScore() {

@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
       title: `${pillar.name}: ${pillar.promise}`,
       alternates: { canonical: `/services/${pillar.id}/` },
       description,
-      openGraph: { title: `${pillar.name} | AIM Smart Solutions`, description, images: [{ url: "/og-v2.png", width: 1200, height: 630, alt: "AIM Smart Solutions" }] },
+      openGraph: { title: `${pillar.name} | AIM Smart Solutions`, description, images: [{ url: "/og-v3.png", width: 1200, height: 630, alt: "AIM Smart Solutions" }] },
     };
   }
   const service = serviceBySlug(slug);
@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     title: service.title,
     alternates: { canonical: `/services/${service.slug}/` },
     description: service.metaDescription,
-    openGraph: { title: `${service.title} | AIM Smart Solutions`, description: service.metaDescription, images: [{ url: "/og-v2.png", width: 1200, height: 630, alt: "AIM Smart Solutions" }] },
+    openGraph: { title: `${service.title} | AIM Smart Solutions`, description: service.metaDescription, images: [{ url: "/og-v3.png", width: 1200, height: 630, alt: "AIM Smart Solutions" }] },
   };
 }
 

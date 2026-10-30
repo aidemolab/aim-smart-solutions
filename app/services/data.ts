@@ -77,12 +77,12 @@ export const services: Service[] = [
     description: "Promo, demo and explainer videos that show what your business does, made with AI-assisted editing, voiceover and captions, and ready for your website, LinkedIn and social media.",
     explanation: [
       "Customers decide quickly whether a business looks right for them. A short video can explain what you do, show how it works and answer the obvious questions faster than a page of text. But filming and editing usually take time you do not have, so the video never gets made.",
-      "We plan the video around the question your customers keep asking, write the script with you, and use AI-assisted editing, voiceover and captions to keep production practical. You review it before it goes anywhere, then receive versions for your website, LinkedIn and social media.",
+      "We plan the video around the question your customers keep asking, write the script with you, and use AI-assisted editing, voiceover and captions to keep production manageable. You review it before it goes anywhere, then receive versions for your website, LinkedIn and social media.",
     ],
     benefits: [
       { title: "Clear at a glance", body: "Visitors see what you do and how it works without reading a long page." },
       { title: "Ready for every channel", body: "One video, cut to suit your website, LinkedIn and social media, with captions for viewers watching on mute." },
-      { title: "Practical to produce", body: "AI-assisted editing and voiceover keep the process quick, and you approve the script and the final cut." },
+      { title: "Quick to produce", body: "AI-assisted editing and voiceover keep the process quick, and you approve the script and the final cut." },
     ],
     useCases: [
       "A promo video that introduces your business and what you offer",
@@ -141,7 +141,7 @@ export const services: Service[] = [
       "Calculators and scenario planners for quotes or proposals",
       "Internal tools that guide staff through a complex process",
     ],
-    features: ["Industry-specific decision tools", "Interactive calculators and scenario planning", "AI-powered explanations with human-checkable results", "Practical implementation and ongoing improvements"],
+    features: ["Industry-specific decision tools", "Interactive calculators and scenario planning", "AI-powered explanations with human-checkable results", "Implementation and ongoing improvements"],
     demos: ["pharma-market-intelligence", "property-investment"],
     metaDescription: "AI smart apps: purpose-built decision tools with transparent calculations, scenario planning and plain-English AI explanations. Try the pharma demo.",
   },
@@ -151,7 +151,7 @@ export const services: Service[] = [
     title: "Data Analytics, Dashboards and Reporting",
     pillar: "decide-better",
     tagline: "Turn business data into clear decisions.",
-    description: "We transform spreadsheets and operational data into focused analysis, practical dashboards and KPI reporting suited to the needs of smaller organisations.",
+    description: "We transform spreadsheets and operational data into focused analysis, clear dashboards and KPI reporting suited to the needs of smaller organisations.",
     explanation: [
       "Many businesses have the data they need, but it is spread across spreadsheets, systems and inboxes, and pulling it together takes hours.",
       "A focused dashboard shows the handful of numbers that matter, updated for you, so you can spot trends early and plan with confidence.",
@@ -176,13 +176,13 @@ export const services: Service[] = [
     title: "AI and Data Training",
     pillar: "train-your-team",
     tagline: "Help your team use AI and data with confidence.",
-    description: "Practical workshops and tailored training in AI tools, data analytics, Excel, SQL, Power BI and business automation.",
+    description: "Hands-on workshops and tailored training in AI tools, data analytics, Excel, SQL, Power BI and business automation.",
     explanation: [
       "AI tools are only useful when people know how to use them well and safely. Many teams have tried them once, got a vague answer and moved on.",
       "Training is hands-on and built around your team's real tasks, so people leave with skills and habits they can use the next day.",
     ],
     benefits: [
-      { title: "Practical skills", body: "Exercises based on your own work, not abstract examples." },
+      { title: "Hands-on skills", body: "Exercises based on your own work, not abstract examples." },
       { title: "Safer use of AI", body: "Clear guidance on checking outputs and protecting sensitive information." },
       { title: "Confident teams", body: "People understand what the tools can and cannot do." },
     ],
@@ -193,7 +193,7 @@ export const services: Service[] = [
     ],
     features: ["Hands-on AI workshops", "Excel and data analysis training", "SQL and reporting skills", "Team-specific training programmes"],
     demos: ["ai-skills-taster"],
-    metaDescription: "Practical AI and data training for UK teams: hands-on workshops in AI tools, prompting, Excel, SQL, Power BI and business automation.",
+    metaDescription: "AI and data training for UK teams: hands-on workshops in AI tools, prompting, Excel, SQL, Power BI and business automation.",
   },
   {
     slug: "course-design",
@@ -235,7 +235,7 @@ export const services: Service[] = [
     benefits: [
       { title: "Clear priorities", body: "Know which opportunity is worth tackling first and why." },
       { title: "Sound investment", body: "Avoid tools and subscriptions that do not fit your business." },
-      { title: "A practical plan", body: "Achievable steps, sized for a small team." },
+      { title: "A realistic plan", body: "Achievable steps, sized for a small team." },
     ],
     useCases: [
       "An AI opportunity assessment across your customer journey",
@@ -244,7 +244,7 @@ export const services: Service[] = [
     ],
     features: ["AI opportunity assessments", "Process and data reviews", "Tool selection and solution design", "Implementation guidance and adoption support"],
     demos: ["ai-opportunity-score"],
-    metaDescription: "AI and digital transformation consultancy for SMEs: assess your workflows, find the AI opportunities worth pursuing and plan practical next steps.",
+    metaDescription: "AI and digital transformation consultancy for SMEs: assess your workflows, find the AI opportunities worth pursuing and plan clear next steps.",
   },
 ];
 

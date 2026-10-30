@@ -298,3 +298,10 @@ footer.site-footer{max-width:1440px;margin:0 auto;padding:56px 6vw 28px;display:
 
 /* Booking page: no header booking button, so the menu button keeps to the right */
 .site-header.no-cta .menu-toggle{margin-left:auto}
+
+/* Homepage hero without the side card */
+.funnel-hero.hero-text-only{grid-template-columns:1fr;min-height:0;padding-top:96px;padding-bottom:88px}
+.hero-text-only .funnel-hero-copy{max-width:1080px}.hero-text-only .hero-lede{max-width:760px}
+.hero-text-only h1{max-width:none}
+@media(min-width:900px){.hero-text-only h1 em{display:block;white-space:nowrap}}
+@media(max-width:680px){.funnel-hero.hero-text-only{padding:52px 20px 56px}}

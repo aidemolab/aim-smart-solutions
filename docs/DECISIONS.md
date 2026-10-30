@@ -191,3 +191,16 @@ than rewriting history; if a decision changes, add a new entry that replaces the
   options, so people see it before they book.
 - The header "Book a Free AI Opportunity Call" button (top bar and mobile menu) is hidden on
   `/book-appointment/` only, where it would reload the same page.
+
+## New hero, "practical" retired, og-v3 share image (2026-10-30)
+- Homepage hero: "AI for solo traders and small businesses · Bolton, UK"; headline "AI that grows
+  your business. Built for you. Taught to you."; the four-pains subheading; buttons "Book a Free AI
+  Opportunity Call" (/book-appointment/) and "Try a live demo" (/live-demos/); the three ticks.
+- The hero is text-only. The planned promo video (aim-promo-v2) was not available to check, so it is
+  not embedded; any promo video must first be checked for out-of-date wording ("practical", three
+  pains/pillars) or footage of the old site.
+- The pillar section and /services/ heading now say "four everyday pains", matching the hero.
+- "Practical" is no longer used anywhere on the site, as branding or as ordinary English; a test
+  fails if it returns.
+- Share image: every page uses `og-v3.png` (new tagline). `og-v2.png` stays in `public/` so old
+  shared links keep their image.

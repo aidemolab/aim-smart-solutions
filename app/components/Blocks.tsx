@@ -44,7 +44,7 @@ export function StartHere() {
       <div className="start-here-copy">
         <p className="kicker">The offer</p>
         <h2 id="start-here-title">The AI Receptionist <em>package</em></h2>
-        <p>For most service businesses, the quickest win is making sure no enquiry or call goes unanswered. The AI Receptionist combines two services into one practical starting point.</p>
+        <p>For most service businesses, the quickest win is making sure no enquiry or call goes unanswered. The AI Receptionist combines two services into one simple starting point.</p>
         <div className="hero-actions"><BookingButton /><a className="button secondary" href="#demo">Test it below <span aria-hidden="true">↓</span></a></div>
       </div>
       <ul className="start-here-list">
@@ -150,7 +150,7 @@ export function EnquiryJourney({ callsEnabled = CALLS_ENABLED }: { callsEnabled?
   );
 }
 
-export function CtaBand({ title = "Where is your business losing customers, time or clarity?", body = "Book a free AI Opportunity Call and identify the first practical improvement worth exploring." }: { title?: string; body?: string }) {
+export function CtaBand({ title = "Where is your business losing customers, time or clarity?", body = "Book a free AI Opportunity Call and identify the first improvement worth exploring." }: { title?: string; body?: string }) {
   return (
     <section className="final-cta">
       <p className="kicker light">One useful conversation</p>
