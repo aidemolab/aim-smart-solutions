@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { pillars } from "@/lib/site";
-import { serviceVideos, sharedServiceVideo } from "@/lib/demos";
+import { serviceVideos } from "@/lib/demos";
 import { serviceBySlug } from "./data";
 import { BookingButton, pillarNumber } from "../components/Blocks";
 import VideoModalLink from "../components/VideoModalLink";
@@ -42,24 +42,19 @@ export default function Services() {
             {pillar.services.map((slug) => {
               const service = serviceBySlug(slug);
               if (!service) return null;
-              const shared = sharedServiceVideo[slug] ? serviceBySlug(sharedServiceVideo[slug]) : undefined;
               const videos = serviceVideos[slug] ?? [];
               return (
                 <article className="services-list-card service-video-card" id={`service-${slug}`} key={slug}>
                   <h3>{service.name}</h3>
                   <p>{service.tagline}</p>
-                  {shared ? (
-                    <p className="service-video-shared">Shown through the 5-minute AI Skills Taster: <a href={`#service-${shared.slug}`}>see its video under {shared.name}</a>.</p>
-                  ) : (
-                    <ul className="service-videos">
-                      {videos.map((video) => (
-                        <li key={video.video}>
-                          {videos.length > 1 && <span className="service-video-name">{video.title}</span>}
-                          <VideoModalLink video={video.video} title={video.title} label="Watch the demo video" />
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+                  <ul className="service-videos">
+                    {videos.map((video) => (
+                      <li key={video.video}>
+                        {videos.length > 1 && <span className="service-video-name">{video.title}</span>}
+                        <VideoModalLink video={video.video} title={video.title} label={video.buttonLabel ?? "Watch the demo video"} />
+                      </li>
+                    ))}
+                  </ul>
                   <Link className="service-explore" href={`/services/${slug}/`}>Explore {service.name} <span aria-hidden="true">→</span></Link>
                 </article>
               );

@@ -4,10 +4,15 @@ import { FormEvent, useEffect, useState } from "react";
 import PrivacyNote from "../components/PrivacyNote";
 import ContactCrumbs from "../components/ContactCrumbs";
 import { BOOKING_CTA } from "@/lib/site";
-import { callFunction, HONEYPOT_FIELD } from "@/lib/supabase-functions";
+import { callFunction, CONTACT_EMAIL, HONEYPOT_FIELD } from "@/lib/supabase-functions";
 import "./booking.css";
 
-type BookingState = "loading" | "ready" | "submitting" | "success" | "error";
+type BookingState = "loading" | "ready" | "slotsError" | "submitting" | "success" | "error";
+
+// The calendar can take several seconds on its first request after a quiet spell. After 8 seconds
+// the visitor sees this message and a "Try again" button; if the times arrive later they still appear.
+const SLOT_TIMEOUT_MS = 8000;
+const SLOTS_FAILED = `We couldn't load the available times. Please try again or email ${CONTACT_EMAIL}.`;
 
 const formatSlot = (slot: string) => new Intl.DateTimeFormat("en-GB", {
   weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Europe/London",
@@ -27,9 +32,10 @@ export default function BookAppointmentPage() {
 
   // State is only set once the request settles, never synchronously inside the effect.
   function showSlots(request: Promise<string[]>) {
+    const timer = window.setTimeout(() => { setState("slotsError"); setMessage(SLOTS_FAILED); }, SLOT_TIMEOUT_MS);
     request.then(
-      (loaded) => { setSlots(loaded); setState("ready"); },
-      (error: unknown) => { setState("error"); setMessage(error instanceof Error ? error.message : "Available times could not be loaded."); },
+      (loaded) => { window.clearTimeout(timer); setSlots(loaded); setState("ready"); setMessage(""); },
+      () => { window.clearTimeout(timer); setState("slotsError"); setMessage(SLOTS_FAILED); },
     );
   }
 
@@ -84,13 +90,14 @@ export default function BookAppointmentPage() {
             <fieldset className="slot-field">
               <legend>Available appointment times</legend>
               {state === "loading" && <p className="slot-loading">Loading available times…</p>}
-              {state !== "loading" && slots.length === 0 && <p className="slot-loading">No appointment times are currently available.</p>}
+              {state === "ready" && slots.length === 0 && <p className="slot-loading">No appointment times are currently available.</p>}
               <div className="slot-grid">{slots.map((slot) => <button key={slot} type="button" className={selectedSlot === slot ? "selected" : ""} onClick={() => setSelectedSlot(slot)}>{formatSlot(slot)}</button>)}</div>
             </fieldset>
             <p className="booking-reassurance">Your details are used only to arrange and prepare for this conversation.</p>
             <button type="submit" disabled={!selectedSlot || state === "submitting"}>{state === "submitting" ? "Booking…" : "Book my free AI Opportunity Call"}<span>→</span></button>
           </>}
-          {message && <p className={`submission-message ${state}`} role="status" aria-live="polite">{message}</p>}
+          {message && <p className={`submission-message ${state === "slotsError" ? "error" : state}`} role="status" aria-live="polite">{message}</p>}
+          {state === "slotsError" && <button className="retry-button" type="button" onClick={loadSlots}>Try again</button>}
           {state === "error" && <button className="retry-button" type="button" onClick={loadSlots}>Reload available times</button>}
           <PrivacyNote text="We use your details only to arrange and prepare for this call." />
         </form>

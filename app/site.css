@@ -326,3 +326,18 @@ footer.site-footer{max-width:1440px;margin:0 auto;padding:56px 6vw 28px;display:
 /* Homepage: header booking button fades while the hero's own booking button is on screen */
 .site-header .nav-cta{transition:opacity .3s ease,visibility .3s ease}
 .site-header .nav-cta.is-hidden{opacity:0;visibility:hidden;pointer-events:none}
+
+/* Header booking button: shorter label on small screens */
+.nav-cta .cta-short{display:none}
+@media(max-width:767px){.nav-cta .cta-long{display:none}.nav-cta .cta-short{display:inline}.site-header .nav-cta{max-width:none;white-space:nowrap;padding:10px 14px}}
+/* Homepage pillar cards: the same space above and below the divider on every card */
+.pillar-card>p:not(.pillar-number):not(.pillar-promise){margin:0}
+.pillar-card .pillar-services{margin:24px 0 0;padding:20px 0 0}
+/* Form text areas and their example text use the site font */
+textarea{font-family:inherit}
+.contact-form textarea,.contact-form textarea::placeholder,.service-details-panel textarea::placeholder{font-family:Arial,Helvetica,sans-serif;font-weight:400;letter-spacing:normal;text-transform:none}
+/* Quote form: services grouped by pillar */
+.quote-service-group{margin:0 0 18px;padding:0;border:0}
+.quote-service-group legend{margin:0 0 10px;padding:0;color:var(--cobalt-dark);font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.quote-services label.is-full{opacity:.55;cursor:not-allowed}
+.quote-limit{margin:4px 0 0;color:var(--slate);font-size:14px;font-weight:700}

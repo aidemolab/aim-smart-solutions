@@ -76,7 +76,7 @@ export default function SiteHeader() {
         {links.map((link) => <Link key={link.href} href={link.href} aria-current={isCurrent(link.href) ? "page" : undefined}>{link.label}</Link>)}
       </nav>
 
-      {!onBooking && <Link className={`nav-cta${hideCta ? " is-hidden" : ""}`} href={BOOKING_CTA.href} aria-hidden={hideCta || undefined} tabIndex={hideCta ? -1 : undefined}>{BOOKING_CTA.label}</Link>}
+      {!onBooking && <Link className={`nav-cta${hideCta ? " is-hidden" : ""}`} href={BOOKING_CTA.href} aria-hidden={hideCta || undefined} tabIndex={hideCta ? -1 : undefined}><span className="cta-long">{BOOKING_CTA.label}</span><span className="cta-short">Book a call</span></Link>}
 
       <button type="button" className="menu-toggle" aria-expanded={open} aria-controls="mobile-menu" onClick={() => setOpen((value) => !value)}>
         <span className="menu-toggle-bars" aria-hidden="true" />
