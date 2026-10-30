@@ -65,7 +65,7 @@ export default function BookAppointmentPage() {
           <ContactCrumbs name={BOOKING_CTA.label} path="/book-appointment/" />
           <p className="kicker">Free AI Opportunity Call</p>
           <h1>Find the first improvement <em>worth making.</em></h1>
-          <p>Choose an available consultation. We will discuss one costly bottleneck, connect it to a business outcome and identify a practical next step. There is no fee and no obligation.</p>
+          <p>Choose an available consultation. We will discuss one costly bottleneck, connect it to a business outcome and identify a clear next step. There is no fee and no obligation.</p>
           <ul className="booking-value"><li>✓ Bring one process that is losing time, customers or clarity</li><li>✓ Talk directly with the person who builds your solution, not a sales team</li><li>✓ Leave with a focused next step, even if we do not work together</li></ul>
         </div>
 

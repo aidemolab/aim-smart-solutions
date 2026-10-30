@@ -42,10 +42,11 @@ test("every page has a unique title and meta description", () => {
 test("every page has an Open Graph image and a canonical URL", () => {
   for (const route of routes) {
     const html = page(route);
-    assert.match(html, /<meta property="og:image" content="https:\/\/aimsmartsolutions\.tech\/og-v2.png"/, `${label(route)} has no og:image`);
+    assert.match(html, /<meta property="og:image" content="https:\/\/aimsmartsolutions\.tech\/og-v3.png"/, `${label(route)} has no og:image`);
     assert.match(html, /<link rel="canonical" href="https:\/\/aimsmartsolutions\.tech\//, `${label(route)} has no canonical URL`);
   }
-  assert.ok(existsSync(join(out, "og-v2.png")), "og-v2.png is missing");
+  assert.ok(existsSync(join(out, "og-v3.png")), "og-v3.png is missing");
+  assert.ok(existsSync(join(out, "og-v2.png")), "og-v2.png must stay so old shared links still work");
 });
 
 const hasId = (html, id) => html.includes(`id="${id}"`);
@@ -136,4 +137,11 @@ test("every form links to the privacy policy", () => {
     assert.match(page(route), /class="privacy-note"[^]*?href="(\/aim-smart-solutions)?\/privacy\/"/, `${route} has no privacy link under its form`);
   }
   assert.match(page("privacy"), /Draft for owner review/, "privacy policy draft note missing");
+});
+
+test("\"practical\" is not used anywhere on the site", () => {
+  for (const route of [...routes, "404"]) {
+    const html = route === "404" ? readFileSync(join(out, "404.html"), "utf8") : page(route);
+    assert.doesNotMatch(html, /practical/i, `${label(route)} still says "practical"`);
+  }
 });

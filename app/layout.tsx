@@ -7,14 +7,14 @@ import "./globals.css";
 import "./site.css";
 import "./demos.css";
 
-const description = "Practical AI and automation for UK service businesses: win more customers, save time on admin, turn your data into clear decisions and train your team to use it. Based in Bolton.";
+const description = "AI that grows your business, built for you and taught to you. AIM fixes missed calls, repetitive admin, scattered data and tools nobody knows how to use, for solo traders and small businesses. Bolton, UK.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://aimsmartsolutions.tech"),
-  title: { default: "AIM Smart Solutions | Practical AI and Automation for UK Service Businesses", template: "%s | AIM Smart Solutions" },
+  title: { default: "AIM Smart Solutions | AI for Solo Traders and Small Businesses", template: "%s | AIM Smart Solutions" },
   description,
-  openGraph: { siteName: "AIM Smart Solutions", title: "AIM Smart Solutions", description, type: "website", locale: "en_GB", images: [{ url: "/og-v2.png", width: 1200, height: 630, alt: "AIM Smart Solutions" }] },
-  twitter: { card: "summary_large_image", title: "AIM Smart Solutions", description, images: ["/og-v2.png"] },
+  openGraph: { siteName: "AIM Smart Solutions", title: "AIM Smart Solutions", description, type: "website", locale: "en_GB", images: [{ url: "/og-v3.png", width: 1200, height: 630, alt: "AIM Smart Solutions: AI that grows your business. Built for you. Taught to you." }] },
+  twitter: { card: "summary_large_image", title: "AIM Smart Solutions", description, images: ["/og-v3.png"] },
   icons: {
     icon: [
       { url: withBase("/favicon.ico"), sizes: "any" },

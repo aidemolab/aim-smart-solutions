@@ -10,7 +10,7 @@ export default function SiteFooter() {
         <Link href="/" className="footer-logo" aria-label="AIM Smart Solutions home">
           <img src={withBase("/aim-logo.webp")} alt="AIM Smart Solutions" width={320} height={208} loading="lazy" />
         </Link>
-        <p>Practical AI, automation and data solutions for UK small and growing businesses.</p>
+        <p>AI, automation and data solutions for UK solo traders and small businesses.</p>
         <p className="footer-contact"><a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a><br />{LOCATION} · Supporting businesses across the UK</p>
       </div>
       {pillars.map((pillar) => (
