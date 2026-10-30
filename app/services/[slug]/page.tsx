@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { pillars } from "@/lib/site";
+import { pillars, type Pillar } from "@/lib/site";
 import { basePath } from "@/lib/base-path";
 import { demoById, PHARMA_VIDEO, VOICE_AGENTS_VIDEO, videoExamples } from "@/lib/demos";
 import { services, serviceBySlug, type Service } from "../data";
@@ -10,15 +10,29 @@ import DemoCard from "../../components/DemoCard";
 import OpportunityScore from "../../components/demos/OpportunityScore";
 import SkillsTaster from "../../components/demos/SkillsTaster";
 import ContentGenerator from "../../components/demos/ContentGenerator";
+import PillarPage from "../PillarPage";
 
 type Params = { params: Promise<{ slug: string }> };
 
 export function generateStaticParams() {
-  return services.map((service) => ({ slug: service.slug }));
+  return [...pillars.map((pillar) => ({ slug: pillar.id })), ...services.map((service) => ({ slug: service.slug }))];
 }
 
+const pillarBySlug = (slug: string): Pillar | undefined => pillars.find((pillar) => pillar.id === slug);
+
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
-  const service = serviceBySlug((await params).slug);
+  const slug = (await params).slug;
+  const pillar = pillarBySlug(slug);
+  if (pillar) {
+    const description = `${pillar.promise}. ${pillar.intro}`;
+    return {
+      title: `${pillar.name}: ${pillar.promise}`,
+      alternates: { canonical: `/services/${pillar.id}/` },
+      description,
+      openGraph: { title: `${pillar.name} | AIM Smart Solutions`, description, images: [{ url: "/og-v2.png", width: 1200, height: 630, alt: "AIM Smart Solutions" }] },
+    };
+  }
+  const service = serviceBySlug(slug);
   if (!service) return {};
   return {
     title: service.title,
@@ -76,7 +90,10 @@ function TryDemoButton({ service }: { service: Service }) {
 }
 
 export default async function ServicePage({ params }: Params) {
-  const service = serviceBySlug((await params).slug);
+  const slug = (await params).slug;
+  const pillarPage = pillarBySlug(slug);
+  if (pillarPage) return <PillarPage pillar={pillarPage} />;
+  const service = serviceBySlug(slug);
   if (!service) notFound();
   const pillar = pillars.find((item) => item.id === service.pillar)!;
   const siblings = pillar.services.filter((slug) => slug !== service.slug).map(serviceBySlug).filter((item) => item !== undefined);
@@ -92,8 +109,7 @@ export default async function ServicePage({ params }: Params) {
         <nav aria-label="Breadcrumb" className="breadcrumbs">
           <ol>
             <li><Link href="/">Home</Link></li>
-            <li><Link href="/services/">Services</Link></li>
-            <li><Link href={`/services/#${pillar.id}`}>{pillar.name}</Link></li>
+            <li><Link href={`/services/${pillar.id}/`}>{pillar.name}</Link></li>
             <li aria-current="page">{service.name}</li>
           </ol>
         </nav>
@@ -101,9 +117,8 @@ export default async function ServicePage({ params }: Params) {
           "@context": "https://schema.org", "@type": "BreadcrumbList",
           itemListElement: [
             { "@type": "ListItem", position: 1, name: "Home", item: "https://aimsmartsolutions.tech/" },
-            { "@type": "ListItem", position: 2, name: "Services", item: "https://aimsmartsolutions.tech/services/" },
-            { "@type": "ListItem", position: 3, name: pillar.name, item: `https://aimsmartsolutions.tech/services/#${pillar.id}` },
-            { "@type": "ListItem", position: 4, name: service.name, item: `https://aimsmartsolutions.tech/services/${service.slug}/` },
+            { "@type": "ListItem", position: 2, name: pillar.name, item: `https://aimsmartsolutions.tech/services/${pillar.id}/` },
+            { "@type": "ListItem", position: 3, name: service.name, item: `https://aimsmartsolutions.tech/services/${service.slug}/` },
           ],
         }) }} />
         <h1>{service.title}</h1>

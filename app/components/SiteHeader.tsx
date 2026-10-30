@@ -19,7 +19,7 @@ function ServicesMenu({ onNavigate }: { onNavigate?: () => void }) {
     <div className="services-menu">
       {pillars.map((pillar) => (
         <div key={pillar.id} className="services-menu-group">
-          <Link className="services-menu-pillar" href={`/services/#${pillar.id}`} onClick={onNavigate}>{pillar.name}</Link>
+          <Link className="services-menu-pillar" href={`/services/${pillar.id}/`} onClick={onNavigate} aria-current={pathname.startsWith(`/services/${pillar.id}`) ? "page" : undefined}>{pillar.name}</Link>
           {pillar.services.map((slug) => (
             <Link key={slug} href={`/services/${slug}/`} onClick={onNavigate} aria-current={pathname.startsWith(`/services/${slug}`) ? "page" : undefined}>{serviceBySlug(slug)?.name}</Link>
           ))}

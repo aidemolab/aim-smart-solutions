@@ -174,7 +174,7 @@ export const services: Service[] = [
     slug: "training",
     name: "AI & Data Training",
     title: "AI and Data Training",
-    pillar: "decide-better",
+    pillar: "train-your-team",
     tagline: "Help your team use AI and data with confidence.",
     description: "Practical workshops and tailored training in AI tools, data analytics, Excel, SQL, Power BI and business automation.",
     explanation: [
@@ -199,7 +199,7 @@ export const services: Service[] = [
     slug: "course-design",
     name: "Course Design & Build",
     title: "Course Design and Build",
-    pillar: "decide-better",
+    pillar: "train-your-team",
     tagline: "From a trainer who understands your pain, builds the solution, and teaches you to use it.",
     description: "Courses, workshops and training materials designed and built around your business: outlines, sessions, slides, activities, and learner and trainer guides.",
     explanation: [

@@ -10,7 +10,7 @@ import VideoModalLink from "../components/VideoModalLink";
 export const metadata: Metadata = {
   alternates: { canonical: "/services/" },
   title: "Services",
-  description: "AI and automation services for UK service businesses, grouped by the pain they solve: win more customers, save time and decide better.",
+  description: "AI and automation services for UK service businesses, grouped by what they change: win more customers, save time, decide better and train your team to use it.",
 };
 
 export default function Services() {
@@ -18,7 +18,7 @@ export default function Services() {
     <main id="main" className="services-main">
       <section className="services-hero">
         <p className="kicker">Our services</p>
-        <h1>Practical technology for <em>three business pains.</em></h1>
+        <h1>Practical technology for three business pains, <em>and a team ready to use it.</em></h1>
         <p>Nine services, grouped by what they change for your business. Each one starts with the pain and uses the smallest practical solution.</p>
         <nav className="pillar-jump" aria-label="Jump to a pillar">
           {pillars.map((pillar) => <a key={pillar.id} href={`#${pillar.id}`}>{pillar.name}</a>)}
@@ -30,7 +30,7 @@ export default function Services() {
           <div className="pillar-section-head">
             <p className="pillar-number">{pillarNumber(pillar)}</p>
             <div>
-              <h2 id={`${pillar.id}-title`}>{pillar.name}</h2>
+              <h2 id={`${pillar.id}-title`}><Link className="pillar-heading-link" href={`/services/${pillar.id}/`}>{pillar.name}</Link></h2>
               <p className="pillar-promise">{pillar.promise}</p>
               <p>{pillar.intro}</p>
             </div>
@@ -72,6 +72,7 @@ export default function Services() {
               );
             })}
           </div>
+          <p className="pillar-page-link"><Link href={`/services/${pillar.id}/`}>Go to the {pillar.name} page <span aria-hidden="true">→</span></Link></p>
         </section>
       ))}
 

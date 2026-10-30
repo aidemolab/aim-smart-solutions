@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { demos } from "@/lib/demos";
+import { pillars } from "@/lib/site";
+import { serviceBySlug } from "../services/data";
 import { BookingButton } from "../components/Blocks";
 import DemoBadge from "../components/DemoBadge";
 import DemoCard from "../components/DemoCard";
@@ -23,9 +26,22 @@ export default function LiveDemos() {
         </dl>
       </section>
 
-      <section className="lab-grid" aria-label="Demos">
-        {demos.map((demo) => <DemoCard key={demo.id} demo={demo} headingLevel={2} />)}
-      </section>
+      {pillars.map((pillar) => {
+        // The demos used on this pillar's service pages, in service order. A demo that serves two
+        // pillars (the enquiry journey) appears under both.
+        const ids = new Set(pillar.services.flatMap((slug) => serviceBySlug(slug)?.demos ?? []));
+        const list = demos.filter((demo) => ids.has(demo.id));
+        if (list.length === 0) return null;
+        return (
+          <section className="lab-pillar" key={pillar.id} aria-labelledby={`lab-${pillar.id}`}>
+            <div className="lab-pillar-head">
+              <h2 id={`lab-${pillar.id}`}><Link href={`/services/${pillar.id}/`}>{pillar.name}</Link></h2>
+              <p>{pillar.promise}</p>
+            </div>
+            <div className="lab-grid">{list.map((demo) => <DemoCard key={demo.id} demo={demo} />)}</div>
+          </section>
+        );
+      })}
 
       <section className="services-cta">
         <h2>Want this for your business?</h2>

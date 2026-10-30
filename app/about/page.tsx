@@ -22,7 +22,7 @@ export default function About() {
       <section className="services-hero">
         <p className="kicker">About AIM</p>
         <h1>Technical depth. <em>Commercial clarity.</em></h1>
-        <p>AIM Smart Solutions helps UK service businesses improve their customer journeys through practical AI, automation, data analytics and training. It is based in Bolton, Greater Manchester, and supports businesses across the UK.</p>
+        <p>AIM Smart Solutions helps UK service businesses win more customers, save time and decide better through practical AI, automation and data analytics, and trains their teams to use it. It is based in Bolton, Greater Manchester, and supports businesses across the UK.</p>
         <BookingButton />
       </section>
 

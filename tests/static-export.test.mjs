@@ -11,7 +11,8 @@ const routes = [
   "", "services", "services/smart-apps", "services/ai-voice-agents",
   "services/business-automation", "services/data-analytics", "services/sales-marketing",
   "services/training", "services/ai-consultancy",
-  "services/video-production", "services/course-design", "live-demos", "about", "contact",
+  "services/video-production", "services/course-design",
+  "services/win-more-customers", "services/save-time", "services/decide-better", "services/train-your-team", "live-demos", "about", "contact",
   "book-appointment", "business-enquiry", "instant-quote", "privacy",
 ];
 

@@ -16,14 +16,18 @@ export function PillarCards() {
     <div className="pillar-grid">
       {pillars.map((pillar) => (
         <article className="pillar-card" id={pillar.id} key={pillar.id}>
-          <p className="pillar-number">{pillarNumber(pillar)}</p>
-          <h3>{pillar.name}</h3>
+          <h3>
+            <Link className="pillar-title-link" href={`/services/${pillar.id}/`}>
+              <span className="pillar-number">{pillarNumber(pillar)}</span>
+              <span className="pillar-name">{pillar.name}</span>
+            </Link>
+          </h3>
           <p className="pillar-promise">{pillar.promise}</p>
           <p>{pillar.intro}</p>
           <ul className="pillar-services">
             {pillar.services.map((slug) => {
               const service = serviceBySlug(slug);
-              return service && <li key={slug}><Link href={`/services/${slug}/`}>{service.name} <span aria-hidden="true">→</span></Link></li>;
+              return service && <li key={slug}>{service.name}</li>;
             })}
           </ul>
         </article>
