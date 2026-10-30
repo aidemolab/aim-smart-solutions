@@ -3,6 +3,7 @@ import { withBase } from "@/lib/base-path";
 import SiteHeader from "./components/SiteHeader";
 import SiteFooter from "./components/SiteFooter";
 import BackToTop from "./components/BackToTop";
+import ScrollToTop from "./components/ScrollToTop";
 import "./globals.css";
 import "./site.css";
 import "./demos.css";
@@ -29,13 +30,16 @@ export const viewport: Viewport = { themeColor: "#0B1F33" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en-GB">
+    // data-scroll-behavior: Next.js turns off the smooth scrolling in globals.css during page changes,
+    // so every new page opens at the very top instead of under the sticky header.
+    <html lang="en-GB" data-scroll-behavior="smooth">
       <body>
         <a className="skip-link" href="#main">Skip to main content</a>
         <SiteHeader />
         {children}
         <SiteFooter />
         <BackToTop />
+        <ScrollToTop />
       </body>
     </html>
   );
