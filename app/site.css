@@ -295,3 +295,6 @@ footer.site-footer{max-width:1440px;margin:0 auto;padding:56px 6vw 28px;display:
 .contact-crumbs{margin:0 0 28px}
 .back-to-contact{display:inline-flex;align-items:center;gap:6px;min-height:32px;margin:0 0 4px;color:var(--cobalt-dark);font-size:14px;font-weight:800}.back-to-contact:hover{text-decoration:underline;text-underline-offset:3px}
 .contact-crumbs .breadcrumbs ol{margin:0}
+
+/* Booking page: no header booking button, so the menu button keeps to the right */
+.site-header.no-cta .menu-toggle{margin-left:auto}

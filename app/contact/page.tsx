@@ -15,6 +15,15 @@ const routes = [
   { title: "Request a quote", body: "Already know which services you need? Answer a few guided questions so we can prepare a quote.", href: "/instant-quote/", cta: "Request a quote" },
 ];
 
+// Moved from the homepage: answers people want before they book.
+const faqs = [
+  ["Do I need to know which technology I need?", "No. The conversation begins with the business problem, the cost of the current process and the outcome you want. AIM recommends technology only when it is useful."],
+  ["Will this replace my existing systems?", "Not necessarily. Many improvements can connect or simplify the tools you already use. The smallest practical solution is considered first."],
+  ["Is AI suitable for every problem?", "No. Sometimes a clearer process, a simple automation or a dashboard is the better answer. You will not be sold AI for its own sake."],
+  ["Will the first call cost anything?", "No. The AI Opportunity Call is free and carries no obligation. You will leave with a clearer view of the first opportunity worth exploring."],
+  ["Can you work with a small team?", "Yes. AIM is designed for small and growing service businesses that need practical support without employing an in-house data, automation or AI specialist."],
+];
+
 export default function Contact() {
   return (
     <main id="main" className="services-main">
@@ -33,6 +42,8 @@ export default function Contact() {
           </article>
         ))}
       </section>
+
+      <section className="section faq-section" id="faq" aria-labelledby="faq-title"><div className="faq-intro"><p className="kicker">Before you book</p><h2 id="faq-title">Clear answers. <em>No hard sell.</em></h2><p>The first conversation is designed to establish whether there is a useful opportunity, not to push technology your business does not need.</p></div><div className="faq-list">{faqs.map(([question, answer]) => <details key={question}><summary>{question}<span aria-hidden="true">+</span></summary><p>{answer}</p></details>)}</div></section>
 
       <section className="contact-details" aria-labelledby="details-title">
         <div>

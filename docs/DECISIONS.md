@@ -182,3 +182,12 @@ than rewriting history; if a decision changes, add a new entry that replaces the
   JSON-LD (`app/components/ContactCrumbs.tsx`). "Contact" is highlighted in the desktop and mobile
   menus on all four Contact pages.
 - The booking page says "Talk directly with the person who builds your solution, not a sales team".
+
+## Homepage trimmed; FAQ on Contact; no header booking button on the booking page (2026-10-30)
+- The homepage is exactly: hero, the four pillar cards, footer. The reasons strip, "Explore all
+  services / Try the live demos" line, "A strong fit?" and the closing call to action are removed.
+  "A strong fit?" is dropped because About's "Who AIM works with" already says the same.
+- The FAQ ("Clear answers. No hard sell.") moves to the Contact page, below the three contact
+  options, so people see it before they book.
+- The header "Book a Free AI Opportunity Call" button (top bar and mobile menu) is hidden on
+  `/book-appointment/` only, where it would reload the same page.

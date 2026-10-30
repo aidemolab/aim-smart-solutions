@@ -47,6 +47,8 @@ export default function SiteHeader() {
   const isCurrent = (href: string) => pathname === href || pathname === href.replace(/\/$/, "")
     || (href === "/contact/" && CONTACT_SECTION.some((path) => pathname.startsWith(path)));
   const close = () => setOpen(false);
+  // On the booking page the booking button would only reload the same page, so it is hidden there.
+  const onBooking = pathname.startsWith(BOOKING_CTA.href.replace(/\/$/, ""));
 
   // Close the mobile menu with Escape.
   useEffect(() => {
@@ -57,7 +59,7 @@ export default function SiteHeader() {
   }, [open]);
 
   return (
-    <header className="site-header">
+    <header className={`site-header${onBooking ? " no-cta" : ""}`}>
       <Link className="brand" href="/" aria-label="AIM Smart Solutions home">
         <img src={withBase("/aim-logo.webp")} alt="AIM Smart Solutions" width={320} height={208} />
       </Link>
@@ -75,7 +77,7 @@ export default function SiteHeader() {
         {links.map((link) => <Link key={link.href} href={link.href} aria-current={isCurrent(link.href) ? "page" : undefined}>{link.label}</Link>)}
       </nav>
 
-      <Link className="nav-cta" href={BOOKING_CTA.href}>{BOOKING_CTA.label}</Link>
+      {!onBooking && <Link className="nav-cta" href={BOOKING_CTA.href}>{BOOKING_CTA.label}</Link>}
 
       <button type="button" className="menu-toggle" aria-expanded={open} aria-controls="mobile-menu" onClick={() => setOpen((value) => !value)}>
         <span className="menu-toggle-bars" aria-hidden="true" />
@@ -90,7 +92,7 @@ export default function SiteHeader() {
           <Link href="/live-demos/" onClick={close} aria-current={isCurrent("/live-demos/") ? "page" : undefined}>Live demos</Link>
           <DemosMenu onNavigate={close} />
           {links.map((link) => <Link key={link.href} href={link.href} onClick={close} aria-current={isCurrent(link.href) ? "page" : undefined}>{link.label}</Link>)}
-          <Link className="button primary" href={BOOKING_CTA.href} onClick={close}>{BOOKING_CTA.label}</Link>
+          {!onBooking && <Link className="button primary" href={BOOKING_CTA.href} onClick={close}>{BOOKING_CTA.label}</Link>}
         </nav>
       </div>
     </header>
