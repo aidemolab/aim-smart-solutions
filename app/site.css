@@ -92,6 +92,8 @@ footer.site-footer{max-width:1440px;margin:0 auto;padding:56px 6vw 28px;display:
 
 /* Start here */
 .start-here-wrap{padding-top:0}
+.service-offer{padding-top:24px}
+.proof-section .demo-video{margin:48px 0 0}.proof-section .demo-video h3{color:#fff}
 .start-here{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;padding:48px;background:linear-gradient(135deg,#FFFBEB,#fff 60%);border:2px solid var(--amber);border-radius:12px}
 .start-here h2{font-size:clamp(34px,4vw,54px)}
 .start-here-copy>p:not(.kicker){margin:20px 0 28px;color:var(--ink-soft);font-size:17px;line-height:1.7}
@@ -195,10 +197,16 @@ footer.site-footer{max-width:1440px;margin:0 auto;padding:56px 6vw 28px;display:
 .badge-key{display:flex;flex-wrap:wrap;gap:12px 32px;margin:26px 0 0}
 .badge-key div{display:flex;align-items:center;gap:10px}.badge-key dt{margin:0}.badge-key dd{margin:0;color:var(--ink-soft);font-size:14px}
 .lab-grid{padding:56px 8vw 80px;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
-.lab-pillar{padding:48px 8vw 8px;border-top:1px solid var(--line)}.lab-pillar .lab-grid{padding:24px 0 48px}
-.lab-pillar-head h2{margin:0;font-size:clamp(28px,3.4vw,42px)}.lab-pillar-head h2 a{color:inherit;text-decoration:underline;text-decoration-color:rgba(37,99,235,.35);text-decoration-thickness:2px;text-underline-offset:6px}.lab-pillar-head h2 a:hover{color:var(--cobalt-dark);text-decoration-color:currentColor}
-.lab-pillar-head p{margin:8px 0 0;color:var(--cobalt-dark);font-size:17px;font-weight:800}
-@media(max-width:600px){.lab-grid{padding:36px 6vw 56px}.lab-pillar{padding:36px 6vw 4px}.lab-pillar .lab-grid{padding:20px 0 36px}}
+.lab-jump{display:block;margin-top:30px}.lab-jump p{margin:0 0 10px;color:var(--slate);font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.lab-jump ul{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+.lab-jump a{display:inline-block;padding:9px 14px;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--navy);font-size:14px;font-weight:700}.lab-jump a:hover{border-color:var(--cobalt);color:var(--cobalt-dark)}
+.lab-pillar{border-top:1px solid var(--line)}
+.lab-service{padding:24px 8vw 8px;scroll-margin-top:100px}.lab-service .lab-grid{padding:22px 0 36px}
+.lab-pillar-label{margin:0;padding:40px 8vw 0;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}.lab-pillar-label a{color:var(--cobalt-dark)}
+.lab-service h2{margin:0;font-size:clamp(28px,3.4vw,40px)}.lab-service h2 a{color:inherit;text-decoration:underline;text-decoration-color:rgba(37,99,235,.35);text-decoration-thickness:2px;text-underline-offset:6px}.lab-service h2 a:hover{color:var(--cobalt-dark);text-decoration-color:currentColor}
+.lab-videos{margin:14px 0 0}
+.lab-shared{margin:14px 0 36px;max-width:640px;color:var(--ink-soft);font-size:16px;line-height:1.7}.lab-shared a{color:var(--cobalt-dark);font-weight:800;text-decoration:underline;text-underline-offset:3px}
+@media(max-width:600px){.lab-grid{padding:36px 6vw 56px}.lab-service{padding:20px 6vw 4px}.lab-pillar-label{padding:32px 6vw 0}.lab-service .lab-grid{padding:18px 0 28px}}
 
 /* About and contact */
 .about-principles .benefit-cards{margin-top:48px}
@@ -276,3 +284,9 @@ footer.site-footer{max-width:1440px;margin:0 auto;padding:56px 6vw 28px;display:
 .mobile-menu .demos-menu{display:flex;flex-direction:column;gap:2px;padding:6px 0 10px 12px;border-left:3px solid #EFF6FF}
 .mobile-menu .demos-menu a{display:flex;align-items:center;min-height:44px;font-size:15px}
 .demo-tile p.demo-pain{margin:0 0 10px;color:var(--navy);font-weight:700;font-size:15px;line-height:1.5}
+
+/* Side columns next to big headings: never narrower than a readable line; stack on smaller screens. */
+.section-intro{grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:clamp(32px,6vw,96px)}
+.proof-heading{grid-template-columns:minmax(0,1.1fr) minmax(260px,.9fr);gap:clamp(32px,6vw,96px)}
+.cost-section{grid-template-columns:minmax(0,1fr) minmax(280px,1fr);gap:clamp(32px,6vw,96px)}
+@media(max-width:900px){.section-intro,.proof-heading,.cost-section{display:block}.section-intro>p,.proof-heading>p{margin-top:22px}.cost-list{margin-top:28px}}

@@ -5,7 +5,7 @@ import { pillars, type Pillar } from "@/lib/site";
 import { basePath } from "@/lib/base-path";
 import { demoById, PHARMA_VIDEO, VOICE_AGENTS_VIDEO, videoExamples } from "@/lib/demos";
 import { services, serviceBySlug, type Service } from "../data";
-import { BookingButton, CtaBand, EnquiryJourney } from "../../components/Blocks";
+import { BookingButton, CostOfWaiting, CtaBand, EnquiryJourney, ProofJourneys, StartHere } from "../../components/Blocks";
 import DemoCard from "../../components/DemoCard";
 import OpportunityScore from "../../components/demos/OpportunityScore";
 import SkillsTaster from "../../components/demos/SkillsTaster";
@@ -102,6 +102,17 @@ export default async function ServicePage({ params }: Params) {
   const index = ordered.findIndex((item) => item.slug === service.slug);
   const prev = ordered[(index - 1 + ordered.length) % ordered.length];
   const next = ordered[(index + 1) % ordered.length];
+  // AI Voice Agents tells one story: pain → explanation → offer → proof → book a call.
+  const story = service.slug === "ai-voice-agents";
+  const voiceVideo = (
+    <figure className="demo-video">
+      <h3>Watch the 1-minute explainer</h3>
+      <video controls preload="none" playsInline poster={`${basePath}/assets/videos/${VOICE_AGENTS_VIDEO}-poster.jpg`} aria-label="Narrated 1-minute explainer video of AI Voice Agents answering calls and calling new leads, with captions">
+        <source src={`${basePath}/assets/videos/${VOICE_AGENTS_VIDEO}.mp4`} type="video/mp4" />
+      </video>
+    </figure>
+  );
+  const ctaBand = <CtaBand title={`Could ${service.name} help your business?`} body="Book a free AI Opportunity Call. We will look at where it fits and whether it is the right first step." />;
 
   return (
     <main id="main" className="services-main">
@@ -129,6 +140,8 @@ export default async function ServicePage({ params }: Params) {
           <TryDemoButton service={service} />
         </div>
       </section>
+
+      {story && <CostOfWaiting />}
 
       <section className="service-explain">
         <div>
@@ -159,7 +172,12 @@ export default async function ServicePage({ params }: Params) {
         </aside>
       </section>
 
-      <section className="service-demo" id="demo" aria-labelledby="demo-title">
+      {story && <div className="section start-here-wrap service-offer"><StartHere /></div>}
+
+      {story && <ProofJourneys>{voiceVideo}</ProofJourneys>}
+      {story && ctaBand}
+
+      {!story && <section className="service-demo" id="demo" aria-labelledby="demo-title">
         <p className="kicker">Try it</p>
         <h2 id="demo-title">See it <em>working.</em></h2>
         {service.slug === "smart-apps" && (
@@ -167,14 +185,6 @@ export default async function ServicePage({ params }: Params) {
             <h3>Watch the 1-minute demo</h3>
             <video controls preload="none" playsInline poster={`${basePath}/assets/videos/${PHARMA_VIDEO}-poster.jpg`} aria-label="Narrated 1-minute video demo of the pharmaceutical market intelligence app, with captions">
               <source src={`${basePath}/assets/videos/${PHARMA_VIDEO}.mp4`} type="video/mp4" />
-            </video>
-          </figure>
-        )}
-        {service.slug === "ai-voice-agents" && (
-          <figure className="demo-video">
-            <h3>Watch the 1-minute explainer</h3>
-            <video controls preload="none" playsInline poster={`${basePath}/assets/videos/${VOICE_AGENTS_VIDEO}-poster.jpg`} aria-label="Narrated 1-minute explainer video of AI Voice Agents answering calls and calling new leads, with captions">
-              <source src={`${basePath}/assets/videos/${VOICE_AGENTS_VIDEO}.mp4`} type="video/mp4" />
             </video>
           </figure>
         )}
@@ -198,7 +208,7 @@ export default async function ServicePage({ params }: Params) {
           </>
         )}
         {service.slug !== "video-production" && <ServiceDemo service={service} />}
-      </section>
+      </section>}
 
       {siblings.length > 0 && (
         <section className="related-services" aria-labelledby="related-title">
@@ -213,7 +223,7 @@ export default async function ServicePage({ params }: Params) {
         <Link className="pager-link is-next" href={`/services/${next.slug}/`} rel="next"><span>Next service →</span><strong>{next.name}</strong></Link>
       </nav>
 
-      <CtaBand title={`Could ${service.name} help your business?`} body="Book a free AI Opportunity Call. We will look at where it fits and whether it is the right first step." />
+      {!story && ctaBand}
     </main>
   );
 }

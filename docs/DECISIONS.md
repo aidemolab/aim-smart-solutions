@@ -155,3 +155,22 @@ than rewriting history; if a decision changes, add a new entry that replaces the
   `#win-more-customers`, `#save-time`, `#decide-better` (and new `#train-your-team`) anchors work.
 - `tests/quality.test.mjs` checks every internal link and `#anchor` in the export, and that each
   service is linked from its pillar page and the Services menu.
+
+## Homepage sections moved; Live demos by service (2026-10-30)
+- The homepage now runs: hero, pillar cards, "A strong fit?", FAQ, call to action. Its "See the
+  solutions working" button goes to the live journeys on the AI Voice Agents page.
+- AI Voice Agents tells one story: the pain ("The cost of waiting"), what the service does, the
+  offer ("The AI Receptionist package", which names what the package adds rather than repeating
+  the page), the proof (the explainer video and the three live journeys: instant response,
+  quotation-ready request, booking), then the booking call to action. Its `demos` list is those
+  three journeys.
+- Business Process Automation already shows the quotation-ready journey as its "Instant quote
+  request" demo.
+- "How I work" lives only on the About page, reworded as "How we work" (AIM).
+- About page: the "See it working before you decide" section is removed and the closing call to
+  action is "Talk to us". "AI Lab" is no longer used anywhere; the page is "Live demos".
+- `/live-demos/` is organised by service, in pillar order, with a pillar label above each group and
+  a quick-jump list at the top. Each service shows the demos from its own "Try it" section
+  (`service.demos`). The three journeys appear under both AI Voice Agents and Business Process
+  Automation because both pages use them. Video Production shows its video examples; Course
+  Design & Build points to the AI Skills Taster under AI & Data Training instead of repeating it.

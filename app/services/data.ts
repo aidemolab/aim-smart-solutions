@@ -38,7 +38,7 @@ export const services: Service[] = [
       "Taking appointment requests and common questions out of hours",
     ],
     features: ["Customer call handling", "Lead and enquiry capture", "Common questions and guided conversations", "Callback and appointment workflows"],
-    demos: ["enquiry-journey"],
+    demos: ["enquiry-journey", "instant-quote", "booking"], // shown as the three live journeys
     metaDescription: "AI voice agents and virtual assistants for UK service businesses: answer calls, capture enquiry details and support callbacks and appointment requests.",
   },
   {

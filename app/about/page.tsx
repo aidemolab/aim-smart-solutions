@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { withBase } from "@/lib/base-path";
 import { pillars } from "@/lib/site";
-import { BookingButton, CtaBand, HowIWork } from "../components/Blocks";
+import { BookingButton, CtaBand, HowWeWork } from "../components/Blocks";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/about/" },
@@ -51,20 +51,13 @@ export default function About() {
         </div>
         <div className="fit-checklist">
           <h3>What AIM helps with</h3>
-          {pillars.map((pillar) => <p key={pillar.id}><Link href={`/services/#${pillar.id}`}><strong>{pillar.name}:</strong> {pillar.promise.toLowerCase()}</Link></p>)}
+          {pillars.map((pillar) => <p key={pillar.id}><Link href={`/services/${pillar.id}/`}><strong>{pillar.name}:</strong> {pillar.promise.charAt(0).toLowerCase() + pillar.promise.slice(1)}</Link></p>)}
         </div>
       </section>
 
-      <div className="section"><HowIWork /></div>
+      <div className="section"><HowWeWork /></div>
 
-      <section className="section about-honesty" aria-labelledby="honesty-title">
-        <p className="kicker">Evidence before promises</p>
-        <h2 id="honesty-title">See it working <em>before you decide.</em></h2>
-        <p>Rather than ask you to take claims on trust, AIM shows working demonstrations you can try yourself. Each one is clearly labelled &quot;Live&quot; or &quot;Illustrative data&quot;, so you always know what you are looking at.</p>
-        <Link className="button secondary" href="/live-demos/">Visit the AI Lab <span aria-hidden="true">→</span></Link>
-      </section>
-
-      <CtaBand title="Talk directly with Alaa" body="Book a free AI Opportunity Call to talk through your business and the first improvement worth exploring." />
+      <CtaBand title="Talk to us" body="Book a free AI Opportunity Call to talk through your business and the first improvement worth exploring." />
     </main>
   );
 }

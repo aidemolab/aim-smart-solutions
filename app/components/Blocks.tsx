@@ -36,30 +36,89 @@ export function PillarCards() {
   );
 }
 
+// The offer on the AI Voice Agents page: the AI Receptionist package. The page above already
+// explains the voice agent, so this names what the package adds rather than repeating it.
 export function StartHere() {
   return (
     <section className="start-here" aria-labelledby="start-here-title">
       <div className="start-here-copy">
-        <p className="kicker">Start here</p>
+        <p className="kicker">The offer</p>
         <h2 id="start-here-title">The AI Receptionist <em>package</em></h2>
-        <p>Not sure where to begin? For most service businesses, the quickest win is making sure no enquiry or call goes unanswered. The AI Receptionist combines two services into one practical starting point.</p>
-        <div className="hero-actions"><BookingButton /><Link className="button secondary" href="/services/ai-voice-agents/">How the voice agent works</Link></div>
+        <p>For most service businesses, the quickest win is making sure no enquiry or call goes unanswered. The AI Receptionist combines two services into one practical starting point.</p>
+        <div className="hero-actions"><BookingButton /><a className="button secondary" href="#demo">Test it below <span aria-hidden="true">↓</span></a></div>
       </div>
       <ul className="start-here-list">
-        <li><strong>AI voice agent</strong><span>Answers calls and urgent enquiries, captures the details and passes them to you.</span></li>
+        <li><strong>The AI voice agent</strong><span>Everything described above, answering calls and urgent enquiries while you are busy.</span></li>
         <li><strong>Automatic enquiry follow-up</strong><span>Every website enquiry gets an instant acknowledgement, you get an alert, and follow-up happens on time.</span></li>
-        <li><strong>Set up around your business</strong><span>Your questions, your tone, your hand-over rules, connected to the tools you already use.</span></li>
+        <li><strong>Set up around your business</strong><span>Connected to the tools you already use.</span></li>
       </ul>
     </section>
   );
 }
 
-export function HowIWork({ dark = false }: { dark?: boolean }) {
+// The pain on the AI Voice Agents page.
+export function CostOfWaiting() {
+  const items = [
+    ["Missed revenue", "from enquiries that receive a faster answer elsewhere."],
+    ["Restricted capacity", "while skilled people repeat avoidable administration."],
+    ["Weaker decisions", "when important information remains scattered and unclear."],
+  ];
   return (
-    <section className={`how-i-work${dark ? " is-dark" : ""}`} aria-labelledby="how-i-work-title">
+    <section className="cost-section" aria-labelledby="cost-title">
+      <div><p className="kicker light">The cost of waiting</p><h2 id="cost-title">Every slow response gives the customer another reason to look elsewhere.</h2></div>
+      {/* Each row is number + one text block, so the text keeps the wide column. */}
+      <div className="cost-list">{items.map(([title, body], index) => <p key={title}><span>{String(index + 1).padStart(2, "0")}</span><span><strong>{title}</strong> {body}</span></p>)}</div>
+    </section>
+  );
+}
+
+// The three live customer journeys (the proof). Shown on the AI Voice Agents page and, by demo id,
+// on Business Process Automation and /live-demos/.
+export const journeys = [
+  {
+    id: "enquiry-journey",
+    title: "A new lead receives an instant response",
+    problem: "A new enquiry arrives while the owner is busy.",
+    solution: CALLS_ENABLED
+      ? "The customer receives confirmation straight away and can request an immediate AI voice response."
+      : "The customer receives confirmation straight away and the owner gets an alert with every detail.",
+    href: "/business-enquiry/",
+    cta: "Try the live enquiry",
+  },
+  { id: "instant-quote", title: "A service request arrives quotation-ready", problem: "Missing details cause repeated emails and slow down the quotation.", solution: "A guided request captures the relevant information for every selected service.", href: "/instant-quote/", cta: "Try the service request" },
+  { id: "booking", title: "A meeting books without diary chasing", problem: "Finding a time and sending reminders consumes valuable administration.", solution: "The customer selects an available appointment and receives confirmation and reminders.", href: "/book-appointment/", cta: "View live availability" },
+];
+
+export function ProofJourneys({ children }: { children?: React.ReactNode }) {
+  return (
+    <section className="proof-section" id="demo" aria-labelledby="proof-title">
+      <div className="section proof-inner">
+        <div className="proof-heading">
+          <div><p className="kicker light">Evidence before promises</p><h2 id="proof-title">Do not imagine the solution. <em>Test it.</em></h2></div>
+          <p>These are working customer journeys, not illustrations. Use them to experience how faster response, better information and simpler booking can feel.</p>
+        </div>
+        {children}
+        <div className="proof-grid">
+          {journeys.map((item, index) => (
+            <article key={item.id}>
+              <div className="proof-card-top"><span>{String(index + 1).padStart(2, "0")}</span><DemoBadge kind="Live" /></div>
+              <h3>{item.title}</h3>
+              <dl><dt>Without improvement</dt><dd>{item.problem}</dd><dt>With AIM</dt><dd>{item.solution}</dd></dl>
+              <Link href={item.href}>{item.cta} <span aria-hidden="true">→</span></Link>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function HowWeWork({ dark = false }: { dark?: boolean }) {
+  return (
+    <section className={`how-i-work${dark ? " is-dark" : ""}`} aria-labelledby="how-we-work-title">
       <div className="section-intro">
-        <div><p className={`kicker${dark ? " light" : ""}`}>How I work</p><h2 id="how-i-work-title">From first conversation to <em>confident team.</em></h2></div>
-        <p>Four clear steps, with a decision point after each one. You only move forward when the next step makes sense for your business.</p>
+        <div><p className={`kicker${dark ? " light" : ""}`}>How we work</p><h2 id="how-we-work-title">From first conversation to <em>confident team.</em></h2></div>
+        <p>AIM works in four clear steps, with a decision point after each one. You only move forward when the next step makes sense for your business.</p>
       </div>
       <ol className="steps">
         {howIWork.map((item) => <li key={item.step}><span>{item.step}</span><h3>{item.title}</h3><p>{item.body}</p></li>)}

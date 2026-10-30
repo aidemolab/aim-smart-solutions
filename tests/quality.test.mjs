@@ -108,7 +108,7 @@ test("every page offers the one main call to action", () => {
   for (const route of routes) assert.match(page(route), cta, `${label(route)} lacks the main call to action`);
 });
 
-test("every demo in the AI Lab has a Live or Illustrative data badge", () => {
+test("every demo on Live demos has a Live or Illustrative data badge", () => {
   const tiles = page("live-demos").split('class="demo-tile"').slice(1);
   assert.ok(tiles.length >= 9, `expected at least 9 demos, found ${tiles.length}`);
   tiles.forEach((tile, i) => assert.match(tile.slice(0, 300), /class="demo-badge [^"]+">(Live|Illustrative data)</, `demo ${i + 1} has no badge`));
