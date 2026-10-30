@@ -214,3 +214,14 @@ than rewriting history; if a decision changes, add a new entry that replaces the
 - Fix: `data-scroll-behavior="smooth"` on `<html>`, and `app/components/ScrollToTop.tsx`, which
   scrolls to the top after each page change except `#anchor` links and Back/Forward (so Back still
   returns to where the visitor was).
+
+## Live demos: video cards only (2026-10-30, replaces the earlier Live demos layout)
+- `/live-demos/` shows one card per demo video, grouped by service in pillar order: a title, one
+  short line and "Watch the demo video" (the site's pop-up player). No try buttons on this page;
+  under each service heading, "Go to [service] →" links to that service page's demo section, where
+  the interactive demos stay.
+- The enquiry, quote and booking pages are not shown as demos: they are AIM's real contact pages.
+- The mapping lives in `serviceVideos` (`lib/demos.ts`). Course Design & Build points to the AI
+  Skills Taster video under AI & Data Training. Cards that record a demo keep its badge;
+  explainers and examples have none.
+- The "Live demos" menu lists the nine services and jumps to each one's videos.

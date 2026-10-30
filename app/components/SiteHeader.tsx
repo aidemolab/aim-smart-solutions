@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { withBase } from "@/lib/base-path";
 import { BOOKING_CTA, pillars } from "@/lib/site";
-import { appDemos } from "@/lib/demos";
 import { serviceBySlug } from "../services/data";
 import { CONTACT_SECTION } from "./ContactCrumbs";
 
@@ -30,11 +29,14 @@ function ServicesMenu({ onNavigate }: { onNavigate?: () => void }) {
   );
 }
 
-// The standalone demo apps open in the same tab so the browser Back button returns here.
+// Matches /live-demos/: one entry per service (in pillar order), jumping to its demo videos.
+// Plain links, so a jump between sections of /live-demos/ never stacks two #anchors.
 function DemosMenu({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <div className="demos-menu">
-      {appDemos.map((demo) => <a key={demo.id} href={demo.href} onClick={onNavigate}>{demo.title}</a>)}
+      {pillars.flatMap((pillar) => pillar.services).map((slug) => (
+        <a key={slug} href={withBase(`/live-demos/#demos-${slug}`)} onClick={onNavigate}>{serviceBySlug(slug)?.name}</a>
+      ))}
       <Link className="demos-menu-all" href="/live-demos/" onClick={onNavigate}>All demos →</Link>
     </div>
   );

@@ -1,36 +1,32 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { demoById, VOICE_AGENTS_VIDEO, videoExamples } from "@/lib/demos";
+import { serviceVideos, sharedServiceVideo } from "@/lib/demos";
 import { pillars } from "@/lib/site";
 import { serviceBySlug } from "../services/data";
 import { BookingButton } from "../components/Blocks";
 import DemoBadge from "../components/DemoBadge";
-import DemoCard from "../components/DemoCard";
 import VideoModalLink from "../components/VideoModalLink";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/live-demos/" },
   title: "Live AI Demos",
-  description: "Try AIM Smart Solutions' AI and automation demos yourself: enquiry handling, instant quotes, online booking and a smart decision app.",
+  description: "Watch a short video of every AIM Smart Solutions demo, grouped by service, then try the interactive demos on each service page.",
 };
-
-// One heading per service, in pillar order. Each service shows the demos in its own "Try it"
-// section (service.demos in app/services/data.ts, the same list the service page uses).
-// Services that share a demo point to where it is shown instead of repeating it.
-const SHARED: Record<string, string> = { "course-design": "training" };
 
 const groups = pillars.map((pillar) => ({
   pillar,
   services: pillar.services.map(serviceBySlug).filter((service) => service !== undefined),
 }));
 
+// One card per demo video: title, one short line, "Watch the demo video" (same pop-up player as
+// the rest of the site). The interactive demos live on the service pages.
 export default function LiveDemos() {
   return (
     <main id="main" className="services-main">
       <section className="services-hero">
         <p className="kicker">Live demos</p>
-        <h1>Don&apos;t just read about AI. <em>Try it.</em></h1>
-        <p>Every demo here is something you can use right now. Each one is labelled so you know exactly what you are looking at.</p>
+        <h1>Don&apos;t just read about AI. <em>See it working.</em></h1>
+        <p>Watch a short video of each demo, then go to its service page to try it yourself. Each one is labelled so you know exactly what you are looking at.</p>
         <dl className="badge-key">
           <div><dt><DemoBadge kind="Live" /></dt><dd>Works for real. Forms send real emails; the data apps keep your own records for 24 hours.</dd></div>
           <div><dt><DemoBadge kind="Illustrative data" /></dt><dd>Runs on fictional sample data to show what is possible.</dd></div>
@@ -47,30 +43,29 @@ export default function LiveDemos() {
         <div className="lab-pillar" key={pillar.id}>
           <p className="lab-pillar-label"><Link href={`/services/${pillar.id}/`}>{pillar.name}</Link></p>
           {services.map((service) => {
-            const shared = SHARED[service.slug] ? serviceBySlug(SHARED[service.slug]) : undefined;
-            const list = shared ? [] : service.demos.map(demoById).filter((demo) => demo !== undefined);
+            const shared = sharedServiceVideo[service.slug] ? serviceBySlug(sharedServiceVideo[service.slug]) : undefined;
+            const cards = serviceVideos[service.slug] ?? [];
             return (
               <section className="lab-service" id={`demos-${service.slug}`} key={service.slug} aria-labelledby={`lab-${service.slug}`}>
                 <h2 id={`lab-${service.slug}`}><Link href={`/services/${service.slug}/`}>{service.name}</Link></h2>
-                {service.slug === "ai-voice-agents" && (
-                  <div className="card-videos lab-videos"><VideoModalLink video={VOICE_AGENTS_VIDEO} title="AI Voice Agents explainer" label="Watch the 1-minute explainer" /></div>
-                )}
-                {shared && (
-                  <p className="lab-shared">Course design is shown through the 5-minute AI Skills Taster. <a href={`#demos-${shared.slug}`}>Try it under {shared.name} <span aria-hidden="true">↑</span></a></p>
-                )}
-                {service.slug === "video-production" ? (
+                <p className="lab-go"><Link href={`/services/${service.slug}/#demo`}>Go to {service.name} <span aria-hidden="true">→</span></Link></p>
+                {shared ? (
+                  <>
+                    <p className="lab-shared">Course design is shown through the 5-minute AI Skills Taster, under <a href={`#demos-${shared.slug}`}>{shared.name}</a>.</p>
+                    <div className="lab-watch lab-shared-watch"><VideoModalLink video={serviceVideos[shared.slug][0].video} title={serviceVideos[shared.slug][0].title} label="Watch the demo video" /></div>
+                  </>
+                ) : (
                   <div className="lab-grid">
-                    {videoExamples.map((item) => (
-                      <article className="demo-tile lab-video-tile" key={item.video}>
-                        <p className="demo-pain">{item.kind}</p>
-                        <h3>{item.title}</h3>
-                        <p>{item.summary}</p>
-                        <div className="card-videos"><VideoModalLink video={item.video} title={item.title} label="Watch example" /></div>
+                    {cards.map((card) => (
+                      // Cards that record a demo carry its badge; explainers and examples do not.
+                      <article className={card.badge ? "demo-tile" : "demo-tile lab-video-tile"} key={card.video}>
+                        {card.badge && <DemoBadge kind={card.badge} />}
+                        <h3>{card.title}</h3>
+                        <p>{card.line}</p>
+                        <div className="lab-watch"><VideoModalLink video={card.video} title={card.title} label="Watch the demo video" /></div>
                       </article>
                     ))}
                   </div>
-                ) : list.length > 0 && (
-                  <div className="lab-grid">{list.map((demo) => <DemoCard key={demo.id} demo={demo} />)}</div>
                 )}
               </section>
             );

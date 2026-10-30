@@ -148,3 +148,33 @@ export const demos: Demo[] = [
 export const appDemos = demos.filter((demo) => demo.external);
 
 export const demoById = (id: string) => demos.find((demo) => demo.id === id);
+
+// /live-demos/ shows one video card per demo, grouped by service. Each card has a title, one short
+// line and a "Watch the demo video" button (pop-up player). The interactive demos stay on the
+// service pages. Badges follow the demo they record; explainers and examples have none.
+export type DemoVideoCard = { title: string; line: string; video: string; badge?: DemoBadgeKind };
+
+const demoVideo = (id: string, line: string): DemoVideoCard => {
+  const demo = demos.find((item) => item.id === id)!;
+  return { title: demo.title, line, video: id === "pharma-market-intelligence" ? PHARMA_VIDEO : demo.video!, badge: demo.badge };
+};
+
+export const serviceVideos: Record<string, DemoVideoCard[]> = {
+  "ai-voice-agents": [{ title: "AI Voice Agents explainer", line: "How a voice agent answers calls and follows up new leads.", video: VOICE_AGENTS_VIDEO }],
+  "sales-marketing": [
+    demoVideo("content-generator", "Turn one idea into social posts, a content plan and local keyword ideas."),
+    demoVideo("sales-lead-scoring", "Know which leads to call first instead of guessing."),
+  ],
+  "video-production": videoExamples.map((item) => ({ title: item.title, line: item.summary, video: item.video })),
+  "business-automation": [{ title: "Business Process Automation demo", line: "An enquiry arrives, the customer gets an instant reply and the owner gets an alert.", video: "automation-demo-v1" }],
+  "smart-apps": [
+    demoVideo("pharma-market-intelligence", "Decide which product to pilot, and at what price, from field survey data."),
+    demoVideo("property-investment", "Check whether a property's numbers stack up before you commit."),
+  ],
+  "data-analytics": [demoVideo("supplier-risk", "Spot risky suppliers before a delay or price rise hits your business.")],
+  "ai-consultancy": [demoVideo("ai-opportunity-score", "Answer seven quick questions and get a score with your top recommendations.")],
+  training: [demoVideo("ai-skills-taster", "A short lesson on writing better AI prompts, with a quick quiz.")],
+};
+
+// Services shown through another service's video instead of their own card.
+export const sharedServiceVideo: Record<string, string> = { "course-design": "training" };

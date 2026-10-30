@@ -119,7 +119,7 @@ test("every page offers the one main call to action", () => {
 
 test("every demo on Live demos has a Live or Illustrative data badge", () => {
   const tiles = page("live-demos").split('class="demo-tile"').slice(1);
-  assert.ok(tiles.length >= 9, `expected at least 9 demos, found ${tiles.length}`);
+  assert.ok(tiles.length >= 7, `expected at least 7 demos, found ${tiles.length}`);
   tiles.forEach((tile, i) => assert.match(tile.slice(0, 300), /class="demo-badge [^"]+">(Live|Illustrative data)</, `demo ${i + 1} has no badge`));
 });
 
@@ -144,4 +144,16 @@ test("\"practical\" is not used anywhere on the site", () => {
     const html = route === "404" ? readFileSync(join(out, "404.html"), "utf8") : page(route);
     assert.doesNotMatch(html, /practical/i, `${label(route)} still says "practical"`);
   }
+});
+
+test("Live demos shows video cards only, one per demo, with no try buttons or contact pages", () => {
+  const html = page("live-demos");
+  // The demo sections only: the closing call to action rightly links to the booking page.
+  const main = html.slice(html.indexOf('class="lab-pillar"'), html.indexOf('class="services-cta"'));
+  const cards = main.split('class="demo-tile').slice(1);
+  assert.ok(cards.length >= 12, `expected at least 12 video cards, found ${cards.length}`);
+  cards.forEach((card, i) => assert.match(card.slice(0, 1500), /Watch the demo video/, `card ${i + 1} has no "Watch the demo video" button`));
+  assert.doesNotMatch(main, /class="demo-try"|Generate content|Get your score|Start the taster|Try it →/, "a try button is still on Live demos");
+  assert.doesNotMatch(main, /Enquiry journey|Instant quote request|Online booking/, "a contact page is still shown as a demo");
+  assert.doesNotMatch(main, /href="(\/aim-smart-solutions)?\/(business-enquiry|instant-quote|book-appointment)\/"/, "Live demos links to a contact page as a demo");
 });
