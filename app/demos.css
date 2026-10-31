@@ -64,7 +64,7 @@
 @media(max-width:900px){.prompt-parts{grid-template-columns:1fr 1fr}.before-after{grid-template-columns:1fr}}
 @media(max-width:600px){.prompt-parts{grid-template-columns:1fr}.demo-app{padding:18px}.before-after figure{padding:14px}.before-after blockquote{padding:10px;font-size:13px}}
 
-.demo-tiles-after{margin-top:20px}
+
 
 /* AI Content & Keyword Generator */
 .gen-form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}

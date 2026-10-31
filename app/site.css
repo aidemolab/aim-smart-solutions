@@ -364,13 +364,18 @@ textarea{font-family:inherit}
 .funnel-about .about-copy>p:not(.kicker):not(.role){max-width:620px;font-size:17px;line-height:1.75}
 /* Demo cards: text block keeps full width */
 .demo-tile-text{width:100%}
-/* Data & Dashboards: one demo per row, text beside a large video */
+/* Service page demo cards: one demo per row, text and Try button beside a large video.
+   Phones stack them: title and bold line, Try button, video, then the longer summary. */
 .demo-tiles-rows{grid-template-columns:1fr;gap:24px}
-.demo-tiles-rows .demo-tile{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.45fr);grid-template-rows:auto 1fr;column-gap:40px;align-items:start;padding:32px}
-.demo-tiles-rows .demo-tile-text{grid-column:1;grid-row:1}
-.demo-tiles-rows .demo-try{grid-column:1;grid-row:2;align-self:start;justify-self:start}
-.demo-tiles-rows .demo-video-card{grid-column:2;grid-row:1/3;margin:0}
-@media(max-width:860px){.demo-tiles-rows .demo-tile{grid-template-columns:1fr;grid-template-rows:none;padding:24px}.demo-tiles-rows .demo-tile>*{grid-column:1!important;grid-row:auto!important}.demo-tiles-rows .demo-video-card{margin:0 0 20px}}
+.demo-tile-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.45fr);grid-template-rows:auto auto 1fr;column-gap:40px;align-items:start;padding:32px}
+.demo-tile-row .demo-tile-text{grid-column:1;grid-row:1}
+.demo-tile-row .demo-try{grid-column:1;grid-row:2;align-self:start;justify-self:start;margin:6px 0 0}
+.demo-tile-row .demo-summary{grid-column:1;grid-row:3;margin:22px 0 0}
+.demo-tile-row .demo-video-card{grid-column:2;grid-row:1/4;margin:0}
+.demo-tile-row .demo-tile-text h2,.demo-tile-row .demo-tile-text h3{margin:14px 0 8px}
+.demo-tile-row p.demo-pain{margin:0 0 14px}
+.demo-tool{margin-top:24px;scroll-margin-top:96px}
+@media(max-width:860px){.demo-tile-row{grid-template-columns:1fr;grid-template-rows:none;padding:22px}.demo-tile-row>*{grid-column:1!important;grid-row:auto!important}.demo-tile-row .demo-try{margin:0 0 18px}.demo-tile-row .demo-video-card{margin:0}.demo-tile-row .demo-video-card h4{display:none}.demo-tile-row .demo-summary{margin:16px 0 0}}
 .external-icon{display:inline-block;margin-left:.2em;font-size:.85em;text-decoration:none}
 /* Footer social icons: side by side under the email address */
 .footer-social{display:flex;gap:10px;margin:18px 0 0;padding:0;list-style:none}

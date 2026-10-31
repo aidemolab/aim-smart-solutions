@@ -164,6 +164,32 @@ test("/services/ shows each service's demo videos, with no try buttons or contac
   assert.doesNotMatch(main, /href="(\/aim-smart-solutions)?\/(business-enquiry|instant-quote|book-appointment)\/"/, "/services/ links to a contact page as a demo");
 });
 
+test("every service demo uses the same card, with the Try button under the bold line", () => {
+  const hands = { "smart-apps": "external", "data-analytics": "external", "sales-marketing": "tool", "ai-consultancy": "tool", training: "tool", "course-design": "tool" };
+  for (const [slug, kind] of Object.entries(hands)) {
+    const html = page(`services/${slug}`);
+    assert.match(html, /class="button secondary try-live-demo" href="#demo">Try the live demo/, `${slug} hero should say "Try the live demo"`);
+    const demo = html.slice(html.indexOf('id="demo"'), html.indexOf("</section>", html.indexOf('id="demo"')));
+    const cards = demo.split('class="demo-tile demo-tile-row"').slice(1);
+    assert.ok(cards.length > 0, `${slug} has no demo card`);
+    for (const card of cards) {
+      // Bold line, then the button, then the video: the button is in view when the section opens.
+      assert.match(card, /class="demo-pain">[^<]+<\/p><\/div><a class="demo-try"/, `${slug}: Try button is not straight under the bold line`);
+      assert.ok(card.indexOf('class="demo-try"') < card.indexOf("<video"), `${slug}: video comes before the Try button`);
+      assert.match(card, /<video/, `${slug}: card has no video`);
+    }
+    if (kind === "tool") {
+      assert.match(demo, /<a class="demo-try" href="#demo-tool">Start the demo(<!-- -->)? <span aria-hidden="true">↓<\/span>/, `${slug}: no "Start the demo ↓" button`);
+      assert.ok(demo.indexOf('id="demo-tool"') > demo.indexOf('class="demo-try"'), `${slug}: the tool should sit under its card`);
+    }
+  }
+  for (const [slug, label] of [["ai-voice-agents", "Watch the demo"], ["business-automation", "Watch the demo"], ["video-production", "Watch our showreel"]]) {
+    const html = page(`services/${slug}`);
+    assert.match(html, new RegExp(`class="button secondary try-live-demo" href="#demo">${label}(<!-- -->)? <span aria-hidden="true">↓`), `${slug} hero should say "${label} ↓"`);
+    assert.doesNotMatch(html, /Try the live demo|demo-tile-row/, `${slug} is video-only`);
+  }
+});
+
 test("/live-demos/ only redirects to /services/, and nothing links to it", () => {
   const html = page("live-demos");
   assert.match(html, /http-equiv="refresh" content="0; url=(\/aim-smart-solutions)?\/services\/"/, "no meta refresh to /services/");

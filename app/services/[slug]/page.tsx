@@ -47,16 +47,20 @@ const FEATURED: Record<string, { id: string; render: () => React.ReactNode }> = 
   "sales-marketing": { id: "content-generator", render: () => <ContentGenerator /> },
   "ai-consultancy": { id: "ai-opportunity-score", render: () => <OpportunityScore /> },
   training: { id: "ai-skills-taster", render: () => <SkillsTaster /> },
+  "course-design": { id: "ai-skills-taster", render: () => <SkillsTaster /> },
 };
 
-// The page's demo section: the same video(s) as on /services/ (serviceVideos), then the
-// interactive demo(s). A standalone app's video sits inside its card, next to "Try it".
+// The page's demo section. Every demo gets the same card: text and Try button on the left,
+// its video (the same one as on /services/, from serviceVideos) on the right. A built-in tool's
+// button says "Start the demo" and jumps to the tool, which sits under the card.
+// Video-only pages show their video on its own.
 function ServiceDemo({ service }: { service: Service }) {
   const videos = serviceVideos[service.slug] ?? [];
   const featured = FEATURED[service.slug];
-  const cards = service.demos.filter((id) => id !== featured?.id).map(demoById).filter((demo) => demo !== undefined);
-  const inCard = new Map(videos.filter((v) => v.demoId && cards.some((demo) => demo.id === v.demoId && demo.external)).map((v) => [v.demoId!, v.video]));
-  const top = videos.filter((v) => !(v.demoId && inCard.has(v.demoId)));
+  const cards = service.demos.map(demoById).filter((demo) => demo !== undefined);
+  const videoFor = (id: string) => videos.find((v) => v.demoId === id)?.video ?? (videos.length === 1 && cards.length === 1 ? videos[0].video : undefined);
+  const used = new Set(cards.map((demo) => videoFor(demo.id)));
+  const top = videos.filter((v) => !used.has(v.video));
   return (
     <>
       {top.map((v) => (
@@ -67,8 +71,14 @@ function ServiceDemo({ service }: { service: Service }) {
           </video>
         </figure>
       ))}
-      {featured?.render()}
-      {cards.length > 0 && <div className={`demo-tiles${featured ? " demo-tiles-after" : ""}${inCard.size > 1 ? " demo-tiles-rows" : ""}`}>{cards.map((demo) => <DemoCard key={demo.id} demo={demo} video={inCard.get(demo.id)} />)}</div>}
+      {cards.length > 0 && (
+        <div className="demo-tiles demo-tiles-rows">
+          {cards.map((demo) => demo.id === featured?.id
+            ? <DemoCard key={demo.id} demo={demo} video={videoFor(demo.id)} row tryHref="#demo-tool" tryText="Start the demo" />
+            : <DemoCard key={demo.id} demo={demo} video={videoFor(demo.id)} row />)}
+        </div>
+      )}
+      {featured && <div className="demo-tool" id="demo-tool">{featured.render()}</div>}
       {top.length === 0 && !featured && cards.length === 0 && (
         <div className="demo-placeholder">
           <h3>See it for your business</h3>

@@ -27,6 +27,7 @@ export const VOICE_AGENTS_VIDEO = "voice-agents-v1";
 export const demos: Demo[] = [
   {
     id: "content-generator",
+    pain: "Get a week of social content and local keyword ideas from one short description.",
     title: "AI Content & Keyword Generator",
     summary: "Describe your business and get three social posts, a 7-day content plan and local keyword ideas in under a minute. AI-generated, so review before posting.",
     href: "/services/sales-marketing/#demo",
@@ -38,6 +39,7 @@ export const demos: Demo[] = [
   },
   {
     id: "ai-opportunity-score",
+    pain: "Find out where AI could help your business most, in seven quick questions.",
     title: "AI Opportunity Score",
     summary: "Answer seven quick questions about how your business runs and get a score out of 100, a short explanation and your top three recommended services.",
     href: "/services/ai-consultancy/#demo",
@@ -76,6 +78,7 @@ export const demos: Demo[] = [
   },
   {
     id: "ai-skills-taster",
+    pain: "Learn to write better AI prompts for your business in five minutes.",
     title: "5-minute AI Skills Taster",
     summary: "A short lesson on writing better AI prompts for your business, with a before-and-after example and a three-question quiz with instant feedback.",
     href: "/services/training/#demo",
