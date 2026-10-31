@@ -146,7 +146,7 @@ export const demoById = (id: string) => demos.find((demo) => demo.id === id);
 export type DemoVideoCard = { title: string; line: string; video: string; demoId?: string; buttonLabel?: string };
 
 // Video Production's 30-45 second showreel, cut from AIM's own videos (no voiceover).
-export const SHOWREEL_VIDEO = "showreel-v1";
+export const SHOWREEL_VIDEO = "showreel-v2";
 
 const demoVideo = (id: string, line: string): DemoVideoCard => {
   const demo = demos.find((item) => item.id === id)!;

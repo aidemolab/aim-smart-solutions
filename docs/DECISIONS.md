@@ -244,9 +244,8 @@ than rewriting history; if a decision changes, add a new entry that replaces the
   Data & Dashboards: Supplier Risk, Sales Lead Scoring and Property Investment (video + Try it each);
   Opportunity Score (video + built-in tool); Skills Taster (Course Design points to it). Sales Lead
   Scoring and Property Investment moved to Data & Dashboards.
-- Video Production's showreel (`showreel-v1`, 38 s, silent, 16:9 and `showreel-v1-1x1` 1:1) is cut
-  from the Voice Agents explainer and the four demo apps, with AIM title and end cards. The other
-  videos were left out because they show the old site on screen.
+- Video Production's showreel (`showreel-v2`, 34 s, 16:9 and `showreel-v2-1x1` 1:1; see "Showreel v2"
+  below) replaced the silent `showreel-v1`.
 - Every service page: hero → how it helps → benefits → use cases and what's included → demo →
   "Could [service] help?" → "Also in [pillar]" → previous/next. The hero button always scrolls to
   #demo ("Try the live demo", or "Watch the demo" on video-only pages). AI Voice Agents keeps its
@@ -296,3 +295,19 @@ than rewriting history; if a decision changes, add a new entry that replaces the
 - Any other website: new tab via `ExternalLink` (`target="_blank"`, `rel="noopener noreferrer"`,
   a small ↗ and a hidden "(opens in a new tab)"). mailto: and tel: have no target. Same-page
   anchors unchanged. A test in `tests/quality.test.mjs` checks every exported page.
+
+## Showreel v2 with Jamie voiceover (2026-10-31)
+- `showreel-v2` (34.2 s, 16:9 and 1:1) replaces the silent v1 on Video Production and /services/.
+  Jamie voiceover (ElevenLabs voice llNlEi50DSCIEuoOIaH7, eleven_multilingual_v2, default
+  settings), burned-in captions, finished with `video/finish.py` (-16 LUFS, no music).
+- Script: "Customers decide in seconds whether a business looks right for them. A short video can
+  show them exactly what you do. At AIM Smart Solutions, we create promo, demo and explainer videos
+  for any business, with the script, voiceover and captions included. Every demo video on our
+  website was made this way, from AI voice agents and smart apps to live dashboards and training.
+  Ready for your website, LinkedIn and social media. Want a video that shows what you do? Book a
+  free AI Opportunity Call at aimsmartsolutions.tech."
+- Cut to the narration: AIM title card; Property dashboard; Voice Agents explainer; Property what-if;
+  then each demo on its word (voice agents call, Pharmaceutical app, Supplier Risk dashboard, Skills
+  Taster); Supplier what-if; end card "Book a free AI Opportunity Call / aimsmartsolutions.tech".
+- Clips are fresh caption-free recordings (video/*.spec.ts) plus the clean Voice Agents scenes,
+  because v1's clips had the old narration's captions burned in.

@@ -147,7 +147,7 @@ test("/services/ shows each service's demo videos, with no try buttons or contac
   const cards = main.split('class="services-list-card service-video-card"').slice(1);
   assert.equal(cards.length, 9, `expected 9 service cards, found ${cards.length}`);
   // Exactly the agreed videos per service (Course Design & Build points to the Skills Taster).
-  const expected = { "ai-voice-agents": ["voice-agents-v1"], "sales-marketing": ["keywords-demo-v1"], "video-production": ["showreel-v1"],
+  const expected = { "ai-voice-agents": ["voice-agents-v1"], "sales-marketing": ["keywords-demo-v1"], "video-production": ["showreel-v2"],
     "business-automation": ["automation-demo-v1"], "smart-apps": ["pharma-demo-v5"], "data-analytics": ["supplier-risk-v2", "sales-leads-v2", "property-v2"],
     "ai-consultancy": ["consultancy-demo-v1"], training: ["training-demo-v1"], "course-design": ["training-demo-v1"] };
   for (const [slug, videos] of Object.entries(expected)) {
