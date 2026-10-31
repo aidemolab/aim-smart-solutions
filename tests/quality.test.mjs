@@ -197,9 +197,29 @@ test("link rules: other websites open in a new tab with a label; our pages, demo
       } else {
         assert.match(tag, /target="_blank"/, `${where} should open in a new tab`);
         assert.match(tag, /rel="noopener noreferrer"/, `${where} needs rel="noopener noreferrer"`);
-        assert.match(body, /↗/, `${where} needs the ↗ icon`);
+        // Footer social icons are icon-only, so they carry an accessible label instead of the ↗.
+        if (!/class="footer-social-link"/.test(tag)) assert.match(body, /↗/, `${where} needs the ↗ icon`);
         assert.match(body, /\(opens in a new tab\)/, `${where} needs "(opens in a new tab)"`);
       }
+    }
+  }
+});
+
+test("the footer links to AIM on LinkedIn and Facebook, in a new tab, on every page", () => {
+  const social = [
+    ["https://www.linkedin.com/company/aimsmartsolutionsuk/", "AIM Smart Solutions on LinkedIn"],
+    ["https://www.facebook.com/aimsmartsolutions.tech", "AIM Smart Solutions on Facebook"],
+  ];
+  for (const route of routes) {
+    const footer = page(route).match(/<footer[\s\S]*?<\/footer>/)?.[0] ?? "";
+    for (const [href, name] of social) {
+      const at = footer.indexOf(`href="${href}"`);
+      const link = at < 0 ? undefined : footer.slice(footer.lastIndexOf("<a", at), footer.indexOf("</a>", at) + 4);
+      assert.ok(link, `${label(route)}: footer has no link to ${href}`);
+      assert.match(link, /target="_blank"/, `${label(route)}: ${name} should open in a new tab`);
+      assert.match(link, /rel="noopener noreferrer"/, `${label(route)}: ${name} needs rel="noopener noreferrer"`);
+      assert.ok(link.includes(`${name} (opens in a new tab)`), `${label(route)}: ${name} needs its label and "(opens in a new tab)"`);
+      assert.match(link, /<svg[^>]*aria-hidden="true"/, `${label(route)}: ${name} needs its icon`);
     }
   }
 });
