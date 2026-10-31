@@ -70,6 +70,6 @@ export const CALLS_ENABLED = Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY)
 
 // Social profiles, shown as icons in the site footer. They open in a new tab.
 export const SOCIAL = [
-  { id: "linkedin", href: "https://www.linkedin.com/company/aimsmartsolutionsuk/", label: "AIM Smart Solutions on LinkedIn" },
+  { id: "linkedin", href: "https://www.linkedin.com/company/aimsmartsolutionsuk/posts/?viewAsMember=true", label: "AIM Smart Solutions on LinkedIn" },
   { id: "facebook", href: "https://www.facebook.com/aimsmartsolutions.tech", label: "AIM Smart Solutions on Facebook" },
 ] as const;
