@@ -332,3 +332,14 @@ than rewriting history; if a decision changes, add a new entry that replaces the
   measures it and pads the page to match.
 - The 3 dashboard apps no longer have their own second bar; under the shared bar they keep a slim
   strip with the "Interactive demo · sample data" label and the 24-hour notice.
+
+## One demo card layout on every service page (2026-10-31)
+- Every hands-on demo on a service page uses the Data & Dashboards card: text on the left, video
+  on the right, stacked on phones (title, bold line, button, video, summary).
+- The Try button sits straight under the bold one-line description, so it is in view as soon as
+  "Try the live demo ↓" scrolls to #demo (checked at 390, 1024, 1280, 1366 and 1440px).
+- Built-in tools (Keyword Generator, Opportunity Score, Skills Taster) say "Start the demo ↓" and
+  jump to the tool under the card (#demo-tool). Course Design & Build now carries the Skills Taster too.
+- Video-only pages (AI Voice Agents, Business Process Automation, Video Production) keep
+  "Watch the demo ↓" / "Watch our showreel ↓".
+- The 3 dashboard apps show the 24-hour message once, in the strip under the demo bar.
