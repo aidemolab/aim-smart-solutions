@@ -7,7 +7,7 @@ import { BookingButton, CtaBand, HowWeWork } from "../components/Blocks";
 export const metadata: Metadata = {
   alternates: { canonical: "/about/" },
   title: "About AIM",
-  description: "AIM Smart Solutions is a Bolton-based AI and automation consultancy founded by Alaa Mostafa (PhD, Semiconductor Physics), supporting solo traders and small businesses across the UK.",
+  description: "AIM Smart Solutions builds AI for solo traders and small businesses, then teaches them to use it. Founded by Alaa Mostafa (PhD, Semiconductor Physics).",
 };
 
 const principles = [
@@ -21,8 +21,8 @@ export default function About() {
     <main id="main" className="services-main">
       <section className="services-hero">
         <p className="kicker">About AIM</p>
-        <h1>Technical depth. <em>Commercial clarity.</em></h1>
-        <p>AIM Smart Solutions helps solo traders and small businesses win more customers, save time and decide better through AI, automation and data analytics, and trains their teams to use it. It is based in Bolton, Greater Manchester, and supports businesses across the UK.</p>
+        <h1>We build AI for small businesses. <em>Then we teach them to use it.</em></h1>
+        <p>AIM Smart Solutions helps solo traders and small businesses win more customers, save time, make better decisions and train their teams, with AI built around their business and training that makes it stick.</p>
         <BookingButton />
       </section>
 
