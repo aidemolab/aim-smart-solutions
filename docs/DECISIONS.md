@@ -291,7 +291,7 @@ than rewriting history; if a decision changes, add a new entry that replaces the
 
 ## Link rules (2026-10-31)
 - Pages on aimsmartsolutions.tech and the demo apps (aidemolab.github.io), including the demo bar's
-  "Back to AIM Smart Solutions", "All services", "Other demos" and "Book a call": same tab.
+  "← Back to [service]", "All services" and "Book a call": same tab.
 - Any other website: new tab via `NewTabLink` (`target="_blank"`, `rel="noopener noreferrer"`,
   a small ↗ and a hidden "(opens in a new tab)"). mailto: and tel: have no target. Same-page
   anchors unchanged. A test in `tests/quality.test.mjs` checks every exported page.
@@ -322,3 +322,13 @@ than rewriting history; if a decision changes, add a new entry that replaces the
   Taster); Supplier what-if; end card "Book a free AI Opportunity Call / aimsmartsolutions.tech".
 - Clips are fresh caption-free recordings (video/*.spec.ts) plus the clean Voice Agents scenes,
   because v1's clips had the old narration's captions burned in.
+
+## One demo bar in every demo app (2026-10-31)
+- All 4 demo apps show only the shared bar (`public/assets/aim-demo-bar.js`): AIM logo (homepage) ·
+  "← Back to [service]" · "All services" (/services/) · "Book a call" (/book-appointment/), same tab.
+  Pharmaceutical goes back to /services/smart-apps/#demo; Supplier Risk, Sales Lead Scoring and
+  Property Investment to /services/data-analytics/#demo. The "Other demos" menu is gone.
+- On phones the bar takes two rows (logo and Back, then All services and Book a call); the script
+  measures it and pads the page to match.
+- The 3 dashboard apps no longer have their own second bar; under the shared bar they keep a slim
+  strip with the "Interactive demo · sample data" label and the 24-hour notice.
