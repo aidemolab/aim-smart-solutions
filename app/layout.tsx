@@ -8,7 +8,7 @@ import "./globals.css";
 import "./site.css";
 import "./demos.css";
 
-const description = "AI that grows your business, built for you and taught to you. AIM fixes missed calls, repetitive admin, scattered data and tools nobody knows how to use, for solo traders and small businesses. Bolton, UK.";
+const description = "AI that grows your business, built for you and taught to you. AIM fixes missed calls, repetitive admin, scattered data and tools nobody knows how to use, for solo traders and small businesses.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://aimsmartsolutions.tech"),
