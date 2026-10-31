@@ -11,7 +11,7 @@ export default function Home() {
       {/* Text-only hero: the promo video slot was left out until an up-to-date video is checked. */}
       <section className="funnel-hero hero-text-only">
         <div className="funnel-hero-copy">
-          <p className="eyebrow"><span /> AI for solo traders and small businesses</p>
+          <p className="eyebrow"><span /> Smart AI solutions that help businesses grow</p>
           <h1>AI that grows your business. <em>Built for you. Taught to you.</em></h1>
           <p className="hero-lede">We fix four everyday pains, from missed calls and repetitive admin to tools nobody knows how to use. We understand your pain, build the solution, and teach you to use it.</p>
           <div className="hero-actions"><BookingButton /><Link className="button secondary" href="/services/">Watch our demos <span aria-hidden="true">→</span></Link></div>
