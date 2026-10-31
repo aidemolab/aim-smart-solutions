@@ -175,14 +175,20 @@ test("/live-demos/ only redirects to /services/, and nothing links to it", () =>
   assert.doesNotMatch(readFileSync(join(out, "sitemap.xml"), "utf8"), /live-demos/, "sitemap still lists /live-demos/");
 });
 
-test("the shared demo bar sends visitors back to AIM, not to the old Live demos page", () => {
+test("the shared demo bar: logo, Back to the service's demo section, All services, Book a call, all same tab", () => {
   const bar = readFileSync(join(out, "assets", "aim-demo-bar.js"), "utf8");
   assert.doesNotMatch(bar, /live-demos/, "aim-demo-bar.js still links to /live-demos/");
-  assert.match(bar, /Back to AIM Smart Solutions/, "aim-demo-bar.js has no 'Back to AIM Smart Solutions' link");
+  assert.doesNotMatch(bar, /Other demos|menu-btn|This service/, "aim-demo-bar.js still has the Other demos menu");
+  assert.doesNotMatch(bar, /target=|_blank/, "a demo bar link opens a new tab");
+  assert.match(bar, /"Back to " \+ current\.service/, "no 'Back to [service]' link");
+  assert.match(bar, /var ALL_SERVICES = SITE \+ "\/services\/";[\s\S]*class="all" href="' \+ ALL_SERVICES \+ '">All services</, "no All services link to /services/");
+  assert.match(bar, /var BOOK = SITE \+ "\/book-appointment\/";[\s\S]*class="book" href="' \+ BOOK \+ '">Book a call</, "no Book a call link to /book-appointment/");
+  assert.match(bar, /class="logo" href="' \+ SITE \+ '\/"/, "logo does not link to the homepage");
   for (const app of ["aim-sales-lead-scoring-demo", "aim-property-investment-demo", "aim-supplier-risk-demo"]) {
-    assert.ok(new RegExp(`id: "${app}"[^}]*serviceUrl: SITE [+] "/services/data-analytics/"`).test(bar), `${app} should go back to Data & Dashboards`);
+    assert.ok(new RegExp(`id: "${app}", service: "Data & Dashboards", serviceUrl: SITE [+] "/services/data-analytics/#demo"`).test(bar), `${app} should go back to Data & Dashboards #demo`);
   }
-  assert.match(bar, /id: "aim-pharmaceutical-ai-demo"[^}]*serviceUrl: SITE \+ "\/services\/smart-apps\/"/, "pharma app should go back to AI Smart Apps");
+  assert.match(bar, /id: "aim-pharmaceutical-ai-demo", service: "AI Smart Apps", serviceUrl: SITE \+ "\/services\/smart-apps\/#demo"/, "pharma app should go back to AI Smart Apps #demo");
+  for (const slug of ["smart-apps", "data-analytics"]) assert.match(page(`services/${slug}`), /id="demo"/, `/services/${slug}/ has no #demo section`);
 });
 
 test("link rules: other websites and form links open in a new tab with a label; other links to our pages, demo apps, mailto and tel do not", () => {
