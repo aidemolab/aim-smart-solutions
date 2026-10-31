@@ -292,9 +292,14 @@ than rewriting history; if a decision changes, add a new entry that replaces the
 ## Link rules (2026-10-31)
 - Pages on aimsmartsolutions.tech and the demo apps (aidemolab.github.io), including the demo bar's
   "Back to AIM Smart Solutions", "All services", "Other demos" and "Book a call": same tab.
-- Any other website: new tab via `ExternalLink` (`target="_blank"`, `rel="noopener noreferrer"`,
+- Any other website: new tab via `NewTabLink` (`target="_blank"`, `rel="noopener noreferrer"`,
   a small ↗ and a hidden "(opens in a new tab)"). mailto: and tel: have no target. Same-page
   anchors unchanged. A test in `tests/quality.test.mjs` checks every exported page.
+- Exception (2026-10-31): links inside a form, or directly under one, where a visitor may have typed
+  something, open in a new tab with the same ↗ and label (`NewTabLink` with `className="form-link"`).
+  Applies to the privacy links under the booking, enquiry and quote forms and the AI Content &
+  Keyword Generator (all via `PrivacyNote`), and under the "Add" forms in the Supplier Risk, Sales
+  Lead Scoring and Property Investment apps. The link-rules test enforces it.
 
 ## Showreel v2 with Jamie voiceover (2026-10-31)
 - `showreel-v2` (34.2 s, 16:9 and 1:1) replaces the silent v1 on Video Production and /services/.
