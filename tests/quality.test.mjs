@@ -221,7 +221,7 @@ test("privacy links under forms open in a new tab", () => {
 
 test("the footer links to AIM on LinkedIn and Facebook, in a new tab, on every page", () => {
   const social = [
-    ["https://www.linkedin.com/company/aimsmartsolutionsuk/posts/?viewAsMember=true", "AIM Smart Solutions on LinkedIn"],
+    ["https://www.linkedin.com/company/aimsmartsolutionsuk/", "AIM Smart Solutions on LinkedIn"],
     ["https://www.facebook.com/aimsmartsolutions.tech", "AIM Smart Solutions on Facebook"],
   ];
   for (const route of routes) {

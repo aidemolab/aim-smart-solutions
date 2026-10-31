@@ -301,7 +301,7 @@ than rewriting history; if a decision changes, add a new entry that replaces the
   Keyword Generator (all via `PrivacyNote`), and under the "Add" forms in the Supplier Risk, Sales
   Lead Scoring and Property Investment apps. The link-rules test enforces it.
 
-- Footer social links (2026-10-31): LinkedIn (linkedin.com/company/aimsmartsolutionsuk/posts/?viewAsMember=true) and Facebook
+- Footer social links (2026-10-31): LinkedIn (linkedin.com/company/aimsmartsolutionsuk, the public page: the posts URL sends signed-out visitors to a sign-up wall) and Facebook
   (facebook.com/aimsmartsolutions.tech) as small icons side by side under the email address
   (`SOCIAL` in `lib/site.ts`). New tab, rel="noopener noreferrer", hidden label "AIM Smart Solutions on
   LinkedIn/Facebook (opens in a new tab)". Icon-only, so no ↗; the link-rules test allows that for these
