@@ -193,7 +193,7 @@ than rewriting history; if a decision changes, add a new entry that replaces the
   `/book-appointment/` only, where it would reload the same page.
 
 ## New hero, "practical" retired, og-v3 share image (2026-10-30)
-- Homepage hero: "AI for solo traders and small businesses · Bolton, UK"; headline "AI that grows
+- Homepage hero: "AI for solo traders and small businesses" (location removed 2026-10-31); headline "AI that grows
   your business. Built for you. Taught to you."; the four-pains subheading; buttons "Book a Free AI
   Opportunity Call" (/book-appointment/) and "Try a live demo" (/live-demos/); the three ticks.
 - The hero is text-only. The planned promo video (aim-promo-v2) was not available to check, so it is
@@ -284,3 +284,8 @@ than rewriting history; if a decision changes, add a new entry that replaces the
   again" appear only when the request actually fails.
 - `save-service-request` (Supabase, version 17) now keeps up to 10 services per request, so the
   quote form has no limit: all nine services plus "Not sure yet" can be chosen.
+
+## Location only in the footer and on Contact (2026-10-31)
+- "Bolton, Greater Manchester" appears only in the site-wide footer and on the Contact page (and in
+  the privacy policy's data-controller line, which must name where the business is based).
+- No location in the homepage or About hero, the site-wide default meta description, or share text.
