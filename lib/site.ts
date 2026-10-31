@@ -59,10 +59,10 @@ export const pillars: Pillar[] = [
 ];
 
 export const howIWork = [
-  { step: "01", title: "Free call", body: "A relaxed conversation about your business, where time or customers are being lost, and what a good result would look like." },
-  { step: "02", title: "Assessment", body: "A closer look at the process and data involved, so we agree on the first improvement worth making and what it will involve." },
-  { step: "03", title: "Build", body: "The smallest useful solution is built around the tools you already use, then tested with you before it goes live." },
-  { step: "04", title: "Train your team", body: "Your team learns how to use it with confidence, with clear guidance and support while it beds in." },
+  { step: "01", title: "Free call", body: "We start with your business problem, not a tool: where time or customers are being lost, and what a good result looks like." },
+  { step: "02", title: "Assessment", body: "A closer look at the process and data involved, so we agree the first improvement worth making." },
+  { step: "03", title: "Build", body: "We build the smallest useful solution around the tools you already use. Sometimes the best answer is not AI at all." },
+  { step: "04", title: "Train your team", body: "Training is part of the work, not an extra. Your team learns to use it with confidence." },
 ];
 
 // The AI call-back needs Turnstile, so it is only on when a site key is built in.

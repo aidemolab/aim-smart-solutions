@@ -88,7 +88,7 @@ footer.site-footer{max-width:1440px;margin:0 auto;padding:56px 6vw 28px;display:
 .pillar-services{margin:auto 0 0;padding:18px 0 0;list-style:none;border-top:1px solid var(--line);display:grid;gap:4px}
 .pillar-services li{padding:10px 0;color:var(--navy);font-size:15px;font-weight:700}
 .pillars-section .specialist-line{margin-top:24px}
-@media(max-width:1080px){.pillar-grid{grid-template-columns:1fr}}
+@media(max-width:700px){.pillar-grid{grid-template-columns:1fr}}
 
 /* Start here */
 .start-here-wrap{padding-top:0}
@@ -262,7 +262,7 @@ footer.site-footer{max-width:1440px;margin:0 auto;padding:56px 6vw 28px;display:
 
 /* Privacy policy and form notes */
 .privacy-draft{display:inline-block;margin:0 0 14px;padding:6px 12px;border-radius:999px;background:#FEF3C7;color:#78350F;font-size:13px;font-weight:800}
-.privacy{max-width:860px;padding:48px 8vw 72px;color:var(--slate);font-size:16px;line-height:1.75}
+.privacy{padding:48px max(8vw,calc((100% - 820px) / 2)) 72px;color:var(--slate);font-size:16px;line-height:1.75}
 .privacy h2{margin:36px 0 12px;font-size:clamp(24px,3vw,32px);color:var(--navy)}
 .privacy ul{padding-left:20px}.privacy li{margin:8px 0}
 .privacy a{color:var(--cobalt-dark);text-decoration:underline;text-underline-offset:3px}
@@ -342,3 +342,20 @@ textarea{font-family:inherit}
 
 /* Booking: slow-loading note with the email fallback */
 .slot-slow .slot-loading{margin-bottom:6px}.slot-fallback{margin:0 0 12px;color:var(--ink-soft);font-size:14px;line-height:1.6}.slot-fallback a{color:var(--cobalt-dark);font-weight:700;text-decoration:underline;text-underline-offset:3px}
+
+/* In-between screen sizes: laptops at 1024-1366px */
+/* How we work: four equal cards in a row when lines stay readable, 2 x 2 below that */
+.how-i-work .steps{grid-template-columns:repeat(4,minmax(0,1fr))}
+.how-i-work .steps p{font-size:15px}
+@media(max-width:1199px){.how-i-work .steps{grid-template-columns:repeat(2,minmax(0,1fr))}.how-i-work .steps li:after{display:none}}
+@media(max-width:600px){.how-i-work .steps{grid-template-columns:1fr}}
+/* Founder: photo beside the text down to tablet width, a shorter photo on phones */
+@media(max-width:1080px){.about.funnel-about{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr)}.funnel-about .about-photo{min-height:480px;max-height:none}.funnel-about .about-copy{padding:64px 6vw}}
+@media(max-width:760px){.about.funnel-about{grid-template-columns:1fr}.funnel-about .about-photo{min-height:0;max-height:440px}}
+/* Footer: an older rule made every column full width below 1080px */
+@media(max-width:1080px){.site-footer nav{grid-column:auto}}
+/* Services overview: a group of three stays on one row instead of leaving one card alone */
+.pillar-section .services-list{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+/* Privacy hero lines up with the centred policy text */
+.privacy-hero{padding-left:max(8vw,calc((100% - 820px) / 2));padding-right:max(8vw,calc((100% - 820px) / 2))}
+

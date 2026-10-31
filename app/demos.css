@@ -62,7 +62,7 @@
 .taster-result{margin-top:22px;padding:20px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:10px}
 .taster-result p{margin:0;color:var(--slate);line-height:1.6}
 @media(max-width:900px){.prompt-parts{grid-template-columns:1fr 1fr}.before-after{grid-template-columns:1fr}}
-@media(max-width:600px){.prompt-parts{grid-template-columns:1fr}}
+@media(max-width:600px){.prompt-parts{grid-template-columns:1fr}.demo-app{padding:18px}.before-after figure{padding:14px}.before-after blockquote{padding:10px;font-size:13px}}
 
 .demo-tiles-after{margin-top:20px}
 
