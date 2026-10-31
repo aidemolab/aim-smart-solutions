@@ -184,3 +184,22 @@ test("the shared demo bar sends visitors back to AIM, not to the old Live demos 
   }
   assert.match(bar, /id: "aim-pharmaceutical-ai-demo"[^}]*serviceUrl: SITE \+ "\/services\/smart-apps\/"/, "pharma app should go back to AI Smart Apps");
 });
+
+test("link rules: other websites open in a new tab with a label; our pages, demo apps, mailto and tel do not", () => {
+  const ours = /^(\/|#|https:\/\/aimsmartsolutions\.tech|https:\/\/aidemolab\.github\.io\/)/;
+  for (const route of [...routes, "404"]) {
+    const html = route === "404" ? readFileSync(join(out, "404.html"), "utf8") : page(route);
+    for (const [tag, body] of [...html.matchAll(/(<a\s[^>]*>)([\s\S]*?)<\/a>/g)].map((m) => [m[1], m[2]])) {
+      const href = tag.match(/href="([^"]*)"/)?.[1] ?? "";
+      const where = `${label(route)}: ${href}`;
+      if (/^(mailto|tel):/.test(href) || ours.test(href)) {
+        assert.ok(!/target=/.test(tag), `${where} should open in the same tab`);
+      } else {
+        assert.match(tag, /target="_blank"/, `${where} should open in a new tab`);
+        assert.match(tag, /rel="noopener noreferrer"/, `${where} needs rel="noopener noreferrer"`);
+        assert.match(body, /↗/, `${where} needs the ↗ icon`);
+        assert.match(body, /\(opens in a new tab\)/, `${where} needs "(opens in a new tab)"`);
+      }
+    }
+  }
+});

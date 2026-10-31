@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CONTACT_EMAIL } from "@/lib/site";
+import ExternalLink from "../components/ExternalLink";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
@@ -86,7 +87,7 @@ export default function Privacy() {
         <p>Under UK GDPR you can ask for a copy of your data, ask us to correct or delete it, restrict or object to how we use it, ask for it to be transferred, and withdraw consent at any time. Email <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. We will reply within one month.</p>
 
         <h2>10. Complaints</h2>
-        <p>If you are unhappy with how we use your data, please contact us first. You also have the right to complain to the Information Commissioner&apos;s Office (ICO): <a href="https://ico.org.uk/make-a-complaint/">ico.org.uk/make-a-complaint</a>, telephone 0303 123 1113.</p>
+        <p>If you are unhappy with how we use your data, please contact us first. You also have the right to complain to the Information Commissioner&apos;s Office (ICO): <ExternalLink href="https://ico.org.uk/make-a-complaint/">ico.org.uk/make-a-complaint</ExternalLink>, telephone 0303 123 1113.</p>
 
         <h2>11. Changes</h2>
         <p>We will update this page if our use of data changes, and show the date of the latest version at the top.</p>

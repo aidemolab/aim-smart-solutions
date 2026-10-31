@@ -289,3 +289,10 @@ than rewriting history; if a decision changes, add a new entry that replaces the
 - "Bolton, Greater Manchester" appears only in the site-wide footer and on the Contact page (and in
   the privacy policy's data-controller line, which must name where the business is based).
 - No location in the homepage or About hero, the site-wide default meta description, or share text.
+
+## Link rules (2026-10-31)
+- Pages on aimsmartsolutions.tech and the demo apps (aidemolab.github.io), including the demo bar's
+  "Back to AIM Smart Solutions", "All services", "Other demos" and "Book a call": same tab.
+- Any other website: new tab via `ExternalLink` (`target="_blank"`, `rel="noopener noreferrer"`,
+  a small ↗ and a hidden "(opens in a new tab)"). mailto: and tel: have no target. Same-page
+  anchors unchanged. A test in `tests/quality.test.mjs` checks every exported page.
