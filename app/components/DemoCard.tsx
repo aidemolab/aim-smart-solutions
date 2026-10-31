@@ -8,10 +8,12 @@ export default function DemoCard({ demo, headingLevel = 3, video }: { demo: Demo
   const Heading = headingLevel === 2 ? "h2" : "h3";
   return (
     <article className="demo-tile">
-      <DemoBadge kind={demo.badge} />
-      <Heading>{demo.title}</Heading>
-      {demo.pain && <p className="demo-pain">{demo.pain}</p>}
-      <p>{demo.summary}</p>
+      <div className="demo-tile-text">
+        <DemoBadge kind={demo.badge} />
+        <Heading>{demo.title}</Heading>
+        {demo.pain && <p className="demo-pain">{demo.pain}</p>}
+        <p>{demo.summary}</p>
+      </div>
       {video && (
         <figure className="demo-video demo-video-card">
           <h4>Watch the demo video</h4>

@@ -359,3 +359,15 @@ textarea{font-family:inherit}
 /* Privacy hero lines up with the centred policy text */
 .privacy-hero{padding-left:max(8vw,calc((100% - 820px) / 2));padding-right:max(8vw,calc((100% - 820px) / 2))}
 
+/* About founder: copy sits in the vertical middle beside the photo */
+.funnel-about .about-copy{display:flex;flex-direction:column;justify-content:center}
+.funnel-about .about-copy>p:not(.kicker):not(.role){max-width:620px;font-size:17px;line-height:1.75}
+/* Demo cards: text block keeps full width */
+.demo-tile-text{width:100%}
+/* Data & Dashboards: one demo per row, text beside a large video */
+.demo-tiles-rows{grid-template-columns:1fr;gap:24px}
+.demo-tiles-rows .demo-tile{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.45fr);grid-template-rows:auto 1fr;column-gap:40px;align-items:start;padding:32px}
+.demo-tiles-rows .demo-tile-text{grid-column:1;grid-row:1}
+.demo-tiles-rows .demo-try{grid-column:1;grid-row:2;align-self:start;justify-self:start}
+.demo-tiles-rows .demo-video-card{grid-column:2;grid-row:1/3;margin:0}
+@media(max-width:860px){.demo-tiles-rows .demo-tile{grid-template-columns:1fr;grid-template-rows:none;padding:24px}.demo-tiles-rows .demo-tile>*{grid-column:1!important;grid-row:auto!important}.demo-tiles-rows .demo-video-card{margin:0 0 20px}}

@@ -4,3 +4,6 @@
 @media(max-width:900px){.quote-site-header nav{display:none}.quote-builder{grid-template-columns:1fr}.service-details-panel{position:static}.quote-fields{grid-template-columns:1fr}}
 @media(max-width:560px){.quote-hero{padding:60px 24px 40px}.quote-builder{padding:34px 18px 54px}.quote-form-panel,.service-details-panel{padding:20px}.service-detail-step{padding:22px}.detail-actions{flex-direction:column}.next-button,.submit-request{margin-left:0}}
 .quote-fields{grid-template-columns:1fr}
+/* Wider form at laptop and desktop widths: two-column fields and services, summary panel beside it */
+@media(min-width:901px){.quote-builder{grid-template-columns:minmax(0,1.5fr) minmax(340px,1fr);gap:32px}.quote-fields{grid-template-columns:1fr 1fr}.quote-services{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}.quote-services label{margin:0}}
+@media(min-width:901px) and (max-width:1199px){.quote-builder{grid-template-columns:minmax(0,1.75fr) minmax(290px,1fr);gap:24px}.quote-form-panel{padding:28px}.service-details-panel{padding:18px}}

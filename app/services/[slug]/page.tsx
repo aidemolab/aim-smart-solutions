@@ -68,7 +68,7 @@ function ServiceDemo({ service }: { service: Service }) {
         </figure>
       ))}
       {featured?.render()}
-      {cards.length > 0 && <div className={`demo-tiles${featured ? " demo-tiles-after" : ""}`}>{cards.map((demo) => <DemoCard key={demo.id} demo={demo} video={inCard.get(demo.id)} />)}</div>}
+      {cards.length > 0 && <div className={`demo-tiles${featured ? " demo-tiles-after" : ""}${inCard.size > 1 ? " demo-tiles-rows" : ""}`}>{cards.map((demo) => <DemoCard key={demo.id} demo={demo} video={inCard.get(demo.id)} />)}</div>}
       {top.length === 0 && !featured && cards.length === 0 && (
         <div className="demo-placeholder">
           <h3>See it for your business</h3>
@@ -83,9 +83,11 @@ function ServiceDemo({ service }: { service: Service }) {
 // Pages with something to try say "Try the live demo"; video-only pages say "Watch the demo".
 // Either way the hero button scrolls to this page's own #demo section.
 const hasTryable = (service: Service) => Boolean(FEATURED[service.slug]) || service.demos.length > 0;
+// Video-only pages can name their video, e.g. "Watch our showreel" on Video Production.
+const watchLabel = (service: Service) => serviceVideos[service.slug]?.[0]?.buttonLabel ?? "Watch the demo";
 
 function TryDemoButton({ service }: { service: Service }) {
-  return <a className="button secondary try-live-demo" href="#demo">{hasTryable(service) ? "Try the live demo" : "Watch the demo"} <span aria-hidden="true">↓</span></a>;
+  return <a className="button secondary try-live-demo" href="#demo">{hasTryable(service) ? "Try the live demo" : watchLabel(service)} <span aria-hidden="true">↓</span></a>;
 }
 
 export default async function ServicePage({ params }: Params) {
@@ -183,7 +185,7 @@ export default async function ServicePage({ params }: Params) {
 
       <nav className="service-pager" aria-label="More services">
         <Link className="pager-link" href={`/services/${prev.slug}/`} rel="prev"><span>← Previous service</span><strong>{prev.name}</strong></Link>
-        <a className="button secondary pager-demo" href="#demo">{hasTryable(service) ? "Try the demo" : "Watch the demo"} <span aria-hidden="true">↑</span></a>
+        <a className="button secondary pager-demo" href="#demo">{hasTryable(service) ? "Try the demo" : watchLabel(service)} <span aria-hidden="true">↑</span></a>
         <Link className="pager-link is-next" href={`/services/${next.slug}/`} rel="next"><span>Next service →</span><strong>{next.name}</strong></Link>
       </nav>
     </main>

@@ -29,10 +29,8 @@ export default function About() {
         <div className="about-copy">
           <p className="kicker">The founder</p>
           <h2>Alaa Mostafa</h2>
-          <p className="role">Founder &amp; AI and Automation Consultant</p>
-          <p>A trainer first, with more than 20 years in technology, education and training.</p>
-          <p>A PhD in Semiconductor Physics.</p>
-          <p>He understands your pain, builds the solution and teaches you to use it.</p>
+          <p className="role">Founder &amp; Lead Trainer</p>
+          <p>Alaa is a trainer first, with more than 20 years in technology, education and training, and a PhD in Semiconductor Physics. He understands your pain, builds the solution and teaches your team to use it.</p>
         </div>
       </section>
 
