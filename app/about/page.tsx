@@ -2,10 +2,14 @@ import type { Metadata } from "next";
 import { withBase } from "@/lib/base-path";
 import { BookingButton, CtaBand, HowWeWork } from "../components/Blocks";
 
+const description = "AIM Smart Solutions builds AI for solo traders and small businesses, then teaches them to use it. Founded by Alaa Mostafa (PhD, Semiconductor Physics).";
+
 export const metadata: Metadata = {
   alternates: { canonical: "/about/" },
   title: "About AIM",
-  description: "AIM Smart Solutions builds AI for solo traders and small businesses, then teaches them to use it. Founded by Alaa Mostafa (PhD, Semiconductor Physics).",
+  description,
+  openGraph: { title: "About AIM | AIM Smart Solutions", description, images: [{ url: "/og-v3.png", width: 1200, height: 630, alt: "AIM Smart Solutions" }] },
+  twitter: { card: "summary_large_image", title: "About AIM | AIM Smart Solutions", description, images: ["/og-v3.png"] },
 };
 
 export default function About() {
