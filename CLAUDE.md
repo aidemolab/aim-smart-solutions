@@ -27,6 +27,9 @@ Read this and `docs/DECISIONS.md` before changing anything. British English thro
 ## Quality
 - Accessible and mobile-first: test at 375px, keyboard reachable, visible focus, alt text,
   sufficient contrast.
+- Check every layout change, and take review screenshots, at 390, 1024, 1280, 1366 and 1440px wide.
+  No text squashed into narrow columns, no unequal cards in a row, no content in a narrow strip
+  with large empty margins.
 - Every page has a unique title and meta description.
 
 ## Facts

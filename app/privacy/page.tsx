@@ -21,7 +21,7 @@ const processors = [
 export default function Privacy() {
   return (
     <main id="main" className="services-main">
-      <section className="services-hero">
+      <section className="services-hero privacy-hero">
         <p className="privacy-draft" role="note">Draft for owner review</p>
         <p className="kicker">Privacy</p>
         <h1>Privacy <em>policy</em></h1>
