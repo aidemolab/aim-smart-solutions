@@ -185,14 +185,20 @@ test("the shared demo bar sends visitors back to AIM, not to the old Live demos 
   assert.match(bar, /id: "aim-pharmaceutical-ai-demo"[^}]*serviceUrl: SITE \+ "\/services\/smart-apps\/"/, "pharma app should go back to AI Smart Apps");
 });
 
-test("link rules: other websites open in a new tab with a label; our pages, demo apps, mailto and tel do not", () => {
+test("link rules: other websites and form links open in a new tab with a label; other links to our pages, demo apps, mailto and tel do not", () => {
   const ours = /^(\/|#|https:\/\/aimsmartsolutions\.tech|https:\/\/aidemolab\.github\.io\/)/;
   for (const route of [...routes, "404"]) {
     const html = route === "404" ? readFileSync(join(out, "404.html"), "utf8") : page(route);
-    for (const [tag, body] of [...html.matchAll(/(<a\s[^>]*>)([\s\S]*?)<\/a>/g)].map((m) => [m[1], m[2]])) {
+    const forms = [...html.matchAll(/<form[\s>][\s\S]*?<\/form>/g)].map((m) => [m.index, m.index + m[0].length]);
+    for (const m of html.matchAll(/(<a\s[^>]*>)([\s\S]*?)<\/a>/g)) {
+      const [, tag, body] = m;
       const href = tag.match(/href="([^"]*)"/)?.[1] ?? "";
       const where = `${label(route)}: ${href}`;
-      if (/^(mailto|tel):/.test(href) || ours.test(href)) {
+      // Exception: links inside a form, or directly under one (class "form-link"), open in a new tab.
+      const formLink = /class="[^"]*\bform-link\b/.test(tag) || forms.some(([a, b]) => m.index > a && m.index < b);
+      if (/^(mailto|tel):/.test(href)) {
+        assert.ok(!/target=/.test(tag), `${where} should have no target`);
+      } else if (ours.test(href) && !formLink) {
         assert.ok(!/target=/.test(tag), `${where} should open in the same tab`);
       } else {
         assert.match(tag, /target="_blank"/, `${where} should open in a new tab`);
@@ -202,6 +208,14 @@ test("link rules: other websites open in a new tab with a label; our pages, demo
         assert.match(body, /\(opens in a new tab\)/, `${where} needs "(opens in a new tab)"`);
       }
     }
+  }
+});
+
+test("privacy links under forms open in a new tab", () => {
+  for (const route of ["book-appointment", "business-enquiry", "instant-quote", "services/sales-marketing"]) {
+    const note = page(route).match(/<p class="privacy-note">[\s\S]*?<\/p>/)?.[0];
+    assert.ok(note, `${route} has no privacy note`);
+    assert.match(note, /class="external-link form-link" target="_blank"|target="_blank"[^>]*form-link/, `${route}: the privacy link should open in a new tab`);
   }
 });
 
