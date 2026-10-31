@@ -301,6 +301,12 @@ than rewriting history; if a decision changes, add a new entry that replaces the
   Keyword Generator (all via `PrivacyNote`), and under the "Add" forms in the Supplier Risk, Sales
   Lead Scoring and Property Investment apps. The link-rules test enforces it.
 
+- Footer social links (2026-10-31): LinkedIn (linkedin.com/company/aimsmartsolutionsuk) and Facebook
+  (facebook.com/aimsmartsolutions.tech) as small icons side by side under the email address
+  (`SOCIAL` in `lib/site.ts`). New tab, rel="noopener noreferrer", hidden label "AIM Smart Solutions on
+  LinkedIn/Facebook (opens in a new tab)". Icon-only, so no ↗; the link-rules test allows that for these
+  two only and checks both are in the footer of every page.
+
 ## Showreel v2 with Jamie voiceover (2026-10-31)
 - `showreel-v2` (34.2 s, 16:9 and 1:1) replaces the silent v1 on Video Production and /services/.
   Jamie voiceover (ElevenLabs voice llNlEi50DSCIEuoOIaH7, eleven_multilingual_v2, default
