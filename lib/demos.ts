@@ -26,6 +26,17 @@ export const VOICE_AGENTS_VIDEO = "voice-agents-v1";
 
 export const demos: Demo[] = [
   {
+    id: "voice-receptionist",
+    pain: "Talk to our AI receptionist right now, in your browser.",
+    title: "AI Receptionist live demo",
+    summary: "Ask what AIM does, which service might fit or how the free call works. Like a real receptionist, it asks your name and what you need. It is a demo: it does not book anything, and calls are not recorded.",
+    href: "/services/ai-voice-agents/#demo",
+    badge: "Live",
+    video: VOICE_AGENTS_VIDEO,
+    tryLabel: "Start talking",
+    service: "ai-voice-agents",
+  },
+  {
     id: "content-generator",
     pain: "Get a week of social content and local keyword ideas from one short description.",
     title: "AI Content & Keyword Generator",

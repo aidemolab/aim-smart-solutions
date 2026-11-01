@@ -5,6 +5,9 @@ name: Deploy to GitHub Pages
 #   NEXT_PUBLIC_SUPABASE_URL        Supabase project URL
 #   NEXT_PUBLIC_SUPABASE_ANON_KEY   legacy anon key (JWT starting eyJ); public by design
 #   NEXT_PUBLIC_TURNSTILE_SITE_KEY  Cloudflare Turnstile site key; public by design
+#   NEXT_PUBLIC_VAPI_PUBLIC_KEY     Vapi PUBLIC key for the voice demo, locked in Vapi to
+#                                   aimsmartsolutions.tech and the demo assistant; public by design
+#   NEXT_PUBLIC_VAPI_DEMO_ASSISTANT_ID  ID of the "AIM Demo Receptionist" Vapi assistant
 #   PAGES_PREVIEW                   "false" (default) builds for the custom domain aimsmartsolutions.tech;
 #                                   "true" builds for aidemolab.github.io/aim-smart-solutions/.
 # Never add the service-role key, SMTP password, Vapi key or Turnstile secret here:
@@ -46,6 +49,8 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL: ${{ vars.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ vars.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
           NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.NEXT_PUBLIC_TURNSTILE_SITE_KEY }}
+          NEXT_PUBLIC_VAPI_PUBLIC_KEY: ${{ vars.NEXT_PUBLIC_VAPI_PUBLIC_KEY }}
+          NEXT_PUBLIC_VAPI_DEMO_ASSISTANT_ID: ${{ vars.NEXT_PUBLIC_VAPI_DEMO_ASSISTANT_ID }}
 
       - uses: actions/configure-pages@v5
 

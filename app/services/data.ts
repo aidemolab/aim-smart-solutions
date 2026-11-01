@@ -38,7 +38,7 @@ export const services: Service[] = [
       "Taking appointment requests and common questions out of hours",
     ],
     features: ["Customer call handling", "Caller details captured and passed to you", "Common questions and guided conversations", "Call-backs and appointment requests"],
-    demos: [],
+    demos: ["voice-receptionist"],
     metaDescription: "AI voice agents for solo traders and small businesses: answer calls when you cannot, take caller details and appointment requests, and call new leads back.",
   },
   {

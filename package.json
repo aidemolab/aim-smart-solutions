@@ -14,6 +14,7 @@
     "check-test-emails": "node scripts/check-test-emails.mjs"
   },
   "dependencies": {
+    "@vapi-ai/web": "2.7.1",
     "next": "16.2.6",
     "react": "19.2.6",
     "react-dom": "19.2.6"

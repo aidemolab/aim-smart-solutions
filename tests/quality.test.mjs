@@ -183,11 +183,28 @@ test("every service demo uses the same card, with the Try button under the bold 
       assert.ok(demo.indexOf('id="demo-tool"') > demo.indexOf('class="demo-try"'), `${slug}: the tool should sit under its card`);
     }
   }
-  for (const [slug, label] of [["ai-voice-agents", "Watch the demo"], ["business-automation", "Watch the demo"], ["video-production", "Watch our showreel"]]) {
+  for (const [slug, label] of [["business-automation", "Watch the demo"], ["video-production", "Watch our showreel"]]) {
     const html = page(`services/${slug}`);
     assert.match(html, new RegExp(`class="button secondary try-live-demo" href="#demo">${label}(<!-- -->)? <span aria-hidden="true">↓`), `${slug} hero should say "${label} ↓"`);
     assert.doesNotMatch(html, /Try the live demo|demo-tile-row/, `${slug} is video-only`);
   }
+});
+
+test("AI Voice Agents has the live receptionist demo in the same card, with its video beside it", () => {
+  const html = page("services/ai-voice-agents");
+  assert.match(html, /class="button secondary try-live-demo" href="#demo">Try the live demo(<!-- -->)? <span aria-hidden="true">↓/, "hero should say \"Try the live demo ↓\"");
+  const demo = html.slice(html.indexOf('id="demo"'), html.indexOf("</section>", html.indexOf('id="demo"')));
+  const cards = demo.split('class="demo-tile demo-tile-row"').slice(1);
+  assert.equal(cards.length, 1, "expected one demo card");
+  const card = cards[0];
+  assert.match(card, /class="demo-badge is-live">Live</, "voice demo needs the Live badge");
+  assert.match(card, /class="demo-pain">Talk to our AI receptionist right now, in your browser\.<\/p><\/div><div class="demo-voice"/, "Start talking is not straight under the bold line");
+  assert.match(card, /<button type="button" class="demo-try"[^>]*>Start talking<\/button>/, "no Start talking button");
+  assert.match(card, /Uses your microphone\. Calls last up to 3 minutes\. Please don(&#x27;|')t share personal or confidential information\./, "microphone note missing");
+  assert.ok(card.indexOf("Start talking") < card.indexOf("<video"), "video comes before the button");
+  assert.match(card, /id="video-voice-receptionist"[^>]*>[\s\S]*data-video="voice-agents-v1"/, "the explainer video should sit in the card");
+  // Only the public key may reach the browser: no private key names anywhere in the build.
+  for (const route of routes) assert.doesNotMatch(page(route), /VAPI_API_KEY|VAPI_PRIVATE/i, `${label(route)} mentions a private Vapi key`);
 });
 
 test("/live-demos/ only redirects to /services/, and nothing links to it", () => {
