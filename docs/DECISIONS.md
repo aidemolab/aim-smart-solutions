@@ -354,8 +354,8 @@ than rewriting history; if a decision changes, add a new entry that replaces the
   needs Turnstile (no secret = no calls) and uses the existing phone number (VAPI_PHONE_NUMBER_ID).
 - Assistant: "AIM Demo Receptionist" (4d2334d1…), a copy of the call-back assistant (same voice,
   model and transcriber) with a receptionist prompt built from the live site and recording off.
-  Each call overrides: opening line "Hi [name], this is AIM's AI receptionist, calling for your
-  demo. How can I help?", max 180 seconds, recording off, and a wrap-up line spoken at 160 seconds.
+  Each call overrides: opening line "Hi [name], this is Aim Smart Solutions' AI receptionist,
+  calling for your demo. How can I help?", max 180 seconds, recording off, and a wrap-up line at 160 s.
   The name is cut to letters, spaces, hyphens and apostrophes (30 characters).
 - Limits: one demo call per number in any 24 hours, 3 per IP per UTC day, 10 a UTC day site-wide
   (table demo_call_log and function demo_call_claim, kept apart from the call-back's call_log).
@@ -364,3 +364,10 @@ than rewriting history; if a decision changes, add a new entry that replaces the
   key of any kind is in the site.
 - The call-back assistant's knowledge was updated to the same site facts (v5); its role, call flow,
   opening line and settings were left as they were. Backups are kept outside the repo.
+
+## Spoken business name (2026-11-01)
+- Both Vapi assistants and the demo-call lines write the name as "Aim Smart Solutions", never "AIM",
+  so the voice says the word "aim" instead of spelling A-I-M. Both prompts carry the rule: always
+  the full name, pronounced like "aim", never spelt out or shortened to "Aim". The Azure voice has
+  no pronunciation dictionary in Vapi (that is ElevenLabs, Cartesia and Vapi voices only).
+  Written site text still uses "AIM".

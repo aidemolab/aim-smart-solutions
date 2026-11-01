@@ -28,7 +28,7 @@ const LIMITS = { callsPerIp: 3, callsTotal: 10 };
 const MAX_CALL_SECONDS = 180;
 const WRAP_UP_AT_SECONDS = 160;
 const WRAP_UP_LINE =
-  "We're nearly out of time for this demo, so I'll let you go. Thanks for trying AIM's AI receptionist. You can book a free AI Opportunity Call on the AIM website. Goodbye!";
+  "We're nearly out of time for this demo, so I'll let you go. Thanks for trying Aim Smart Solutions' AI receptionist. You can book a free AI Opportunity Call on the Aim Smart Solutions website. Goodbye!";
 
 const DEFAULT_TURNSTILE_HOSTNAMES = ["aimsmartsolutions.tech", "www.aimsmartsolutions.tech", "aidemolab.github.io", "localhost"];
 
@@ -154,7 +154,7 @@ Deno.serve(withCors(async (request: Request) => {
         phoneNumberId,
         customer: { number: mobile },
         assistantOverrides: {
-          firstMessage: `Hi ${name}, this is AIM's AI receptionist, calling for your demo. How can I help?`,
+          firstMessage: `Hi ${name}, this is Aim Smart Solutions' AI receptionist, calling for your demo. How can I help?`,
           maxDurationSeconds: MAX_CALL_SECONDS,
           artifactPlan: { recordingEnabled: false },
           hooks: [{ on: "call.timeElapsed", options: { seconds: WRAP_UP_AT_SECONDS }, do: [{ type: "say", exact: WRAP_UP_LINE }] }],
