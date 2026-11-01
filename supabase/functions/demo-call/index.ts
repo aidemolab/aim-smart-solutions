@@ -24,7 +24,7 @@ const CONSENT_TEXT = "I agree to receive one demo call from AIM's AI receptionis
 // "AIM Demo Receptionist" in Vapi: a copy of the call-back assistant with recording off.
 const DEFAULT_DEMO_ASSISTANT_ID = "4d2334d1-8776-49ee-badc-37035e7dd6b0";
 
-const LIMITS = { callsPerIp: 3, callsTotal: 30 };
+const LIMITS = { callsPerIp: 3, callsTotal: 10 };
 const MAX_CALL_SECONDS = 180;
 const WRAP_UP_AT_SECONDS = 160;
 const WRAP_UP_LINE =

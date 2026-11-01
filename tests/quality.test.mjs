@@ -216,7 +216,7 @@ test("the demo call consent wording matches the demo-call function", () => {
   const site = readFileSync(fileURLToPath(new URL("../lib/demos.ts", import.meta.url)), "utf8");
   const wording = site.match(/DEMO_CALL_CONSENT = "([^"]+)"/)[1];
   assert.ok(fn.includes(`"${wording}"`), "consent wording differs between site and function");
-  for (const [limit, value] of [["callsPerIp", 3], ["callsTotal", 30], ]) assert.match(fn, new RegExp(`${limit}: ${value}`), `${limit} should be ${value}`);
+  for (const [limit, value] of [["callsPerIp", 3], ["callsTotal", 10], ]) assert.match(fn, new RegExp(`${limit}: ${value}`), `${limit} should be ${value}`);
   assert.match(fn, /MAX_CALL_SECONDS = 180/);
   assert.match(fn, /recordingEnabled: false/);
 });

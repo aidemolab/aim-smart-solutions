@@ -357,7 +357,7 @@ than rewriting history; if a decision changes, add a new entry that replaces the
   Each call overrides: opening line "Hi [name], this is AIM's AI receptionist, calling for your
   demo. How can I help?", max 180 seconds, recording off, and a wrap-up line spoken at 160 seconds.
   The name is cut to letters, spaces, hyphens and apostrophes (30 characters).
-- Limits: one demo call per number in any 24 hours, 3 per IP per UTC day, 30 a UTC day site-wide
+- Limits: one demo call per number in any 24 hours, 3 per IP per UTC day, 10 a UTC day site-wide
   (table demo_call_log and function demo_call_claim, kept apart from the call-back's call_log).
   Numbers are stored only as salted hashes and deleted after 7 days.
 - The earlier in-browser version (Vapi Web SDK and a public key) was dropped before merge; no Vapi
