@@ -344,25 +344,23 @@ than rewriting history; if a decision changes, add a new entry that replaces the
   "Watch the demo ↓" / "Watch our showreel ↓".
 - The 3 dashboard apps show the 24-hour message once, in the strip under the demo bar.
 
-## Live AI receptionist voice demo (2026-11-01)
-- AI Voice Agents now has a hands-on demo: "Talk to our AI receptionist right now, in your browser."
-  in the standard card, with "Start talking" under the bold line and the explainer video beside it.
-  The hero says "Try the live demo ↓". The call runs inside the card (no #demo-tool).
-- Vapi assistant "AIM Demo Receptionist" (4d2334d1…) is a duplicate of the call-back assistant
-  "AIM Smart Solutions" (Sophie), so it keeps the same voice (Azure Ada, British), model and
-  transcriber. On the copy only: a receptionist prompt built from the live site (answers from the
-  site only, matches pains to services, takes a first name, points to the booking button, never
-  books, never quotes prices), the opening line "Hi, you're talking to AIM's AI receptionist, a live
-  demo. How can I help?", max 180 seconds and audio recording off. No call-back, transfer or
-  forwarding number. About $0.07 a minute at Vapi's listed rates.
+## AI receptionist demo call (2026-11-01)
+- AI Voice Agents has a hands-on demo in the standard card: bold line, then "Try it now: get a call
+  from our AI receptionist", with the explainer video beside it. The hero says "Try the live demo ↓".
+- The button opens a centred pop-up (native <dialog>): first name, UK mobile, the tick box "I agree
+  to receive one demo call from AIM's AI receptionist", Turnstile and "Call me now". On success:
+  "Your phone will ring in a few seconds."
+- Supabase function `demo-call` places the call through Vapi with the private key server-side. It
+  needs Turnstile (no secret = no calls) and uses the existing phone number (VAPI_PHONE_NUMBER_ID).
+- Assistant: "AIM Demo Receptionist" (4d2334d1…), a copy of the call-back assistant (same voice,
+  model and transcriber) with a receptionist prompt built from the live site and recording off.
+  Each call overrides: opening line "Hi [name], this is AIM's AI receptionist, calling for your
+  demo. How can I help?", max 180 seconds, recording off, and a wrap-up line spoken at 160 seconds.
+  The name is cut to letters, spaces, hyphens and apostrophes (30 characters).
+- Limits: one demo call per number in any 24 hours, 3 per IP per UTC day, 30 a UTC day site-wide
+  (table demo_call_log and function demo_call_claim, kept apart from the call-back's call_log).
+  Numbers are stored only as salted hashes and deleted after 7 days.
+- The earlier in-browser version (Vapi Web SDK and a public key) was dropped before merge; no Vapi
+  key of any kind is in the site.
 - The call-back assistant's knowledge was updated to the same site facts (v5); its role, call flow,
   opening line and settings were left as they were. Backups are kept outside the repo.
-- The page asks the assistant to wrap up at 2:35. Each browser gets 3 calls a day (localStorage, easy
-  to clear: a courtesy limit only).
-- Key: Vapi PUBLIC key "AIM website voice demo (copy assistant)", allowed origin
-  https://aimsmartsolutions.tech only, allowed assistant the demo copy only, transient assistants off.
-  It reaches the build as the GitHub variables NEXT_PUBLIC_VAPI_PUBLIC_KEY and
-  NEXT_PUBLIC_VAPI_DEMO_ASSISTANT_ID. The private key never goes in the browser or GitHub.
-- Vapi has no daily call or spend cap; the org has 10 concurrent call lines (shared with the
-  call-back) and credits auto-reload. An origin lock stops other websites, not scripts that fake
-  the Origin header, so watch usage; a server-issued short-lived token would be the next step.

@@ -13,7 +13,7 @@ const processors = [
   ["Supabase", "Database and server functions for the forms, bookings and demos", "UK (London data centre); Supabase is a US company"],
   ["IONOS", "Email: sending confirmations and holding our mailbox", "UK / EU"],
   ["Google (Calendar)", "Holding booked appointments in our calendar", "Global, including the US"],
-  ["Vapi", "Placing the optional AI call-back to your mobile, if you ask for one, and running the AI receptionist voice demo", "US"],
+  ["Vapi", "Placing the optional AI call-back and the AI receptionist demo call to your mobile, if you ask for one", "US"],
   ["Cloudflare (Turnstile)", "Checking that form submissions come from people, not bots", "Global, including the US"],
   ["OpenRouter and the AI model provider it routes to", "Generating text in the AI demos (content generator, pharma assistant)", "US and other countries"],
   ["GitHub (GitHub Pages)", "Hosting this website; keeps standard server logs such as IP addresses", "US"],
@@ -48,7 +48,7 @@ export default function Privacy() {
         <ul>
           <li><strong>Supplier risk, sales lead scoring and property apps:</strong> the sample data is fictional. Anything you add is saved against a random identifier stored in your browser (not your name) and is <strong>deleted automatically after 24 hours</strong>. Please do not enter personal or confidential information.</li>
           <li><strong>AI Content &amp; Keyword Generator:</strong> what you type is sent to an AI service through our server to create the content. We <strong>do not store your inputs or the results</strong>. We keep only a hashed IP counter for the daily limit, deleted after a few days.</li>
-          <li><strong>AI receptionist voice demo:</strong> if you press &quot;Start talking&quot;, your microphone audio is streamed to Vapi and its AI providers to run the conversation. Call audio is not recorded. Vapi keeps a text transcript and log of each demo call in our Vapi account, which only we can see, for its standard call history (currently 14 days), along with basic call details such as time and length. Please do not share personal or confidential information. Your browser keeps a count of today&apos;s demo calls to apply the limit of three a day; it is not sent to us.</li>
+          <li><strong>AI receptionist demo call:</strong> if you ask for a demo call, we collect your first name and UK mobile number. They are passed to Vapi, which places the call, and the conversation is processed by Vapi and its AI providers. The call audio is not recorded. Vapi keeps a text transcript of the call for 14 days, which only we can see. Your number is used only to place that one call; we keep a one-way scrambled (hashed) version, not the number itself, for up to 7 days to apply the limit of one demo call per number a day. Please do not share personal or confidential information during the call.</li>
           <li><strong>Other demos</strong> (opportunity score, skills taster) run entirely in your browser and send nothing to us.</li>
         </ul>
 
@@ -78,11 +78,12 @@ export default function Privacy() {
           <li>Enquiries, quote requests, bookings and related emails: [owner to confirm, suggested: up to 24 months after our last contact], unless we go on to work together.</li>
           <li>Call-back consent records: for as long as we keep the related enquiry.</li>
           <li>Demo app records: 24 hours. Content generator inputs: not stored. Hashed IP counters: a few days.</li>
+          <li>AI receptionist demo calls: no audio recording; the transcript is kept by Vapi for 14 days; the hashed number for up to 7 days.</li>
           <li>AI call records held by Vapi: [owner to confirm Vapi retention settings].</li>
         </ul>
 
         <h2>8. Cookies and browser storage</h2>
-        <p>We do not use advertising or analytics cookies. The demo apps store a random identifier in your browser so your own records show up for 24 hours, and the voice demo stores a count of today&apos;s calls. Cloudflare Turnstile may use browser data to tell people and bots apart.</p>
+        <p>We do not use advertising or analytics cookies. The demo apps store a random identifier in your browser so your own records show up for 24 hours. Cloudflare Turnstile may use browser data to tell people and bots apart.</p>
 
         <h2>9. Your rights</h2>
         <p>Under UK GDPR you can ask for a copy of your data, ask us to correct or delete it, restrict or object to how we use it, ask for it to be transferred, and withdraw consent at any time. Email <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. We will reply within one month.</p>

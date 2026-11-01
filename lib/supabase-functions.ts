@@ -22,7 +22,7 @@ export const NETWORK_ERROR_MESSAGE =
 export const HONEYPOT_FIELD = "website";
 
 export async function callFunction(
-  name: "appointment-booking" | "save-service-request" | "submit-enquiry",
+  name: "appointment-booking" | "save-service-request" | "submit-enquiry" | "demo-call",
   body: unknown,
 ): Promise<{ status: number; result: FunctionResult | null }> {
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {

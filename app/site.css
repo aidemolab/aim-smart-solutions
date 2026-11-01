@@ -383,28 +383,27 @@ textarea{font-family:inherit}
 .footer-social-link:hover{background:var(--cobalt,#2563EB);border-color:transparent}
 .footer-social-link:focus-visible{outline:2px solid #93B4FF;outline-offset:3px}
 
-/* AI Receptionist live demo (voice call inside its demo card) */
-.demo-tile-row .demo-voice{grid-column:1;grid-row:2;margin:6px 0 0}
-.demo-voice{width:100%;max-width:440px}
-.demo-voice button.demo-try{border:0;font-family:inherit;cursor:pointer}
-.demo-voice button.demo-try:disabled{cursor:progress;opacity:.8}
-.demo-voice .demo-try{display:inline-block}
-.demo-tile .demo-voice p{margin:0}
-.demo-tile .demo-voice p.voice-note{margin-top:12px;font-size:13px;line-height:1.5;color:var(--ink-soft)}
-.voice-live{display:flex;flex-wrap:wrap;align-items:center;gap:12px 14px;padding:12px 14px;background:#EFF6FF;border:1px solid var(--line);border-radius:8px}
-.voice-mic{position:relative;display:grid;place-items:center;width:44px;height:44px;flex:none;color:#fff;background:var(--cobalt-dark);border-radius:50%}
-.voice-mic::after{content:"";position:absolute;inset:0;border-radius:50%;box-shadow:0 0 0 0 rgba(37,99,235,.55);animation:voice-pulse 1.6s ease-out infinite}
-@keyframes voice-pulse{to{box-shadow:0 0 0 14px rgba(37,99,235,0)}}
-@media(prefers-reduced-motion:reduce){.voice-mic::after{animation:none}}
-.voice-live-text{flex:1 1 140px;color:var(--navy);font-weight:700;font-size:15px}
-.voice-clock{display:block;color:var(--ink-soft);font-weight:600;font-size:13px}
-.voice-end{padding:10px 14px;border:0;border-radius:4px;background:#B91C1C;color:#fff;font:800 14px/1 inherit;font-family:inherit;cursor:pointer}
-.voice-end:hover{background:#7F1D1D}
-.voice-ended{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
-.voice-ended p{flex-basis:100%;color:var(--navy);font-size:16px}
-.voice-again{padding:10px 4px;border:0;background:none;color:var(--cobalt-dark);font:700 14px/1 inherit;font-family:inherit;text-decoration:underline;cursor:pointer}
-.voice-problem{padding:12px 14px;background:#FFFBEB;border:1px solid #FCD34D;border-radius:8px}
-.demo-tile .voice-problem p{color:var(--navy);font-size:14px;line-height:1.55}
-.voice-problem a{color:var(--cobalt-dark);font-weight:700;text-decoration:underline}
-.voice-problem .voice-again{margin-top:6px;padding-left:0}
-@media(max-width:860px){.demo-tile-row .demo-voice{margin:0 0 18px}}
+/* AI Receptionist demo: button in the card, "call me" pop-up */
+.demo-tile-row .demo-call{grid-column:1;grid-row:2;margin:6px 0 0}
+.demo-call{width:100%;max-width:460px}
+.demo-call button.demo-try,.demo-call-dialog button.demo-try{border:0;font-family:inherit;line-height:1.35;text-align:left;cursor:pointer}
+.demo-tile .demo-call p.demo-call-note{margin:12px 0 0;font-size:13px;line-height:1.5;color:var(--ink-soft)}
+.demo-call-dialog{position:fixed;inset:0;margin:auto;height:fit-content;width:min(440px,calc(100vw - 32px));overflow:auto;max-height:calc(100dvh - 32px);padding:0;border:0;border-radius:10px;background:#fff;color:var(--navy);box-shadow:0 24px 70px rgba(11,31,51,.35)}
+.demo-call-dialog::backdrop{background:rgba(11,31,51,.55)}
+.demo-call-dialog h3{margin:0;padding:24px 56px 0 28px;font:600 22px/1.25 Georgia,serif}
+.demo-call-dialog .contact-form{padding:20px 28px 26px;box-shadow:none;border-top:0}
+.demo-call-dialog .contact-form input:not([type=checkbox]){font:400 16px/1.4 Arial,Helvetica,sans-serif;letter-spacing:normal;text-transform:none}
+.demo-call-dialog .contact-form button[type=submit]{color:#fff;background:var(--cobalt-dark)}
+.demo-call-dialog .contact-form button[type=submit]:hover{background:var(--navy)}
+.demo-call-dialog .contact-form button[type=submit]:disabled{opacity:.7;cursor:wait}
+.demo-call-close{position:absolute;top:12px;right:12px;width:40px;height:40px;border:0;border-radius:50%;background:transparent;color:var(--navy);font-size:26px;line-height:1;cursor:pointer}
+.demo-call-close:hover{background:#EFF6FF}
+.contact-form label.demo-call-consent{display:flex;align-items:flex-start;gap:10px;margin:0 0 18px;font-size:14px;font-weight:400;letter-spacing:0;line-height:1.45;text-transform:none;cursor:pointer}
+.contact-form label.demo-call-consent input{width:18px;height:18px;margin:2px 0 0;flex:none}
+.demo-call-form .submission-message:empty{display:none}
+.demo-call-form .submission-message{margin:14px 0 0;font-size:14px;line-height:1.5}
+.demo-call-form .submission-message.error{color:#B91C1C}
+.demo-call-done{padding:16px 28px 28px}
+.demo-call-done p{margin:0 0 14px;color:var(--ink-soft);font-size:15px;line-height:1.6}
+.demo-call-done p.demo-call-ring{color:var(--green);font-size:18px;font-weight:800}
+@media(max-width:860px){.demo-tile-row .demo-call{margin:0 0 18px}}

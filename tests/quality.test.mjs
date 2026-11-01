@@ -190,7 +190,7 @@ test("every service demo uses the same card, with the Try button under the bold 
   }
 });
 
-test("AI Voice Agents has the live receptionist demo in the same card, with its video beside it", () => {
+test("AI Voice Agents has the call-me receptionist demo in the same card, with its video beside it", () => {
   const html = page("services/ai-voice-agents");
   assert.match(html, /class="button secondary try-live-demo" href="#demo">Try the live demo(<!-- -->)? <span aria-hidden="true">↓/, "hero should say \"Try the live demo ↓\"");
   const demo = html.slice(html.indexOf('id="demo"'), html.indexOf("</section>", html.indexOf('id="demo"')));
@@ -198,13 +198,27 @@ test("AI Voice Agents has the live receptionist demo in the same card, with its 
   assert.equal(cards.length, 1, "expected one demo card");
   const card = cards[0];
   assert.match(card, /class="demo-badge is-live">Live</, "voice demo needs the Live badge");
-  assert.match(card, /class="demo-pain">Talk to our AI receptionist right now, in your browser\.<\/p><\/div><div class="demo-voice"/, "Start talking is not straight under the bold line");
-  assert.match(card, /<button type="button" class="demo-try"[^>]*>Start talking<\/button>/, "no Start talking button");
-  assert.match(card, /Uses your microphone\. Calls last up to 3 minutes\. Please don(&#x27;|')t share personal or confidential information\./, "microphone note missing");
-  assert.ok(card.indexOf("Start talking") < card.indexOf("<video"), "video comes before the button");
-  assert.match(card, /id="video-voice-receptionist"[^>]*>[\s\S]*data-video="voice-agents-v1"/, "the explainer video should sit in the card");
-  // Only the public key may reach the browser: no private key names anywhere in the build.
-  for (const route of routes) assert.doesNotMatch(page(route), /VAPI_API_KEY|VAPI_PRIVATE/i, `${label(route)} mentions a private Vapi key`);
+  assert.match(card, /class="demo-pain">[^<]+<\/p><\/div><div class="demo-call"><button type="button" class="demo-try"[^>]*>Try it now: get a call from our AI receptionist<\/button>/, "the call button is not straight under the bold line");
+  assert.ok(card.indexOf("Try it now") < card.indexOf("<video"), "video comes before the button");
+  assert.match(card, /data-video="voice-agents-v1"/, "the explainer video should sit in the card");
+  // The pop-up: first name, UK mobile, consent tick box, honeypot and "Call me now".
+  const dialog = card.slice(card.indexOf("<dialog"), card.indexOf("</dialog>"));
+  assert.match(dialog, /name="name"/, "no first name field");
+  assert.match(dialog, /type="tel"[^>]*name="mobile"/, "no mobile field");
+  assert.match(dialog, /type="checkbox"[^>]*\/?> ?(<!-- -->)?I agree to receive one demo call from AIM(&#x27;|')s AI receptionist/, "consent wording missing");
+  assert.match(dialog, /Call me now/, "no Call me now button");
+  // The browser-talk demo is gone: no Vapi SDK, key or private key name in any page.
+  for (const route of routes) assert.doesNotMatch(page(route), /VAPI_API_KEY|vapi-ai\/web|Start talking/i, `${label(route)} still has browser-talk code`);
+});
+
+test("the demo call consent wording matches the demo-call function", () => {
+  const fn = readFileSync(fileURLToPath(new URL("../supabase/functions/demo-call/index.ts", import.meta.url)), "utf8");
+  const site = readFileSync(fileURLToPath(new URL("../lib/demos.ts", import.meta.url)), "utf8");
+  const wording = site.match(/DEMO_CALL_CONSENT = "([^"]+)"/)[1];
+  assert.ok(fn.includes(`"${wording}"`), "consent wording differs between site and function");
+  for (const [limit, value] of [["callsPerIp", 3], ["callsTotal", 30], ]) assert.match(fn, new RegExp(`${limit}: ${value}`), `${limit} should be ${value}`);
+  assert.match(fn, /MAX_CALL_SECONDS = 180/);
+  assert.match(fn, /recordingEnabled: false/);
 });
 
 test("/live-demos/ only redirects to /services/, and nothing links to it", () => {

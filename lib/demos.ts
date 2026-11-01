@@ -24,16 +24,19 @@ export const PHARMA_VIDEO = "pharma-demo-v5";
 // top of the AI Voice Agents demo section and in that card's pop-up on /services/.
 export const VOICE_AGENTS_VIDEO = "voice-agents-v1";
 
+// Wording of the tick box on the demo call pop-up (also in supabase/functions/demo-call).
+export const DEMO_CALL_CONSENT = "I agree to receive one demo call from AIM's AI receptionist";
+
 export const demos: Demo[] = [
   {
     id: "voice-receptionist",
-    pain: "Talk to our AI receptionist right now, in your browser.",
+    pain: "Hear it for yourself: our AI receptionist calls your mobile in seconds.",
     title: "AI Receptionist live demo",
-    summary: "Ask what AIM does, which service might fit or how the free call works. Like a real receptionist, it asks your name and what you need. It is a demo: it does not book anything, and calls are not recorded.",
+    summary: "Enter your first name and UK mobile, and the AI receptionist phones you for a short demo. Ask what AIM does, which service might fit or how the free call works. It is a demo: it does not book anything, and calls are not recorded.",
     href: "/services/ai-voice-agents/#demo",
     badge: "Live",
     video: VOICE_AGENTS_VIDEO,
-    tryLabel: "Start talking",
+    tryLabel: "Try it now: get a call from our AI receptionist",
     service: "ai-voice-agents",
   },
   {

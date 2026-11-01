@@ -13,7 +13,7 @@ type Props = {
   // Built-in tools: the button jumps to the tool further down the page instead.
   tryHref?: string;
   tryText?: string;
-  // Demos that run inside the card (the voice receptionist) replace the Try link with their own controls.
+  // Demos that run inside the card (the voice receptionist call-back) replace the Try link with their own controls.
   action?: React.ReactNode;
 };
 
