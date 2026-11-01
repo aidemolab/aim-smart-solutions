@@ -10,6 +10,7 @@ import DemoCard from "../../components/DemoCard";
 import OpportunityScore from "../../components/demos/OpportunityScore";
 import SkillsTaster from "../../components/demos/SkillsTaster";
 import ContentGenerator from "../../components/demos/ContentGenerator";
+import DemoCall from "../../components/demos/DemoCall";
 import PillarPage from "../PillarPage";
 
 type Params = { params: Promise<{ slug: string }> };
@@ -73,7 +74,10 @@ function ServiceDemo({ service }: { service: Service }) {
       ))}
       {cards.length > 0 && (
         <div className="demo-tiles demo-tiles-rows">
-          {cards.map((demo) => demo.id === featured?.id
+          {cards.map((demo) => demo.id === "voice-receptionist"
+            // The voice demo runs inside its card: the button opens the "call me" pop-up.
+            ? <DemoCard key={demo.id} demo={demo} video={videoFor(demo.id)} row action={<DemoCall />} />
+            : demo.id === featured?.id
             ? <DemoCard key={demo.id} demo={demo} video={videoFor(demo.id)} row tryHref="#demo-tool" tryText="Start the demo" />
             : <DemoCard key={demo.id} demo={demo} video={videoFor(demo.id)} row />)}
         </div>

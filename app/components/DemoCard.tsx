@@ -13,6 +13,8 @@ type Props = {
   // Built-in tools: the button jumps to the tool further down the page instead.
   tryHref?: string;
   tryText?: string;
+  // Demos that run inside the card (the voice receptionist call-back) replace the Try link with their own controls.
+  action?: React.ReactNode;
 };
 
 function TryLink({ demo, tryHref, tryText }: Pick<Props, "demo" | "tryHref" | "tryText">) {
@@ -24,7 +26,7 @@ function TryLink({ demo, tryHref, tryText }: Pick<Props, "demo" | "tryHref" | "t
 
 function DemoVideo({ demo, video }: { demo: Demo; video: string }) {
   return (
-    <figure className="demo-video demo-video-card">
+    <figure className="demo-video demo-video-card" id={`video-${demo.id}`}>
       <h4>Watch the demo video</h4>
       <video controls preload="none" playsInline poster={`${basePath}/assets/videos/${video}-poster.jpg`} aria-label={`${demo.title} video`} data-video={video}>
         <source src={`${basePath}/assets/videos/${video}.mp4`} type="video/mp4" />
@@ -34,7 +36,7 @@ function DemoVideo({ demo, video }: { demo: Demo; video: string }) {
 }
 
 // A demo card: badge, title, summary, optionally its demo video, and the "Try it" link.
-export default function DemoCard({ demo, headingLevel = 3, video, row, tryHref, tryText }: Props) {
+export default function DemoCard({ demo, headingLevel = 3, video, row, tryHref, tryText, action }: Props) {
   const Heading = headingLevel === 2 ? "h2" : "h3";
   if (row) {
     return (
@@ -44,7 +46,7 @@ export default function DemoCard({ demo, headingLevel = 3, video, row, tryHref, 
           <Heading>{demo.title}</Heading>
           {demo.pain && <p className="demo-pain">{demo.pain}</p>}
         </div>
-        <TryLink demo={demo} tryHref={tryHref} tryText={tryText} />
+        {action ?? <TryLink demo={demo} tryHref={tryHref} tryText={tryText} />}
         {video && <DemoVideo demo={demo} video={video} />}
         <p className="demo-summary">{demo.summary}</p>
       </article>

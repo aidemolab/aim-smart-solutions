@@ -340,6 +340,27 @@ than rewriting history; if a decision changes, add a new entry that replaces the
   "Try the live demo ↓" scrolls to #demo (checked at 390, 1024, 1280, 1366 and 1440px).
 - Built-in tools (Keyword Generator, Opportunity Score, Skills Taster) say "Start the demo ↓" and
   jump to the tool under the card (#demo-tool). Course Design & Build now carries the Skills Taster too.
-- Video-only pages (AI Voice Agents, Business Process Automation, Video Production) keep
+- Video-only pages (Business Process Automation, Video Production; AI Voice Agents until 2026-11-01) keep
   "Watch the demo ↓" / "Watch our showreel ↓".
 - The 3 dashboard apps show the 24-hour message once, in the strip under the demo bar.
+
+## AI receptionist demo call (2026-11-01)
+- AI Voice Agents has a hands-on demo in the standard card: bold line, then "Try it now: get a call
+  from our AI receptionist", with the explainer video beside it. The hero says "Try the live demo ↓".
+- The button opens a centred pop-up (native <dialog>): first name, UK mobile, the tick box "I agree
+  to receive one demo call from AIM's AI receptionist", Turnstile and "Call me now". On success:
+  "Your phone will ring in a few seconds."
+- Supabase function `demo-call` places the call through Vapi with the private key server-side. It
+  needs Turnstile (no secret = no calls) and uses the existing phone number (VAPI_PHONE_NUMBER_ID).
+- Assistant: "AIM Demo Receptionist" (4d2334d1…), a copy of the call-back assistant (same voice,
+  model and transcriber) with a receptionist prompt built from the live site and recording off.
+  Each call overrides: opening line "Hi [name], this is AIM's AI receptionist, calling for your
+  demo. How can I help?", max 180 seconds, recording off, and a wrap-up line spoken at 160 seconds.
+  The name is cut to letters, spaces, hyphens and apostrophes (30 characters).
+- Limits: one demo call per number in any 24 hours, 3 per IP per UTC day, 10 a UTC day site-wide
+  (table demo_call_log and function demo_call_claim, kept apart from the call-back's call_log).
+  Numbers are stored only as salted hashes and deleted after 7 days.
+- The earlier in-browser version (Vapi Web SDK and a public key) was dropped before merge; no Vapi
+  key of any kind is in the site.
+- The call-back assistant's knowledge was updated to the same site facts (v5); its role, call flow,
+  opening line and settings were left as they were. Backups are kept outside the repo.
