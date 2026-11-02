@@ -205,7 +205,7 @@ test("AI Voice Agents has the call-me receptionist demo in the same card, with i
   const dialog = card.slice(card.indexOf("<dialog"), card.indexOf("</dialog>"));
   assert.match(dialog, /name="name"/, "no first name field");
   assert.match(dialog, /type="tel"[^>]*name="mobile"/, "no mobile field");
-  assert.match(dialog, /type="checkbox"[^>]*\/?> ?(<!-- -->)?I agree to receive one demo call from AIM(&#x27;|')s AI receptionist/, "consent wording missing");
+  assert.match(dialog, /type="checkbox"[^>]*\/?> ?(<!-- -->)?I agree to receive one demo call from Aim Smart Solutions(&#x27;|') AI receptionist/, "consent wording missing");
   assert.match(dialog, /Call me now/, "no Call me now button");
   // The browser-talk demo is gone: no Vapi SDK, key or private key name in any page.
   for (const route of routes) assert.doesNotMatch(page(route), /VAPI_API_KEY|vapi-ai\/web|Start talking/i, `${label(route)} still has browser-talk code`);
@@ -320,4 +320,25 @@ test("contact forms check fields themselves and show a message under each field"
     assert.match(html, /<form[^>]*noValidate|<form[^>]*novalidate/, `${route}: form should use its own field messages (noValidate)`);
     assert.doesNotMatch(html, /type="submit"[^>]*disabled=""/, `${route}: the send button should not start disabled`);
   }
+});
+
+// Design audit #1 and #3 (2026-11-02): the home hero leads with the promise and the live AI
+// receptionist demo, and the site uses self-hosted IBM Plex.
+test("home hero: main promise, sub-line, and the live call demo with its Live badge", () => {
+  const html = page("");
+  const hero = html.slice(html.indexOf('class="funnel-hero voice-hero"'), html.indexOf("</section>", html.indexOf('class="funnel-hero voice-hero"')));
+  assert.match(hero, /<h1[^>]*>Smart AI solutions that help businesses grow<\/h1>/, "hero headline");
+  assert.match(hero, /AI that grows your business\. Built for you\. Taught to you\./, "hero sub-line");
+  assert.match(hero, /Try it now: our AI receptionist calls you in seconds\./, "line above the call panel");
+  assert.match(hero, /class="demo-badge is-live">Live</, "the call demo needs its Live badge");
+  assert.match(hero, /name="mobile"/, "no mobile field in the hero demo");
+  assert.match(hero, /I agree to receive one demo call from Aim Smart Solutions(&#x27;|') AI receptionist/, "consent wording missing");
+  assert.match(hero, /class="hero-actions"[\s\S]*?href="\/book-appointment\/"/, "the hero keeps its booking button (the header button fades against it)");
+});
+
+test("fonts are IBM Plex, served from this site", () => {
+  const html = page("");
+  assert.doesNotMatch(html, /fonts\.googleapis\.com|fonts\.gstatic\.com/, "fonts must not load from Google");
+  const css = ["globals.css", "site.css", "demos.css"].map((f) => readFileSync(fileURLToPath(new URL(`../app/${f}`, import.meta.url)), "utf8")).join("");
+  assert.doesNotMatch(css, /Georgia|Arial/, "old font stacks left in the CSS");
 });

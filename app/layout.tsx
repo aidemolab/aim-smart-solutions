@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { IBM_Plex_Sans, IBM_Plex_Serif } from "next/font/google";
 import { withBase } from "@/lib/base-path";
 import SiteHeader from "./components/SiteHeader";
 import SiteFooter from "./components/SiteFooter";
@@ -7,6 +8,11 @@ import ScrollToTop from "./components/ScrollToTop";
 import "./globals.css";
 import "./site.css";
 import "./demos.css";
+
+// IBM Plex: Serif for headings, Sans for everything else. next/font downloads the files at build
+// time and serves them from this site, so visitors' browsers never contact Google.
+const plexSans = IBM_Plex_Sans({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-sans", display: "swap" });
+const plexSerif = IBM_Plex_Serif({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-serif", display: "swap" });
 
 const description = "AI that grows your business, built for you and taught to you. AIM fixes missed calls, repetitive admin, scattered data and tools nobody knows how to use, for solo traders and small businesses.";
 
@@ -32,7 +38,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     // data-scroll-behavior: Next.js turns off the smooth scrolling in globals.css during page changes,
     // so every new page opens at the very top instead of under the sticky header.
-    <html lang="en-GB" data-scroll-behavior="smooth">
+    <html lang="en-GB" data-scroll-behavior="smooth" className={`${plexSans.variable} ${plexSerif.variable}`}>
       <body>
         <a className="skip-link" href="#main">Skip to main content</a>
         <SiteHeader />

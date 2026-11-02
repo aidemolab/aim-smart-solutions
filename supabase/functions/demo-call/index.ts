@@ -19,7 +19,7 @@ import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { withCors } from "../_shared/cors.ts";
 
 // Must match the tick box on the site (lib/demos.ts DEMO_CALL_CONSENT).
-const CONSENT_TEXT = "I agree to receive one demo call from AIM's AI receptionist";
+const CONSENT_TEXT = "I agree to receive one demo call from Aim Smart Solutions' AI receptionist";
 
 // "AIM Demo Receptionist" in Vapi: a copy of the call-back assistant with recording off.
 const DEFAULT_DEMO_ASSISTANT_ID = "4d2334d1-8776-49ee-badc-37035e7dd6b0";

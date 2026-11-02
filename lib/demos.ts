@@ -25,7 +25,7 @@ export const PHARMA_VIDEO = "pharma-demo-v5";
 export const VOICE_AGENTS_VIDEO = "voice-agents-v1";
 
 // Wording of the tick box on the demo call pop-up (also in supabase/functions/demo-call).
-export const DEMO_CALL_CONSENT = "I agree to receive one demo call from AIM's AI receptionist";
+export const DEMO_CALL_CONSENT = "I agree to receive one demo call from Aim Smart Solutions' AI receptionist";
 
 export const demos: Demo[] = [
   {

@@ -348,7 +348,7 @@ than rewriting history; if a decision changes, add a new entry that replaces the
 - AI Voice Agents has a hands-on demo in the standard card: bold line, then "Try it now: get a call
   from our AI receptionist", with the explainer video beside it. The hero says "Try the live demo ↓".
 - The button opens a centred pop-up (native <dialog>): first name, UK mobile, the tick box "I agree
-  to receive one demo call from AIM's AI receptionist", Turnstile and "Call me now". On success:
+  to receive one demo call from Aim Smart Solutions' AI receptionist" (wording changed 2026-11-02), Turnstile and "Call me now". On success:
   "Your phone will ring in a few seconds."
 - Supabase function `demo-call` places the call through Vapi with the private key server-side. It
   needs Turnstile (no secret = no calls) and uses the existing phone number (VAPI_PHONE_NUMBER_ID).
@@ -395,3 +395,22 @@ than rewriting history; if a decision changes, add a new entry that replaces the
 - Quote: "Send my quote request" is always shown under the details panel; it lists what is missing
   (a service, the details for a service, or contact fields) instead of staying hidden or disabled.
 - `prefers-reduced-motion: reduce` turns off smooth scrolling, transitions and animations.
+
+## IBM Plex and the voice-demo home hero (2026-11-02)
+- Typeface: IBM Plex Serif for headings, IBM Plex Sans for everything else, loaded with `next/font`
+  in `app/layout.tsx` as `--font-serif` and `--font-sans`. The files are downloaded at build time
+  and served from the site, so no request goes to Google. All CSS uses the two variables; Georgia
+  and Arial are gone (a test checks). Heading letter-spacing is -.02em to suit Plex. Text burned
+  into video cover images is unchanged.
+- Home hero replaces the text-only hero (and the "Smart AI solutions…" eyebrow): headline "Smart AI
+  solutions that help businesses grow", sub-line "AI that grows your business. Built for you.
+  Taught to you.", the four-pains paragraph, then "Rather talk it through with a person?" with the
+  booking button and the three ticks. Beside it (below the intro on mobile, before booking) the
+  line "Try it now: our AI receptionist calls you in seconds." and a navy "Incoming call" panel
+  with the Live badge and the AI receptionist demo form open on the page.
+- The panel uses `DemoCall` with `variant="inline"`: same fields, consent, Turnstile, limits and
+  `demo-call` function as the AI Voice Agents pop-up. The site-wide limit (10 demo calls a day)
+  now covers both places.
+- "Watch our demos" is no longer in the home hero; the Services menu and pillar cards lead there.
+- Demo-call tick box (both places) and the consent text the `demo-call` function logs now read
+  "I agree to receive one demo call from Aim Smart Solutions' AI receptionist" (demo-call v3).

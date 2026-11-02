@@ -1,7 +1,8 @@
 "use client";
 
 // AI receptionist demo: a button in the demo card opens a small pop-up asking for a
-// first name and UK mobile. The demo-call Supabase function checks Turnstile and the
+// first name and UK mobile (variant "dialog", the AI Voice Agents page), or the same form
+// sits open on the page (variant "inline", the home page hero). The demo-call Supabase function checks Turnstile and the
 // limits, then asks Vapi to phone the visitor. No Vapi key is in the browser.
 import { FormEvent, useRef, useState } from "react";
 import { DEMO_CALL_CONSENT } from "@/lib/demos";
@@ -10,7 +11,8 @@ import Turnstile from "../Turnstile";
 
 type State = "ready" | "sending" | "done" | "error";
 
-export default function DemoCall() {
+export default function DemoCall({ variant = "dialog" }: { variant?: "dialog" | "inline" }) {
+  const id = variant === "inline" ? "hero-call" : "demo-call";
   const dialog = useRef<HTMLDialogElement>(null);
   const [state, setState] = useState<State>("ready");
   const [message, setMessage] = useState("");
@@ -58,12 +60,41 @@ export default function DemoCall() {
     }
   }
 
+  const form = (
+    <form className="contact-form demo-call-form" onSubmit={submit} noValidate>
+      <label htmlFor={`${id}-name`}>First name<input id={`${id}-name`} name="name" type="text" autoComplete="given-name" maxLength={30} required /></label>
+      <label htmlFor={`${id}-mobile`}>UK mobile number<input id={`${id}-mobile`} name="mobile" type="tel" inputMode="tel" autoComplete="tel" placeholder={variant === "inline" ? "07 or +44 7" : "07…"} aria-describedby={`${id}-status`} required /></label>
+      <div aria-hidden="true" style={{ position: "absolute", left: "-10000px", width: 1, height: 1, overflow: "hidden" }}>
+        <label htmlFor={`${id}-website`}>Website<input id={`${id}-website`} name={HONEYPOT_FIELD} type="text" tabIndex={-1} autoComplete="off" /></label>
+      </div>
+      <label htmlFor={`${id}-consent`} className="demo-call-consent"><input id={`${id}-consent`} name="consent" type="checkbox" value="yes" required /> {DEMO_CALL_CONSENT}</label>
+      <Turnstile onToken={setToken} resetKey={turnstileKey} />
+      <button type="submit" disabled={state === "sending"}>{state === "sending" ? "Calling…" : "Call me now"}</button>
+      <p id={`${id}-status`} className={`submission-message ${state}`} role="status" aria-live="polite">{message}</p>
+    </form>
+  );
+  const note = <p className="demo-call-note">One call per number per day. Calls last up to 3 minutes. Please don&apos;t share personal or confidential information.</p>;
+
+  if (variant === "inline") {
+    return (
+      <div className="demo-call demo-call-inline">
+        {state === "done" ? (
+          <div className="demo-call-done" role="status" aria-live="polite">
+            <p className="demo-call-ring">{message}</p>
+            <p>Answer it and ask whatever you like: what AIM does, which service fits, or how the free call works.</p>
+          </div>
+        ) : form}
+        {note}
+      </div>
+    );
+  }
+
   return (
     <div className="demo-call">
       <button type="button" className="demo-try" onClick={open} aria-haspopup="dialog">
         Try it now: get a call from our AI receptionist
       </button>
-      <p className="demo-call-note">One call per number per day. Calls last up to 3 minutes. Please don&apos;t share personal or confidential information.</p>
+      {note}
 
       <dialog ref={dialog} className="demo-call-dialog" aria-labelledby="demo-call-title" onClose={() => state === "error" && setState("ready")}>
         <button type="button" className="demo-call-close" onClick={() => dialog.current?.close()} aria-label="Close">×</button>
@@ -75,17 +106,7 @@ export default function DemoCall() {
             <button type="button" className="demo-try" onClick={() => dialog.current?.close()}>Close</button>
           </div>
         ) : (
-          <form className="contact-form demo-call-form" onSubmit={submit} noValidate>
-            <label htmlFor="demo-call-name">First name<input id="demo-call-name" name="name" type="text" autoComplete="given-name" maxLength={30} required /></label>
-            <label htmlFor="demo-call-mobile">UK mobile number<input id="demo-call-mobile" name="mobile" type="tel" inputMode="tel" autoComplete="tel" placeholder="07…" aria-describedby="demo-call-status" required /></label>
-            <div aria-hidden="true" style={{ position: "absolute", left: "-10000px", width: 1, height: 1, overflow: "hidden" }}>
-              <label htmlFor="demo-call-website">Website<input id="demo-call-website" name={HONEYPOT_FIELD} type="text" tabIndex={-1} autoComplete="off" /></label>
-            </div>
-            <label htmlFor="demo-call-consent" className="demo-call-consent"><input id="demo-call-consent" name="consent" type="checkbox" value="yes" required /> {DEMO_CALL_CONSENT}</label>
-            <Turnstile onToken={setToken} resetKey={turnstileKey} />
-            <button type="submit" disabled={state === "sending"}>{state === "sending" ? "Calling…" : "Call me now"}</button>
-            <p id="demo-call-status" className={`submission-message ${state}`} role="status" aria-live="polite">{message}</p>
-          </form>
+          form
         )}
       </dialog>
     </div>
