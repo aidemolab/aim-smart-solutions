@@ -348,7 +348,7 @@ than rewriting history; if a decision changes, add a new entry that replaces the
 - AI Voice Agents has a hands-on demo in the standard card: bold line, then "Try it now: get a call
   from our AI receptionist", with the explainer video beside it. The hero says "Try the live demo ↓".
 - The button opens a centred pop-up (native <dialog>): first name, UK mobile, the tick box "I agree
-  to receive one demo call from AIM's AI receptionist", Turnstile and "Call me now". On success:
+  to receive one demo call from Aim Smart Solutions' AI receptionist" (wording changed 2026-11-02), Turnstile and "Call me now". On success:
   "Your phone will ring in a few seconds."
 - Supabase function `demo-call` places the call through Vapi with the private key server-side. It
   needs Turnstile (no secret = no calls) and uses the existing phone number (VAPI_PHONE_NUMBER_ID).
@@ -412,3 +412,5 @@ than rewriting history; if a decision changes, add a new entry that replaces the
   `demo-call` function as the AI Voice Agents pop-up. The site-wide limit (10 demo calls a day)
   now covers both places.
 - "Watch our demos" is no longer in the home hero; the Services menu and pillar cards lead there.
+- Demo-call tick box (both places) and the consent text the `demo-call` function logs now read
+  "I agree to receive one demo call from Aim Smart Solutions' AI receptionist" (demo-call v3).

@@ -205,7 +205,7 @@ test("AI Voice Agents has the call-me receptionist demo in the same card, with i
   const dialog = card.slice(card.indexOf("<dialog"), card.indexOf("</dialog>"));
   assert.match(dialog, /name="name"/, "no first name field");
   assert.match(dialog, /type="tel"[^>]*name="mobile"/, "no mobile field");
-  assert.match(dialog, /type="checkbox"[^>]*\/?> ?(<!-- -->)?I agree to receive one demo call from AIM(&#x27;|')s AI receptionist/, "consent wording missing");
+  assert.match(dialog, /type="checkbox"[^>]*\/?> ?(<!-- -->)?I agree to receive one demo call from Aim Smart Solutions(&#x27;|') AI receptionist/, "consent wording missing");
   assert.match(dialog, /Call me now/, "no Call me now button");
   // The browser-talk demo is gone: no Vapi SDK, key or private key name in any page.
   for (const route of routes) assert.doesNotMatch(page(route), /VAPI_API_KEY|vapi-ai\/web|Start talking/i, `${label(route)} still has browser-talk code`);
@@ -332,7 +332,7 @@ test("home hero: main promise, sub-line, and the live call demo with its Live ba
   assert.match(hero, /Try it now: our AI receptionist calls you in seconds\./, "line above the call panel");
   assert.match(hero, /class="demo-badge is-live">Live</, "the call demo needs its Live badge");
   assert.match(hero, /name="mobile"/, "no mobile field in the hero demo");
-  assert.match(hero, /I agree to receive one demo call from AIM(&#x27;|')s AI receptionist/, "consent wording missing");
+  assert.match(hero, /I agree to receive one demo call from Aim Smart Solutions(&#x27;|') AI receptionist/, "consent wording missing");
   assert.match(hero, /class="hero-actions"[\s\S]*?href="\/book-appointment\/"/, "the hero keeps its booking button (the header button fades against it)");
 });
 
