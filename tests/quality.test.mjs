@@ -321,3 +321,24 @@ test("contact forms check fields themselves and show a message under each field"
     assert.doesNotMatch(html, /type="submit"[^>]*disabled=""/, `${route}: the send button should not start disabled`);
   }
 });
+
+// Design audit #1 and #3 (2026-11-02): the home hero leads with the promise and the live AI
+// receptionist demo, and the site uses self-hosted IBM Plex.
+test("home hero: main promise, sub-line, and the live call demo with its Live badge", () => {
+  const html = page("");
+  const hero = html.slice(html.indexOf('class="funnel-hero voice-hero"'), html.indexOf("</section>", html.indexOf('class="funnel-hero voice-hero"')));
+  assert.match(hero, /<h1[^>]*>Smart AI solutions that help businesses grow<\/h1>/, "hero headline");
+  assert.match(hero, /AI that grows your business\. Built for you\. Taught to you\./, "hero sub-line");
+  assert.match(hero, /Try it now: our AI receptionist calls you in seconds\./, "line above the call panel");
+  assert.match(hero, /class="demo-badge is-live">Live</, "the call demo needs its Live badge");
+  assert.match(hero, /name="mobile"/, "no mobile field in the hero demo");
+  assert.match(hero, /I agree to receive one demo call from AIM(&#x27;|')s AI receptionist/, "consent wording missing");
+  assert.match(hero, /class="hero-actions"[\s\S]*?href="\/book-appointment\/"/, "the hero keeps its booking button (the header button fades against it)");
+});
+
+test("fonts are IBM Plex, served from this site", () => {
+  const html = page("");
+  assert.doesNotMatch(html, /fonts\.googleapis\.com|fonts\.gstatic\.com/, "fonts must not load from Google");
+  const css = ["globals.css", "site.css", "demos.css"].map((f) => readFileSync(fileURLToPath(new URL(`../app/${f}`, import.meta.url)), "utf8")).join("");
+  assert.doesNotMatch(css, /Georgia|Arial/, "old font stacks left in the CSS");
+});
