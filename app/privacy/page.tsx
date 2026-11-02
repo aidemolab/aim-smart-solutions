@@ -24,8 +24,7 @@ export default function Privacy() {
     <main id="main" className="services-main">
       <section className="services-hero privacy-hero">
         <p className="privacy-draft" role="note">Draft for owner review</p>
-        <p className="kicker">Privacy</p>
-        <h1>Privacy <em>policy</em></h1>
+        <h1>Privacy policy</h1>
         <p>This policy explains how AIM Smart Solutions uses personal data when you use this website, contact us, request a quote, book a call or try a demo. Last updated: 22 October 2026 (draft).</p>
       </section>
 

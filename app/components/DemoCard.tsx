@@ -20,8 +20,8 @@ type Props = {
 function TryLink({ demo, tryHref, tryText }: Pick<Props, "demo" | "tryHref" | "tryText">) {
   if (tryHref) return <a className="demo-try" href={tryHref}>{tryText} <span aria-hidden="true">↓</span></a>;
   return demo.external
-    ? <a className="demo-try" href={demo.href}>{demo.tryLabel} <span aria-hidden="true">→</span></a>
-    : <Link className="demo-try" href={demo.href}>{demo.tryLabel} <span aria-hidden="true">→</span></Link>;
+    ? <a className="demo-try" href={demo.href}>{demo.tryLabel}</a>
+    : <Link className="demo-try" href={demo.href}>{demo.tryLabel}</Link>;
 }
 
 function DemoVideo({ demo, video }: { demo: Demo; video: string }) {

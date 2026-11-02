@@ -19,7 +19,7 @@ export default function LiveDemosMoved() {
       <RedirectTo to="/services/" />
       <section className="services-hero">
         <p className="kicker">Demos have moved</p>
-        <h1>Our demo videos are now on <em>the Services page.</em></h1>
+        <h1>Our demo videos are now on the Services page.</h1>
         <p>Taking you there now. If nothing happens, <Link href="/services/">go to Services</Link>.</p>
       </section>
     </main>

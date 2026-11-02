@@ -3,7 +3,7 @@ import Link from "next/link";
 import { pillars } from "@/lib/site";
 import { serviceVideos } from "@/lib/demos";
 import { serviceBySlug } from "./data";
-import { BookingButton, pillarNumber } from "../components/Blocks";
+import { BookingButton } from "../components/Blocks";
 import VideoModalLink from "../components/VideoModalLink";
 
 export const metadata: Metadata = {
@@ -18,8 +18,7 @@ export default function Services() {
   return (
     <main id="main" className="services-main">
       <section className="services-hero">
-        <p className="kicker">Our services</p>
-        <h1>AI for four everyday pains, <em>and a team ready to use it.</em></h1>
+        <h1>AI for four everyday pains, and a team ready to use it.</h1>
         <p>Nine services, grouped by what they change for your business. Watch a short demo of each one, then explore the service to try it yourself.</p>
         <nav className="pillar-jump" aria-label="Jump to a pillar">
           {pillars.map((pillar) => <a key={pillar.id} href={`#${pillar.id}`}>{pillar.name}</a>)}
@@ -29,7 +28,6 @@ export default function Services() {
       {pillars.map((pillar) => (
         <section className="pillar-section" id={pillar.id} key={pillar.id} aria-labelledby={`${pillar.id}-title`}>
           <div className="pillar-section-head">
-            <p className="pillar-number">{pillarNumber(pillar)}</p>
             <div>
               <h2 id={`${pillar.id}-title`}><Link className="pillar-heading-link" href={`/services/${pillar.id}/`}>{pillar.name}</Link></h2>
               <p className="pillar-promise">{pillar.promise}</p>
@@ -55,7 +53,7 @@ export default function Services() {
                       </li>
                     ))}
                   </ul>
-                  <Link className="service-explore" href={`/services/${slug}/`}>Explore {service.name} <span aria-hidden="true">→</span></Link>
+                  <Link className="service-explore" href={`/services/${slug}/`}>Explore {service.name}</Link>
                 </article>
               );
             })}

@@ -371,3 +371,27 @@ than rewriting history; if a decision changes, add a new entry that replaces the
   the full name, pronounced like "aim", never spelt out or shortened to "Aim". The Azure voice has
   no pronunciation dictionary in Vapi (that is ElevenLabs, Cartesia and Vapi voices only).
   Written site text still uses "AIM".
+
+## Design audit batch 1: template tells and forms (2026-11-02)
+- Headings carry no accented phrase (no `<em>` in blue italic). Buttons and links have no trailing
+  "→"; the only arrows left are "← Back to Contact", the "Next service →" pager and quote form step,
+  the ↓/↑ demo jump buttons and the ↗ new-tab mark (link rules).
+- No forced capitals: eyebrow labels, form labels, footer and menu pillar headings, badges and
+  legends show their text as written, in sentence case for labels. Labels that only repeated
+  their heading or the breadcrumb were removed (page labels on About, Contact, Services, the three
+  contact forms and Privacy; "What AIM helps with", "The cost of waiting", "The offer", "One useful
+  conversation", "How it helps", "Use cases", "Try it"/"Watch it", "Contact details",
+  "Location", "The founder"). Kept: "Business benefits", "What's included", "How we work",
+  "Before you book", "What happens next", "Error 404".
+- Numbers only on real sequences: the pillar cards (home, /services/, pillar pages) and the
+  cost-of-waiting list lost their 01–04; the About "How we work" steps, the enquiry "What happens
+  next" steps and the quote form's 01/02 steps keep theirs.
+- Forms use `noValidate` and their own messages (`lib/form-errors.ts`, `FieldError`): one plain
+  message under each field that needs fixing, focus moves to the first one. Email: "Enter an email
+  address like name@business.co.uk." Mobile: "Enter a UK mobile number beginning 07 or +44 7."
+  Optional fields say "(optional)"; the enquiry form says "All fields are required."
+- Booking: the button is always active; without a time it says "Choose one of the available times
+  above." Six grey placeholder slots show while times load.
+- Quote: "Send my quote request" is always shown under the details panel; it lists what is missing
+  (a service, the details for a service, or contact fields) instead of staying hidden or disabled.
+- `prefers-reduced-motion: reduce` turns off smooth scrolling, transitions and animations.

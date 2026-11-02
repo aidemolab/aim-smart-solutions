@@ -109,7 +109,7 @@ export default function SkillsTaster() {
           <div className="taster-result" role="status">
             <p><strong>You scored {correct} out of {QUIZ.length}.</strong> {correct === QUIZ.length ? "Great work: you already have the habits that make AI useful." : "Try the four-part structure on your next real task and you will see the difference straight away."}</p>
             <div className="demo-app-actions">
-              <Link className="button primary" href={BOOKING_CTA.href}>{BOOKING_CTA.label} <span aria-hidden="true">→</span></Link>
+              <Link className="button primary" href={BOOKING_CTA.href}>{BOOKING_CTA.label}</Link>
               <button type="button" className="button secondary" onClick={() => setPicked(QUIZ.map(() => null))}>Try the quiz again</button>
             </div>
           </div>
