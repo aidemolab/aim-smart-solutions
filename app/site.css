@@ -117,7 +117,7 @@ footer.site-footer{max-width:1440px;margin:0 auto;padding:56px 6vw 28px;display:
 .pillar-jump{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px;font-size:14px}
 .pillar-jump a{padding:10px 16px;border:1px solid var(--line);border-radius:999px;background:#fff;font-weight:800;border-bottom:1px solid var(--line)}.pillar-jump a:hover{border-color:var(--cobalt);color:var(--cobalt-dark)}
 .pillar-section{padding:72px 8vw 24px;scroll-margin-top:100px;border-bottom:1px solid var(--line)}
-.pillar-section-head{display:grid;grid-template-columns:70px 1.3fr .9fr;gap:28px;align-items:start}
+.pillar-section-head{display:grid;grid-template-columns:1.3fr .9fr;gap:28px;align-items:start}
 .pillar-section-head h2{font-size:clamp(34px,4vw,52px)}
 .pillar-section-head p:not(.pillar-number):not(.pillar-promise){color:var(--ink-soft);font-size:16px;line-height:1.7;max-width:640px}
 .pillar-section-head .pillar-promise{margin-top:10px}
@@ -407,3 +407,54 @@ textarea{font-family:inherit}
 .demo-call-done p{margin:0 0 14px;color:var(--ink-soft);font-size:15px;line-height:1.6}
 .demo-call-done p.demo-call-ring{color:var(--green);font-size:18px;font-weight:800}
 @media(max-width:860px){.demo-tile-row .demo-call{margin:0 0 18px}}
+
+/* Sentence case labels (design audit 2026-11-02): no forced capitals or wide tracking.
+   The text in the markup is already sentence or title case, so it reads as written. */
+.eyebrow,.kicker,.card-tag,.demo-card-heading p,.demo-card dt,.about-copy .role,.location-card span,.panel-label,.proof-grid dt,.services-menu a.services-menu-pillar,.site-footer nav h2,.demo-badge,.pillar-problems:before,.lab-jump p,.lab-pillar-label,.quote-service-group legend,.before-after figcaption,.confidence-strip{text-transform:none;letter-spacing:0}
+.eyebrow,.kicker{font-size:15px;font-weight:700}
+.card-tag{font-size:13px!important}
+.demo-card-heading p,.demo-card dt,.about-copy .role,.location-card span,.panel-label,.proof-grid dt,.pillar-problems:before,.lab-jump p,.lab-pillar-label,.before-after figcaption{font-size:14px;font-weight:700}
+.services-menu a.services-menu-pillar,.quote-service-group legend{font-size:14px;font-weight:700}
+.site-footer nav h2{font:700 15px/1.4 Arial,Helvetica,sans-serif}
+.demo-badge{font-size:12px}
+.contact-form label{font-size:14px;font-weight:700;letter-spacing:0;text-transform:none}
+.contact-form input,.contact-form textarea,.contact-form select{font-weight:400;letter-spacing:normal;text-transform:none}
+.contact-form input::placeholder{font-weight:400;letter-spacing:normal}
+/* Cost-of-waiting rows lost their 01/02/03 markers, so they are plain rows now. */
+.cost-list p{display:block}
+
+/* Reduced motion: no smooth scrolling, transitions or animations for people who ask for less. */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto!important}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+
+/* Form errors (design audit 2026-11-02): one plain message under each field that needs fixing. */
+.contact-form .field-error,.quote-builder .field-error{margin:-14px 0 22px;color:#B42318;font-size:14px;font-weight:700;line-height:1.45}
+.quote-builder .field-error{margin:8px 0 0}
+.quote-builder .service-step+.field-error{margin:-8px 0 16px}
+.quote-builder .field-error.quote-summary{margin:12px 0 0}
+.contact-form [aria-invalid="true"]{border-bottom:2px solid #B42318}
+.quote-builder [aria-invalid="true"]:not([type=checkbox]){border-color:#B42318;box-shadow:inset 0 0 0 1px #B42318}
+.contact-form .field-help{margin:-16px 0 24px}
+.contact-form .field-error+.field-help{margin-top:-14px}
+.form-note{margin:0 0 22px;color:var(--ink-soft);font-size:14px}
+.contact-form label .optional{font-weight:400;color:var(--ink-soft)}
+/* Inputs lose the default outline, so show a clear 2px line when focused. */
+.contact-form input:focus,.contact-form textarea:focus{border-bottom:2px solid var(--cobalt)}
+.contact-form input:focus-visible,.contact-form textarea:focus-visible{outline:2px solid var(--cobalt);outline-offset:2px}
+.slot-field legend,.quote-fields label,.service-detail-step label{font-size:14px;font-weight:700;letter-spacing:0;text-transform:none}
+.slot-placeholders span{display:block;height:42px;margin:0;background:var(--mist);border:1px dashed var(--blue-grey-light)}
+.slot-loading{margin:0 0 10px}
+.slot-grid:focus{outline:none}
+.quote-placeholder{min-height:260px;border:0}
+.quote-submit{display:block;width:100%;margin-top:18px;padding:16px 18px;border:0;background:var(--cobalt);color:#fff;font:800 15px/1.3 Arial,Helvetica,sans-serif;cursor:pointer}
+.quote-submit:hover,.quote-submit:focus-visible{background:var(--cobalt-dark)}
+.quote-submit:disabled{opacity:.6;cursor:progress}
+/* The quote and booking pages load their own CSS after this file, so these need the page class. */
+.quote-builder .quote-fields label,.quote-builder .service-detail-step label,.booking-form .slot-field legend{font-size:14px;font-weight:700;letter-spacing:0;text-transform:none}
+.quote-builder .quote-fields input,.quote-builder .quote-fields input::placeholder{font-weight:400;letter-spacing:normal;text-transform:none}
+.quote-builder .quote-placeholder{min-height:260px;border:0}
+.booking-form .slot-field .field-error{margin:12px 0 0}
+.booking-page .booking-copy h1{margin-bottom:24px}
+.cost-list p>span:first-child{color:#c7d4df;font-size:15px;font-weight:400}

@@ -83,7 +83,7 @@ export default function DemoCall() {
             </div>
             <label htmlFor="demo-call-consent" className="demo-call-consent"><input id="demo-call-consent" name="consent" type="checkbox" value="yes" required /> {DEMO_CALL_CONSENT}</label>
             <Turnstile onToken={setToken} resetKey={turnstileKey} />
-            <button type="submit" disabled={state === "sending"}>{state === "sending" ? "Calling…" : "Call me now"}<span aria-hidden="true">→</span></button>
+            <button type="submit" disabled={state === "sending"}>{state === "sending" ? "Calling…" : "Call me now"}</button>
             <p id="demo-call-status" className={`submission-message ${state}`} role="status" aria-live="polite">{message}</p>
           </form>
         )}

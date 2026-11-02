@@ -300,3 +300,24 @@ test("the footer links to AIM on LinkedIn and Facebook, in a new tab, on every p
     }
   }
 });
+
+// Design audit 2026-11-02: no accented phrase in headings, no forced capitals, plain buttons.
+test("headings have no accented phrase and buttons have no trailing arrow", () => {
+  for (const route of routes) {
+    const main = page(route).match(/<main[\s\S]*?<\/main>/)?.[0] ?? "";
+    for (const heading of main.match(/<h[12][^>]*>[\s\S]*?<\/h[12]>/g) ?? []) {
+      assert.doesNotMatch(heading, /<em>/, `${label(route)}: a heading has an <em> accent: ${heading}`);
+    }
+    assert.doesNotMatch(main, /<span aria-hidden="true">→<\/span>/, `${label(route)}: a link or button ends with →`);
+  }
+  const css = ["globals.css", "site.css"].map((f) => readFileSync(fileURLToPath(new URL(`../app/${f}`, import.meta.url)), "utf8")).join("");
+  assert.match(css, /prefers-reduced-motion:\s*reduce/, "no reduced-motion rule");
+});
+
+test("contact forms check fields themselves and show a message under each field", () => {
+  for (const route of ["business-enquiry", "book-appointment", "instant-quote"]) {
+    const html = page(route);
+    assert.match(html, /<form[^>]*noValidate|<form[^>]*novalidate/, `${route}: form should use its own field messages (noValidate)`);
+    assert.doesNotMatch(html, /type="submit"[^>]*disabled=""/, `${route}: the send button should not start disabled`);
+  }
+});

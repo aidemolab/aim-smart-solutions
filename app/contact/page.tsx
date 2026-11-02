@@ -28,8 +28,7 @@ export default function Contact() {
   return (
     <main id="main" className="services-main">
       <section className="services-hero">
-        <p className="kicker">Contact AIM</p>
-        <h1>Let&apos;s solve your next <em>business challenge.</em></h1>
+        <h1>Let&apos;s solve your next business challenge.</h1>
         <p>Tell us about your requirements for AI applications, voice agents, automation, dashboards or training. Choose whichever way suits you best.</p>
       </section>
 
@@ -38,22 +37,20 @@ export default function Contact() {
           <article key={route.href} className={route.primary ? "is-primary" : undefined}>
             <h2>{route.title}</h2>
             <p>{route.body}</p>
-            <Link className={route.primary ? "button primary" : "button secondary"} href={route.href}>{route.cta} <span aria-hidden="true">→</span></Link>
+            <Link className={route.primary ? "button primary" : "button secondary"} href={route.href}>{route.cta}</Link>
           </article>
         ))}
       </section>
 
-      <section className="section faq-section" id="faq" aria-labelledby="faq-title"><div className="faq-intro"><p className="kicker">Before you book</p><h2 id="faq-title">Clear answers. <em>No hard sell.</em></h2><p>The first conversation is designed to establish whether there is a useful opportunity, not to push technology your business does not need.</p></div><div className="faq-list">{faqs.map(([question, answer]) => <details key={question}><summary>{question}<span aria-hidden="true">+</span></summary><p>{answer}</p></details>)}</div></section>
+      <section className="section faq-section" id="faq" aria-labelledby="faq-title"><div className="faq-intro"><p className="kicker">Before you book</p><h2 id="faq-title">Clear answers. No hard sell.</h2><p>The first conversation is designed to establish whether there is a useful opportunity, not to push technology your business does not need.</p></div><div className="faq-list">{faqs.map(([question, answer]) => <details key={question}><summary>{question}<span aria-hidden="true">+</span></summary><p>{answer}</p></details>)}</div></section>
 
       <section className="contact-details" aria-labelledby="details-title">
         <div>
-          <p className="kicker">Contact details</p>
           <h2 id="details-title">Prefer email?</h2>
           <p><a className="contact-email" href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p>
           <p>We reply to enquiries within 24 hours.</p>
         </div>
         <div>
-          <p className="kicker">Location</p>
           <h2>{LOCATION}</h2>
           <p>Based in Bolton, supporting businesses across the UK.</p>
         </div>

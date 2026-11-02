@@ -104,7 +104,7 @@ export default function OpportunityScore() {
               {top.map((service) => <li key={service.slug}><Link href={`/services/${service.slug}/`}><strong>{service.name}</strong><span>{service.tagline}</span></Link></li>)}
             </ol>
             <div className="demo-app-actions">
-              <Link className="button primary" href={BOOKING_CTA.href}>Book a call to discuss your results <span aria-hidden="true">→</span></Link>
+              <Link className="button primary" href={BOOKING_CTA.href}>Book a call to discuss your results</Link>
               <button type="button" className="button secondary" onClick={reset}>Start again</button>
             </div>
             <p className="demo-small">This quick self-assessment is a starting point for a conversation, not a guarantee of results.</p>

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { SITE_URL, type Pillar } from "@/lib/site";
 import { serviceBySlug } from "./data";
-import { CtaBand, pillarNumber } from "../components/Blocks";
+import { CtaBand } from "../components/Blocks";
 
 export default function PillarPage({ pillar }: { pillar: Pillar }) {
   const services = pillar.services.map(serviceBySlug).filter((service) => service !== undefined);
@@ -24,7 +24,6 @@ export default function PillarPage({ pillar }: { pillar: Pillar }) {
           ],
         }) }} />
         <div className="pillar-section-head">
-          <p className="pillar-number">{pillarNumber(pillar)}</p>
           <div>
             <h1>{pillar.name}</h1>
             <p className="pillar-promise">{pillar.promise}</p>
@@ -44,7 +43,7 @@ export default function PillarPage({ pillar }: { pillar: Pillar }) {
               <Link className="pillar-service-card" href={`/services/${service.slug}/`}>
                 <h3>{service.name}</h3>
                 <p>{service.tagline}</p>
-                <span className="pillar-service-more">Explore {service.name} <span aria-hidden="true">→</span></span>
+                <span className="pillar-service-more">Explore {service.name}</span>
               </Link>
             </li>
           ))}

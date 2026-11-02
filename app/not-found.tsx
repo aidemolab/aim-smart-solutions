@@ -13,7 +13,7 @@ export default function NotFound() {
     <main id="main" className="services-main">
       <section className="services-hero not-found">
         <p className="kicker">Error 404</p>
-        <h1>Sorry, we could not find <em>that page.</em></h1>
+        <h1>Sorry, we could not find that page.</h1>
         <p>The link may be out of date, or the page may have moved. These are good places to start:</p>
         <ul className="not-found-links">
           <li><Link href="/">Home</Link></li>

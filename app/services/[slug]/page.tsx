@@ -153,8 +153,7 @@ export default async function ServicePage({ params }: Params) {
 
       <section className="service-explain">
         <div>
-          <p className="kicker">How it helps</p>
-          <h2>What this means <em>for your business.</em></h2>
+          <h2>What this means for your business.</h2>
         </div>
         <div className="service-explain-copy">{service.explanation.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div>
       </section>
@@ -169,7 +168,6 @@ export default async function ServicePage({ params }: Params) {
 
       <section className="services-detail">
         <div>
-          <p className="kicker">Use cases</p>
           <h2>Where it fits.</h2>
           <ul className="services-feature-list">{service.useCases.map((item) => <li key={item}>{item}</li>)}</ul>
         </div>
@@ -183,8 +181,7 @@ export default async function ServicePage({ params }: Params) {
       {story && <div className="section start-here-wrap service-offer"><StartHere /></div>}
 
       <section className="service-demo" id="demo" aria-labelledby="demo-title">
-        <p className="kicker">{hasTryable(service) ? "Try it" : "Watch it"}</p>
-        <h2 id="demo-title">See it <em>working.</em></h2>
+        <h2 id="demo-title">See it working.</h2>
         <ServiceDemo service={service} />
       </section>
 
