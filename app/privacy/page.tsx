@@ -25,10 +25,17 @@ export default function Privacy() {
       <section className="services-hero privacy-hero">
         <p className="privacy-draft" role="note">Draft for owner review</p>
         <h1>Privacy policy</h1>
-        <p>This policy explains how AIM Smart Solutions uses personal data when you use this website, contact us, request a quote, book a call or try a demo. Last updated: 22 October 2026 (draft).</p>
+        <p>This policy explains how AIM Smart Solutions uses personal data when you use this website, contact us, request a quote, book a call or try a demo. Last updated: 24 November 2026 (draft).</p>
       </section>
 
       <article className="privacy">
+        <h2 id="google-sign-in">Google sign-in (&quot;Hermes OVH&quot;)</h2>
+        <p><strong>Who we are.</strong> AIM Smart Solutions, Bolton, UK. Contact: <a href="mailto:alaa.mostafa050607@gmail.com">alaa.mostafa050607@gmail.com</a>.</p>
+        <p><strong>What it is.</strong> &quot;Hermes OVH&quot; is the name of the Google sign-in we use. Only AIM Smart Solutions&apos; own tools use it. They run Google Colab jobs and access Google Drive for the account owner. It is not offered to visitors, and visitors do not sign in with it.</p>
+        <p><strong>What is accessed, and why.</strong> The tools reach the account owner&apos;s Google Drive files and Colab notebooks. They do this only to run our own jobs, such as processing data and saving the results.</p>
+        <p><strong>Your data.</strong> We do not sell this data or share it with anyone else. We use it only to run these jobs.</p>
+        <p><strong>Deletion and revoking access.</strong> To ask for deletion, email <a href="mailto:alaa.mostafa050607@gmail.com">alaa.mostafa050607@gmail.com</a>. To revoke access yourself, go to Google Account → Security → Third-party access, choose &quot;Hermes OVH&quot; and select Remove access.</p>
+
         <h2>1. Who we are</h2>
         <p>The data controller is <strong>AIM Smart Solutions</strong> (Alaa Mostafa), based in Bolton, United Kingdom. Contact: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. [Owner to add: ICO registration number, if registered.]</p>
 
